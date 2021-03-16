@@ -36,3 +36,7 @@
     padding: 30px 15px;
     line-height: 30px;
 }
+
+div.demo-container {
+    padding-top: 0;
+}

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="_Default" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="TelerikWebAppResponsive.Default" %>
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 
 <asp:Content ID="Content0" ContentPlaceHolderID="head" Runat="Server">
@@ -6,6 +6,9 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+
+      <asp:Label ID="Label1" Text="Aqui vai aparece o JSON da API" runat="server" />
+
     <telerik:RadPageLayout runat="server" ID="RadPageLayout1">
         <Rows>
             <telerik:LayoutRow>
@@ -13,16 +16,28 @@
                     <telerik:LayoutColumn CssClass="jumbotron">
                         <h1>H1 title, font size 36px</h1>
                         <h2>H2 Title, font size 30 px. Duis nibh dolor, rhoncus in euismod at, feugiat id magna.
-                            <telerik:RadButton runat="server" ID="RadButton0" Text="Button" ButtonType="SkinnedButton"></telerik:RadButton>
-                        </h2>
+                            <telerik:RadButton runat="server" ID="RadButton0" Text="NextPage Test" ButtonType="ToggleButton" Skin="Black" NavigateUrl="Grid.aspx"></telerik:RadButton>
+                            
+                            <telerik:RadLinkButton runat="server" ID="RadLinkButton1" Primary="true" Text="Time Line " ToolTip="Learn Аbout ASP.NET AJAX" NavigateUrl="TimeLine.aspx">
+                                <Icon CssClass="rbOk"></Icon>
+                            </telerik:RadLinkButton>
 
+                            <br />
+
+                            <telerik:RadButton runat="server" ID="RadButton4" Primary="true" Text=" JOKE API CALL" RenderMode="Lightweight" onclick="btnGo_Click"></telerik:RadButton>
+
+                            <telerik:RadLinkButton runat="server" ID="RadLinkButton2" Primary="true" Text="Login" ToolTip="Learn Аbout ASP.NET AJAX" NavigateUrl="Login.aspx">
+                                <Icon CssClass="rbOk"></Icon>
+                            </telerik:RadLinkButton>
+
+                        </h2>
                     </telerik:LayoutColumn>
                 </Columns>
             </telerik:LayoutRow>
             <telerik:LayoutRow>
                 <Columns>
                     <telerik:LayoutColumn HiddenMd="true" HiddenSm="true" HiddenXs="true">
-                        <h3>H3 text, font size 24 px </h3>
+                        <h3 id="teste">H3 text, font size 24 px </h3>
                         Ut aliquam elit eget quam tincidunt, et aliquam libero congue. Phasellus aliquet sed quam vitae dictum. Aliquam erat volutpat. Morbi accumsan a mi quis pretium. 
                     </telerik:LayoutColumn>
                 </Columns>
