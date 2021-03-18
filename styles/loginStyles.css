@@ -1,0 +1,39 @@
+﻿.validationSummary {
+    font-family: "Segoe UI",Arial,Helvetica,sans-serif;
+    font-size: 12px;
+}
+
+.validators input,
+.validators input.rfdTextInput {
+    margin-bottom: 3px;
+}
+
+.fieldRow {
+    margin-top: 4px;
+}
+
+    .fieldRow label {
+        width: 140px;
+        display: block;
+        float: left;
+    }
+
+.RadForm_MetroTouch .mtFix {
+    margin-top: 50px;
+}
+
+.demo-container strong {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.size-custom {
+    min-width: 400px;
+    min-height: 328px;
+}
+
+.demo-containers {
+    max-width: 1000px;
+    margin: 0 auto;
+}
