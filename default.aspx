@@ -7,7 +7,8 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
-      <asp:Label ID="Label1" Text="Aqui vai aparece o JSON da API" runat="server" />
+      <asp:Label ID="Label1" Text="Vai aparecer o nome do use caso ele exista" runat="server" />
+      <asp:Label ID="Label2" Text="" runat="server" />
 
     <telerik:RadPageLayout runat="server" ID="RadPageLayout1">
         <Rows>
@@ -22,13 +23,15 @@
                                 <Icon CssClass="rbOk"></Icon>
                             </telerik:RadLinkButton>
 
-                            <br />
-
-                            <telerik:RadButton runat="server" ID="RadButton4" Primary="true" Text=" JOKE API CALL" RenderMode="Lightweight" onclick="btnGo_Click"></telerik:RadButton>
-
                             <telerik:RadLinkButton runat="server" ID="RadLinkButton2" Primary="true" Text="Login" ToolTip="Learn Аbout ASP.NET AJAX" NavigateUrl="Login.aspx">
                                 <Icon CssClass="rbOk"></Icon>
                             </telerik:RadLinkButton>
+
+                            <br />
+
+                            <telerik:RadButton runat="server" ID="RadButton5" Primary="true" Text="Logout" RenderMode="Lightweight" onclick="Logout"></telerik:RadButton>
+
+                          
 
                         </h2>
                     </telerik:LayoutColumn>

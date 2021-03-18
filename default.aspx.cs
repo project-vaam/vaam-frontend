@@ -16,47 +16,25 @@ namespace TelerikWebAppResponsive
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
+            if (Session["sessionToken"] != null)
+            {
+                Label1.Text = "Olá " + Session["username"];
+            }
+            else
+            {
+                Label1.Text = "De momento nao se encontra logado";
+            }
         }
 
-        protected void btnGo_Click(object sender, EventArgs e)
+        protected void Logout(object sender, EventArgs e)
         {
-            try
-            {
-                /*
-                WebClient client = new WebClient();           
-
-                string url = "http://api.icndb.com/jokes/random?fbclid=IwAR0STGvv9kGc2T9TXhkMXTlASwG-NBP_5wmmHSZoyciDx-ill0ueyvnNzFg";
-
-                Stream stream = client.OpenRead(url);
-                StreamReader reader = new StreamReader(stream);
-                JObject jObject = JObject.Parse(reader.ReadLine());
-
-                Label1.Text = jObject.ToString(); */
-
-                var body = new { username = "admin", password = "123" };
-
-                using (var client = new WebClient())
-                {
-                    var dataString = JsonConvert.SerializeObject(body);
-                    client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
-
-                    String responseStr = client.UploadString(new Uri("http://project-vaam.pt/api/login/token"), "POST", dataString);
-
-                    JObject jsonResponse = JObject.Parse(responseStr);
-
-                    var token = jsonResponse["token"].ToString();
-
-                    Label1.Text = token.ToString();
-                }
+            System.Diagnostics.Debug.WriteLine(Session["sessionToken"] + "logged off");
+            Session.Clear();
+            Label2.Text = "Session Cleanned";
+            Page.Response.Redirect(Page.Request.Url.ToString(), true);
 
 
-            }
-
-            catch (Exception ex)
-            {
-                Label1.Text = ex.ToString();
-            }
         }
     }
 }

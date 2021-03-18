@@ -26,7 +26,7 @@ public partial class DummyTest : System.Web.UI.Page
         var content = new StringContent(JsonConvert.SerializeObject(body).ToString(), Encoding.UTF8, "application/json");
         using (var httpClient = new HttpClient())
         {
-            using (var response = await httpClient.PostAsync("http://localhost:8080/api/login/token", content))
+            using (var response = await httpClient.PostAsync("http://project-vaam.pt/api/login/token", content))  //http://localhost:8080/api/login/token
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 var status = response.IsSuccessStatusCode;
@@ -36,51 +36,23 @@ public partial class DummyTest : System.Web.UI.Page
 
                     var token = (string)obj["token"];
 
-                    //store token on session storage
-                    //HttpContext.Session.SetString("sessionKey", token);
+                    Session.Add("sessionToken", token);
+                    Session.Add("username", username);
 
-                    LabelResult.Text = "Welcome back, " + username + ". <br />" + "Your token is: " + token.ToString();
+                    var sessionToken = Session["sessionToken"];
+
+                    LabelResult.Text = "Welcome back, " + username + ". <br />" + "Your token is: " + token.ToString() + "< br />" + "The token in Session is: " + sessionToken; 
                     LabelResult.ForeColor = System.Drawing.Color.Green;
+
+                    System.Diagnostics.Debug.WriteLine("ola");
+
+                    Response.Redirect("Default.aspx", false);
                 }
                 else
                 {
                     LabelResult.Text = "Someting went wrong";
                     LabelResult.ForeColor = System.Drawing.Color.Red;
                 }
-
-
-
-
-
-                /*
-                try
-                {
-
-                    var body = new { username = username, password = password };
-
-                    using (var client = new WebClient())
-                    {
-                        //LabelResult.Text = "";
-                        var dataString = JsonConvert.SerializeObject(body);
-                        client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
-
-                        String responseStr = client.UploadString(new Uri("http://localhost:8080/api/login/token"), "POST", dataString); //localhost:8080/api/login/token
-
-                        JObject jsonResponse = JObject.Parse(responseStr);
-
-                        var token = jsonResponse["token"].ToString();           
-
-                        LabelResult.Text = "Welcome back, " + username + ". <br />" + "Your token is: " + token.ToString();
-                        LabelResult.ForeColor = System.Drawing.Color.Green;
-
-                    }
-                }
-
-                catch (WebException exception)
-                {
-                    LabelResult.Text = "Someting went wrong, " + exception.Message;
-                    LabelResult.ForeColor = System.Drawing.Color.Red;
-                } */
             }
         }
     }
