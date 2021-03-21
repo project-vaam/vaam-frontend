@@ -1,0 +1,3 @@
+# Ignoring Telerik Config Files
+.vs/TelerikWebAppResponsive/config/applicationhost.config 
+.vs/TelerikWebAppResponsive/v16/.suo

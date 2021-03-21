@@ -2,7 +2,7 @@
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-    <link href="styles/grid.css" rel="stylesheet" />
+    <link href="assets/styles/grid.css" rel="stylesheet" />
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -16,7 +16,7 @@
                         <telerik:RadButton runat="server" ID="RadButton0" Text="Button" ButtonType="SkinnedButton"></telerik:RadButton>
                     </telerik:LayoutColumn>
                     <telerik:LayoutColumn Span="2" HiddenMd="true" HiddenSm="true" HiddenXs="true">
-                        <img src="images/Thumbnails/Desert.jpg" />
+                        <img src="assets/images/Thumbnails/Desert.jpg" />
                     </telerik:LayoutColumn>
                 </Columns>
             </telerik:LayoutRow>

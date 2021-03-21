@@ -6,8 +6,8 @@
 <head runat="server">
     <title></title>
     <meta name="viewport" content="initial-scale=1.0, minimum-scale=1, maximum-scale=1.0, user-scalable=no" />
-    <link href="styles/base.css" rel="stylesheet" />
-    <link href="styles/pages/masterpage.css" rel="stylesheet" />
+    <link href="assets/styles/base.css" rel="stylesheet" />
+    <link href="assets/styles/pages/masterpage.css" rel="stylesheet" />
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
@@ -24,7 +24,7 @@
                         <%--Logo--%>
                         <telerik:LayoutColumn Span="2" SpanMd="3" SpanSm="12" SpanXs="12">
                             <a href="#" class="logo">
-                                <img src="images/logo.png" alt="site logo"/>
+                                <img src="assets/images/logo.png" alt="site logo"/>
                             </a>
                         </telerik:LayoutColumn>
 
@@ -98,7 +98,7 @@
                     <Columns>
                         <telerik:LayoutColumn CssClass="footer">
                             <hr />
-                            Footer: © 2002-2015 Company Inc, 201 Jones Rd, Waltham, MA 03451
+                                © 2021 Instituto Politecnico de Leiria, VAAM
                         </telerik:LayoutColumn>
                     </Columns>
                 </telerik:LayoutRow>
