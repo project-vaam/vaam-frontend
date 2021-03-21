@@ -21,7 +21,7 @@ public partial class DummyTest : Page
         String username = (Login2.FindControl("UserName") as TextBox).Text;
         String password = (Login2.FindControl("Password") as TextBox).Text;
 
-        var body = new { username = username, password = password };
+        var body = new { username, password };
 
         var content = new StringContent(JsonConvert.SerializeObject(body).ToString(), Encoding.UTF8, "application/json");
         using (var httpClient = new HttpClient())
@@ -41,7 +41,6 @@ public partial class DummyTest : Page
 
                     var sessionToken = Session["sessionToken"];
 
-                    System.Diagnostics.Debug.WriteLine("ola");
 
                     Response.Redirect("Default.aspx", false);
                 }

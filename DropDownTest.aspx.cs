@@ -40,7 +40,7 @@ public partial class DropDownTest : System.Web.UI.Page
             Debug.WriteLine("IM HERE");
             Debug.WriteLine("Debug");
 
-            using (var response = await httpClient.GetAsync("http://localhost:8080/api/moulds").ConfigureAwait(false))
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION+"moulds").ConfigureAwait(false))
             {
                 Debug.WriteLine(response);
 
@@ -50,7 +50,7 @@ public partial class DropDownTest : System.Web.UI.Page
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine(apiResponse);                  
 
-                    JArray obj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(apiResponse);
+                    JArray obj = JsonConvert.DeserializeObject<JArray>(apiResponse);
 
                     ArrayList itemsList = new ArrayList();
 
