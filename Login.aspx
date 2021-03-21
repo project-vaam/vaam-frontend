@@ -4,8 +4,8 @@
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head runat="server">
     <title>Telerik ASP.NET Example</title>
-     <link href="styles/loginStyles.css" rel="stylesheet" />
-    <script src="scripts.js"></script>
+     <link href="assets/styles/loginStyles.css" rel="stylesheet" />
+    <script src="assets/scripts/scripts.js"></script>
 </head>
 <body>
     <form id="form1" runat="server">

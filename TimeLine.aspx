@@ -3,8 +3,8 @@
 <!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head runat="server">
-    <title>Telerik ASP.NET Example</title>
-    <%--<link href="styles.css" rel="stylesheet" />--%>
+    <title>Mould Lifetime</title>
+    <link href="assets/styles/styles.css" rel="stylesheet" />
 </head>
 <body>
     <form id="form1" runat="server">

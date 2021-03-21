@@ -54,7 +54,7 @@ public partial class TimeLine : System.Web.UI.Page
 
             Debug.WriteLine("Debug");
 
-            using (var response = await httpClient.GetAsync("http://project-vaam.pt/api/moulds/mouldA/events").ConfigureAwait(false))  //http://project-vaam.pt/api/login/token
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds/mouldA/events").ConfigureAwait(false))  //http://project-vaam.pt/api/login/token
             {
                 Debug.WriteLine(response);
 
