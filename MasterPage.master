@@ -7,9 +7,11 @@
     <title></title>
     <meta name="viewport" content="initial-scale=1.0, minimum-scale=1, maximum-scale=1.0, user-scalable=no" />
     <link href="styles/base.css" rel="stylesheet" />
+    <link href="styles/pages/masterpage.css" rel="stylesheet" />
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
+
 <body>
     <form id="form1" runat="server">
         <telerik:RadScriptManager runat="server"></telerik:RadScriptManager>
@@ -27,7 +29,7 @@
                         </telerik:LayoutColumn>
 
                         <%--Main Nav--%>
-                        <telerik:LayoutColumn Span="10" SpanMd="9" SpanSm="12" SpanXs="12">
+                        <telerik:LayoutColumn Span="0">
                             <telerik:RadMenu ID="RadMenu1" runat="server" RenderMode="Auto">
                                 <Items>
                                     <telerik:RadMenuItem Text="Home" NavigateUrl="Default.aspx" />
@@ -36,20 +38,20 @@
                                     <telerik:RadMenuItem IsSeparator="true" />
                                     <telerik:RadMenuItem Text="ListView Page" NavigateUrl="ListView.aspx" />
                                     <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="About" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Projects" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Dashboard" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="..." />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="..." />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Contacts" />
+                                    <telerik:RadMenuItem Text="Timeline" NavigateUrl="Timeline.aspx" />
+                                    <telerik:RadMenuItem IsSeparator="true" />    
+                                    <telerik:RadMenuItem Text="DropDownTest" NavigateUrl="DropDownTest.aspx" />
                                 </Items>
                             </telerik:RadMenu>
                         </telerik:LayoutColumn>
+
+                         <%--Buttons--%>
+                        <telerik:LayoutColumn Span="2" Push="5">
+                            
+                           <telerik:RadLinkButton runat="server" CssClass="loginButton" ID="loginButton" Primary="true" Text="Login" NavigateUrl="Login.aspx"></telerik:RadLinkButton>
+                            <telerik:RadButton runat="server" CssClass="logoutButton"  ID="logoutButton" Primary="true" Text="Logout" RenderMode="Lightweight" onclick="Logout"></telerik:RadButton>   
+                        </telerik:LayoutColumn>
+
                     </Columns>
                 </telerik:LayoutRow>
 

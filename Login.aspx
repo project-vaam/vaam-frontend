@@ -5,12 +5,14 @@
 <head runat="server">
     <title>Telerik ASP.NET Example</title>
      <link href="styles/loginStyles.css" rel="stylesheet" />
-    <script src="scripts.js"></script>
+    <script src="scripts/functions.js"></script>
 </head>
+
 <body>
     <form id="form1" runat="server">
     <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
     <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="true" />
+
     <div id="rfd-demo-zone" class="demo-containers">
         <div class="validationSummary">
             <telerik:RadFormDecorator RenderMode="Lightweight" ID="RadFormDecorator1" runat="server" DecoratedControls="All"
@@ -18,13 +20,13 @@
  
             <div class="demo-container size-custom">
                 <asp:Panel runat="server" ID="Panel2">
-                    <p><strong>Login</strong></p>
+                    <h2>Login</h2>
                     <asp:Login ID="Login2" runat="server" Width="100%" EnableViewState="false" OnClick="LoginPost" OnLoggingIn="Login2_LogginIn">
                         <LayoutTemplate>
-                            <table cellpadding="1" cellspacing="0" width="100%">
+                            <table>
                                 <tr>
                                     <td>
-                                        <table cellpadding="0" width="100%">
+                                        <table>
                                             <tr>
                                                 <td>
                                                     <asp:Label ID="UserNameLabel" runat="server" AssociatedControlID="UserName">User Name:</asp:Label>
@@ -46,13 +48,6 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>&nbsp;
-                                                </td>
-                                                <td>
-                                                    <asp:CheckBox ID="RememberMe" runat="server" Text="Remember me next time."></asp:CheckBox>
-                                                </td>
-                                            </tr>
-                                            <tr>
                                                 <td align="center" colspan="2" style="color: Red;">
                                                     <asp:Literal ID="FailureText" runat="server" EnableViewState="False"></asp:Literal>
                                                 </td>
@@ -68,27 +63,14 @@
                             </table>
                         </LayoutTemplate>
                     </asp:Login>
-
-                 
-                    <asp:Label ID="LabelStatusLabel" Text="" Font-Size="Large" ForeColor="Green" runat="server"></asp:Label>
-                    <asp:Label ID="LabelPassword" Text="" Font-Size="Large" ForeColor="Green" runat="server"></asp:Label>
-                    <asp:Label ID="LabelResult" Text="" Font-Size="Large" ForeColor="Green" runat="server"></asp:Label>
-
-
-                    <div style="margin-top: 5px;">
-                        <asp:LoginName ID="LoginName1" runat="server" Width="300px" EnableViewState="false"></asp:LoginName>
-                    </div>
-                    <div style="margin-top: 5px;">
-                        <asp:LoginStatus ID="LoginStatus1" runat="server" Width="300px" EnableViewState="false" Enabled="false"></asp:LoginStatus>
-                    </div>
                 </asp:Panel>
+                 <asp:Label ID="LabelResult" Text="" Font-Size="Large" ForeColor="Red" runat="server"></asp:Label>
             </div>
         </div>
     </div>
  
-    <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server">
-    </telerik:RadAjaxLoadingPanel>
+    
 
-    </form>
+   </form>
 </body>
 </html>

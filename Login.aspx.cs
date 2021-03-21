@@ -26,7 +26,7 @@ public partial class DummyTest : System.Web.UI.Page
         var content = new StringContent(JsonConvert.SerializeObject(body).ToString(), Encoding.UTF8, "application/json");
         using (var httpClient = new HttpClient())
         {
-            using (var response = await httpClient.PostAsync("http://project-vaam.pt/api/login/token", content))  //http://localhost:8080/api/login/token
+            using (var response = await httpClient.PostAsync("http://localhost:8080/api/login/token", content))  //http://project-vaam.pt/api/login/token
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 var status = response.IsSuccessStatusCode;
@@ -40,9 +40,6 @@ public partial class DummyTest : System.Web.UI.Page
                     Session.Add("username", username);
 
                     var sessionToken = Session["sessionToken"];
-
-                    LabelResult.Text = "Welcome back, " + username + ". <br />" + "Your token is: " + token.ToString() + "< br />" + "The token in Session is: " + sessionToken; 
-                    LabelResult.ForeColor = System.Drawing.Color.Green;
 
                     System.Diagnostics.Debug.WriteLine("ola");
 

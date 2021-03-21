@@ -39,6 +39,7 @@
                         <telerik:RadMenuItem Text="Contacts" />
                     </Items>
                 </telerik:RadMenu>
+
             </div>
             <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
             </asp:ContentPlaceHolder>
