@@ -21,25 +21,14 @@ public partial class DropDownTest : System.Web.UI.Page
     {
         if (!Page.IsPostBack)
         {
-            BindToArrayList(RadDropDownList1);
+            callMoulds();
 
         }
     }
 
-    private void BindToArrayList(Telerik.Web.UI.RadDropDownList dropDownList)
-    {
-        ArrayList itemsList = new ArrayList();
-        itemsList.Add("One");
-        itemsList.Add("Two");
-        itemsList.Add("Three");
-        dropDownList.DataSource = itemsList;
-        dropDownList.DataBind();
-    }
+ 
 
-
-
-
-    protected async void callMouldss(object sender, EventArgs e)
+    protected async void callMoulds()
     {
         Debug.WriteLine("Calling API...");
         
@@ -59,16 +48,20 @@ public partial class DropDownTest : System.Web.UI.Page
                 if (status == true)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine(apiResponse);
-                    MouldsListLabel.Text = apiResponse.ToString();
+                    Debug.WriteLine(apiResponse);                  
 
-                    
+                    JArray obj = Newtonsoft.Json.JsonConvert.DeserializeObject<JArray>(apiResponse);
 
-                    //Debug.WriteLine(jsonResponse);
+                    ArrayList itemsList = new ArrayList();
 
-                    //var token = jsonResponse["code"].ToString();
-
-
+                    foreach (JObject item in obj)
+                    {
+                        string code = item.GetValue("code").ToString();
+                        itemsList.Add(code);
+                        Debug.WriteLine(code);
+                        RadDropDownList1.DataSource = itemsList;
+                        RadDropDownList1.DataBind();
+                    }                
                 }
                 else
                 {
@@ -76,6 +69,11 @@ public partial class DropDownTest : System.Web.UI.Page
                 }
             }
         }
+    }
+
+    protected void SelectedIndexChanged(object sender, DropDownListEventArgs e)
+    {
+        selectedMould.Text = "You selected " + e.Text;
     }
 }
 

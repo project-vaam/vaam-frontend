@@ -9,10 +9,10 @@
 <body>
     <form id="form1" runat="server">  
         <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
-         <asp:Label ID="MouldsListLabel" Text="" Font-Size="Large" ForeColor="Green" runat="server" ></asp:Label>
-          <asp:Button ID="callMoulds" runat="server" Text="Call Moulds" OnClick="callMouldss"></asp:Button>
+         <asp:Label ID="selectedMould" Text="" Font-Size="Large" ForeColor="Green" runat="server" ></asp:Label>         
             <div>
-                <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" EmptySelectionMessage="Escolher um modulo" runat="server">
+                <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" DefaultMessage="Escolha um modulo" AutoPostBack="true"
+     OnSelectedIndexChanged="SelectedIndexChanged" runat="server">
                 </telerik:RadDropDownList>
             </div>
         </asp:ScriptManager>
