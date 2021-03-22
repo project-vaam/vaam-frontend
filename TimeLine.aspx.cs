@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -50,10 +52,15 @@ public partial class TimeLine : System.Web.UI.Page
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine(apiResponse);
+
+                    /* DateTime Format Converter */
+                    
+
                     events = JsonConvert.DeserializeObject<List<LifetimeEvent>>(apiResponse);
-                    foreach(var eventLife in events)
+                    foreach (var eventLife in events)
                     {
-                        Debug.WriteLine(eventLife.Process.Name);
+                        Debug.WriteLine(eventLife.Process.StartDate.ToString());
+                        Debug.WriteLine(eventLife.StartDate.ToString());
                     }
                     RadTimeline1.DataSource = events;
                     RadTimeline1.DataBind();
@@ -78,8 +85,10 @@ public partial class TimeLine : System.Web.UI.Page
         [DataMember]
         public ActivityLifeEvent Activity { get; set; }
         [DataMember]
-        public DateTime StartDate { get; set; }
+        [JsonConverter(typeof(CustomDateTimeConverter))]
+        public DateTime StartDate{ get; set; }
         [DataMember]
+        [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime? EndDate { get; set; }
         [DataMember]
         public int? Duration { get; set; }
@@ -94,8 +103,10 @@ public partial class TimeLine : System.Web.UI.Page
         [DataMember]
         public string Description { get; set; }
         [DataMember]
-        public String StartDate { get; set; }
+        [JsonConverter(typeof(CustomDateTimeConverter))]
+        public DateTime StartDate { get; set; }
         [DataMember]
+        [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime? EndDate { get; set; }
         [DataMember]
         public int NumberOfCases { get; set; }
@@ -123,4 +134,12 @@ public partial class TimeLine : System.Web.UI.Page
         public string TagRfid { get; set; }
     }
 
+}
+
+public class CustomDateTimeConverter : IsoDateTimeConverter
+{
+    public CustomDateTimeConverter()
+    {
+        base.DateTimeFormat = "dd-MM-yyyy HH:mm:ss.fff";
+    }
 }
