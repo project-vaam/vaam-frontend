@@ -42,8 +42,9 @@
                     <div class="k-card-description" style="display:flex; flex-direction: column">
 
                         <span>Descrição do Processo: <b>#= data.Process.Description#</b></span>
-                        <span>Começo: <b>#= data.Process.startDate#</b></span>
-                        <span>Termino: <b>#= data.Process.endDate || "Ainda por terminar"#</b></span>
+                        <span>Começo do Processo: <b>#= kendo.toString(kendo.parseDate(data.Process.StartDate), "dd/MM/yyyy HH:mm:ss") #</b></span>
+                        <span>Termino do Processo: <b>#= kendo.toString(kendo.parseDate(data.Process.EndDate), "dd/MM/yyyy HH:mm:ss") || "Ainda por terminar"#</b></span>
+
                         #if(data.Part) {#
                         <h5 class="top-flex-space">Parte do Molde</h5>
                         <span>Código: <b>#= data.Part.Code#</b></span>
@@ -70,8 +71,9 @@
             <WebServiceClientDataSource runat="server">
                 <Schema>
                     <Model>
-                        <telerik:ClientDataSourceModelField DataType="Date" FieldName="endDate" />
+                        <%--<telerik:ClientDataSourceModelField DataType="Date" FieldName="endDate" />
                         <telerik:ClientDataSourceModelField DataType="Date" FieldName="startDate" />
+                        <telerik:ClientDataSourceModelField DataType="Date" FieldName="Process.StartDate" />--%>
                     </Model>
                 </Schema>
                 <SortExpressions>
