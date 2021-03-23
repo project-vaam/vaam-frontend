@@ -1,15 +1,29 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="TimeLine.aspx.cs" Async="true" Inherits="TimeLine" %>
+﻿<%@ Page Language="C#"  MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeFile="TimeLine.aspx.cs" Async="true" Inherits="TimeLine" %>
+<%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 
-<!DOCTYPE html>
-<html xmlns='http://www.w3.org/1999/xhtml'>
-<head runat="server">
-    <title>Mould Lifetime</title>
+
+<asp:Content ID="Content0" ContentPlaceHolderID="head" Runat="Server">
     <link href="assets/styles/base.css" rel="stylesheet" />
     <link href="assets/styles/pages/timeline.css" rel="stylesheet" />
-</head>
-<body>
-    <form id="form1" runat="server">
-    <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
+    <link href="assets/styles/default.css" rel="stylesheet" />
+</asp:Content>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <div>
+        
+       
+        <h5>Selecione o Modulo</h5>
+       
+        <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" DefaultMessage="Escolha um modulo" AutoPostBack="true"
+            OnSelectedIndexChanged="GetMouldLifetimeEvents" runat="server">
+        </telerik:RadDropDownList>
+     </div>
+
+    <div style="text-align:center">
+        <h1><span id="currentMould" runat="server"></span></h1>
+    </div>
+    <hr />
+
     <div class="demo-container" runat="server">
         <telerik:RadTimeline runat="server" ID="RadTimeline1" CollapsibleEvents="true" AlternatingMode="true"
             DataDateField="startDate" 
@@ -66,6 +80,4 @@
             </WebServiceClientDataSource>
         </telerik:RadTimeline>
     </div>
-    </form>
-</body>
-</html>
+</asp:Content>

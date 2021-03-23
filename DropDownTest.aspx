@@ -12,7 +12,7 @@
          <asp:Label ID="selectedMould" Text="" Font-Size="Large" ForeColor="Green" runat="server" ></asp:Label>         
             <div>
                 <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" DefaultMessage="Escolha um modulo" AutoPostBack="true"
-     OnSelectedIndexChanged="SelectedIndexChanged" runat="server">
+                    OnSelectedIndexChanged="SelectedIndexChanged" runat="server">
                 </telerik:RadDropDownList>
             </div>
         </asp:ScriptManager>

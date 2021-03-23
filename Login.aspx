@@ -11,7 +11,7 @@
 <body>
     <form id="form1" runat="server">
     <telerik:RadScriptManager runat="server" ID="RadScriptManager1" />
-    <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="true" />
+   
 
     <div id="rfd-demo-zone" class="demo-containers">
         <div class="validationSummary">

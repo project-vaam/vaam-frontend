@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Telerik.Web.UI;
 
 public partial class TimeLine : System.Web.UI.Page
 {
@@ -22,28 +24,33 @@ public partial class TimeLine : System.Web.UI.Page
         if (Session["sessionToken"] == null)
         {
            
-            Page.Response.Redirect("Default.aspx", true);
+            Page.Response.Redirect("Login.aspx", true);
         }
     
         
         if (!IsPostBack)
         {
-            /*Task<List<LifetimeEvent>> task = */GetMouldLifetimeEvents();
+            /*Task<List<LifetimeEvent>> task = */
             //RadTimeline1.DataSource = task.Result;
             //RadTimeline1.DataBind();
+            callMoulds();
+            //GetMouldLifetimeEvents();
+            
         }
     }
 
-    public async void GetMouldLifetimeEvents()
+    public async void GetMouldLifetimeEvents(object sender, DropDownListEventArgs e)
     {
         var events = new List<LifetimeEvent>();
+        currentMould.InnerText = "Timeline do " + e.Text;
+        //mouldTimeline.Text = "You selected " + e.Text;
 
         using (var httpClient = new HttpClient())
         {
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds/mouldA/events").ConfigureAwait(false))  //http://project-vaam.pt/api/login/token
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds/" + e.Text + "/events").ConfigureAwait(false))  //http://project-vaam.pt/api/login/token
             {
                 var status = response.IsSuccessStatusCode;
                 if (status == true)
@@ -57,6 +64,46 @@ public partial class TimeLine : System.Web.UI.Page
                     }
                     RadTimeline1.DataSource = events;
                     RadTimeline1.DataBind();
+                }
+                else
+                {
+                    Debug.WriteLine("Something went bad.");
+                }
+            }
+        }
+    }
+
+    protected async void callMoulds()
+    {
+       
+        using (var httpClient = new HttpClient())
+        {
+            string token = (string)Session["sessionToken"];
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+         
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds").ConfigureAwait(false))
+            {
+                Debug.WriteLine(response);
+
+                var status = response.IsSuccessStatusCode;
+                if (status == true)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine(apiResponse);
+
+                    JArray obj = JsonConvert.DeserializeObject<JArray>(apiResponse);
+
+                    ArrayList itemsList = new ArrayList();
+
+                    foreach (JObject item in obj)
+                    {
+                        string code = item.GetValue("code").ToString();
+                        itemsList.Add(code);
+                        Debug.WriteLine(code);
+                        RadDropDownList1.DataSource = itemsList;
+                        RadDropDownList1.DataBind();
+                    }
                 }
                 else
                 {
