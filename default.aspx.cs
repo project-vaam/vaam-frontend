@@ -19,7 +19,7 @@ namespace TelerikWebAppResponsive
             
             if (Session["sessionToken"] != null)
             {
-                Label1.Text = "Olá " + Session["username"];
+                Label1.Text = "Welcome back " + Session["username"];
             }
             else
             {
@@ -31,7 +31,6 @@ namespace TelerikWebAppResponsive
         {
             System.Diagnostics.Debug.WriteLine(Session["sessionToken"] + "logged off");
             Session.Clear();
-            Label2.Text = "Session Cleanned";
             Page.Response.Redirect(Page.Request.Url.ToString(), true);
 
 

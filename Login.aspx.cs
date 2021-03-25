@@ -3,11 +3,11 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Text;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class DummyTest : System.Web.UI.Page
+
+public partial class DummyTest : Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -21,12 +21,12 @@ public partial class DummyTest : System.Web.UI.Page
         String username = (Login2.FindControl("UserName") as TextBox).Text;
         String password = (Login2.FindControl("Password") as TextBox).Text;
 
-        var body = new { username = username, password = password };
+        var body = new { username, password };
 
         var content = new StringContent(JsonConvert.SerializeObject(body).ToString(), Encoding.UTF8, "application/json");
         using (var httpClient = new HttpClient())
         {
-            using (var response = await httpClient.PostAsync("http://project-vaam.pt/api/login/token", content))  //http://localhost:8080/api/login/token
+            using (var response = await httpClient.PostAsync(Constants.URL_BACKEND_CONNECTION + "login/token/", content))  
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 var status = response.IsSuccessStatusCode;
@@ -41,10 +41,6 @@ public partial class DummyTest : System.Web.UI.Page
 
                     var sessionToken = Session["sessionToken"];
 
-                    LabelResult.Text = "Welcome back, " + username + ". <br />" + "Your token is: " + token.ToString() + "< br />" + "The token in Session is: " + sessionToken; 
-                    LabelResult.ForeColor = System.Drawing.Color.Green;
-
-                    System.Diagnostics.Debug.WriteLine("ola");
 
                     Response.Redirect("Default.aspx", false);
                 }
