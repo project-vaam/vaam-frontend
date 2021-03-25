@@ -5,3 +5,23 @@
 .top-flex-space {
     margin-top: 16px !important;
 }
+
+table, td, th {
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 15px;
+}
+
+
+.k-card {
+    width: 100% !important;
+}

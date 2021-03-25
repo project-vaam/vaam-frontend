@@ -19,7 +19,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
-public partial class TimeLine : System.Web.UI.Page
+public partial class TimeLine : Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -40,19 +40,17 @@ public partial class TimeLine : System.Web.UI.Page
             
         }
     }
-
     public async void GetMouldLifetimeEvents(object sender, DropDownListEventArgs e)
     {
         var events = new List<LifetimeEvent>();
         currentMould.InnerText = "Timeline do " + e.Text;
-        //mouldTimeline.Text = "You selected " + e.Text;
 
         using (var httpClient = new HttpClient())
         {
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds/" + e.Text + "/events").ConfigureAwait(false))  //http://project-vaam.pt/api/login/token
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds/" + e.Text + "/eventsUsersWorkstations").ConfigureAwait(false))  //http://project-vaam.pt/api/login/token
             {
                 var status = response.IsSuccessStatusCode;
                 if (status == true)
@@ -60,15 +58,22 @@ public partial class TimeLine : System.Web.UI.Page
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine(apiResponse);
 
-                    /* DateTime Format Converter */
-                    
-
-                    events = JsonConvert.DeserializeObject<List<LifetimeEvent>>(apiResponse);
-                    foreach (var eventLife in events)
+                    events = JsonConvert.DeserializeObject<List<LifetimeEvent>>(apiResponse, new JsonSerializerSettings
                     {
-                        Debug.WriteLine(eventLife.Process.StartDate.ToString());
-                        Debug.WriteLine(eventLife.StartDate.ToString());
+                        MissingMemberHandling = MissingMemberHandling.Ignore // For Empty Arrays
+                    });
+
+
+                    foreach(var eventLife in events)
+                    {
+                        
+                        foreach (var activity in eventLife.ActivityUserEntry)
+                        {
+                            Debug.WriteLine(activity.StartDate);
+                            Debug.WriteLine(activity.User.Name);
+                        }
                     }
+                        
                     RadTimeline1.DataSource = events;
                     RadTimeline1.DataBind();
                 }
@@ -139,6 +144,8 @@ public partial class TimeLine : System.Web.UI.Page
         public DateTime? EndDate { get; set; }
         [DataMember]
         public int? Duration { get; set; }
+        [DataMember]
+        public WorkersActivity[] ActivityUserEntry { get;  set; }
 
     }
 
@@ -179,6 +186,41 @@ public partial class TimeLine : System.Web.UI.Page
         public string Description { get; set; }
         [DataMember]
         public string TagRfid { get; set; }
+    }
+
+
+    [DataContract]
+    public class WorkersActivity
+    {
+        [DataMember]
+        public User User { get; set; }
+        [DataMember]
+        [JsonConverter(typeof(CustomDateTimeConverter))]
+        public DateTime StartDate { get; set; }
+        [DataMember]
+        [JsonConverter(typeof(CustomDateTimeConverter))]
+        public DateTime? EndDate { get; set; }
+        [DataMember]
+        public Workstation Workstation { get; set; }
+        [DataMember]
+        public int TimeSpentMillis { get; set; }
+    }
+
+    [DataContract]
+    public class User
+    {
+        [DataMember]
+        public String Name { get; set; }
+        [DataMember]
+        public String Role { get; set; }
+        [DataMember]
+        public String Email { get; set; }
+    }
+    [DataContract]
+    public class Workstation
+    {
+        [DataMember]
+        public String Name { get; set; }
     }
 
 }
