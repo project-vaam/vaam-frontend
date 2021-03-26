@@ -7,6 +7,6 @@ function timeConvert(millis) {
     let hours = minAux / 60
     let hoursFloor = Math.floor(hours)
     let min = (hours - hoursFloor) * 60
-
-    return min < 1 ? `${(min * 60).toFixed(3)} segundos` : `${hoursFloor}h ${min.toFixed(0)}min`
+ 
+    return min < 1 && min > 0 ? `${(min * 60).toFixed(3)} segundos` : `${hoursFloor}h ${min.toFixed(0)}min`
 }
