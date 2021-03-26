@@ -21,7 +21,19 @@ th, td {
     padding: 15px;
 }
 
+.red {
+    background-color: #E50000 !important;
+}
+
+.yellow {
+    background-color: #ffff4d !important;
+}
+
+.green {
+    background-color: #329932 !important;
+}
 
 .k-card {
     width: 100% !important;
 }
+

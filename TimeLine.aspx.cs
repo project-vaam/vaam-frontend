@@ -66,12 +66,7 @@ public partial class TimeLine : Page
 
                     foreach(var eventLife in events)
                     {
-                        
-                        foreach (var activity in eventLife.ActivityUserEntry)
-                        {
-                            Debug.WriteLine(activity.StartDate);
-                            Debug.WriteLine(activity.User.Name);
-                        }
+                        Debug.WriteLine(eventLife.AverageEventDurationForActivityMillis);
                     }
                         
                     RadTimeline1.DataSource = events;
@@ -144,6 +139,8 @@ public partial class TimeLine : Page
         public DateTime? EndDate { get; set; }
         [DataMember]
         public int? Duration { get; set; }
+        [DataMember]
+        public float? AverageEventDurationForActivityMillis { get; set; }
         [DataMember]
         public WorkersActivity[] ActivityUserEntry { get;  set; }
 
