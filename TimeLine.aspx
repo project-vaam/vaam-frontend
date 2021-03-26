@@ -36,8 +36,6 @@
                     #
                         const durationMin = data.duration / 1000 / 60
                         const avgDurationMin = data.AverageEventDurationForActivityMillis / 1000 / 60
-                        <%--let classColor = durationMin <= avgDurationMin*1.05 && data.duration >= avgDurationMin*0.95 ?
-                                            'yellow' : ( durationMin < avgDurationMin*0.95 ? 'green' : 'red' )--%>
 
                         let classColor
                         if(durationMin <= avgDurationMin*1.05 && durationMin >= avgDurationMin*0.95) classColor = 'yellow'

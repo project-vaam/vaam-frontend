@@ -22,15 +22,15 @@ th, td {
 }
 
 .red {
-    background-color: #E50000 !important;
+    color: #E50000 !important;
 }
 
 .yellow {
-    background-color: #ffff4d !important;
+    color: #ffae19 !important;
 }
 
 .green {
-    background-color: #329932 !important;
+    color: #329932 !important;
 }
 
 .k-card {
