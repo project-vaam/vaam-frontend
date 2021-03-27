@@ -1,6 +1,6 @@
 ﻿#wrapper .header {
     background-color: #2a2d33;
-    padding: 10px 0;
+    padding: 5px 0;
     margin-bottom: 40px;
 }
 
@@ -16,7 +16,7 @@
 }
 
 #wrapper .logo img {
-    max-width: 100%;
+    max-width: 50%;
 }
 
 #wrapper .jumbotron {

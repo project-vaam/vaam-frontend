@@ -22,9 +22,9 @@
                 <telerik:LayoutRow CssClass="header">
                     <Columns>
                         <%--Logo--%>
-                        <telerik:LayoutColumn Span="2" SpanMd="3" SpanSm="12" SpanXs="12">
+                        <telerik:LayoutColumn Span="0">
                             <a href="#" class="logo">
-                                <img src="assets/images/logo.png" alt="site logo"/>
+                                <img src="assets/images/VAAM_LOGO.png" alt="site logo"/>
                             </a>
                         </telerik:LayoutColumn>
 
@@ -39,15 +39,19 @@
                                     <telerik:RadMenuItem Text="ListView Page" NavigateUrl="ListView.aspx" />
                                     <telerik:RadMenuItem IsSeparator="true" />
                                     <telerik:RadMenuItem Text="Timeline" NavigateUrl="Timeline.aspx" />
+                                    <telerik:RadMenuItem IsSeparator="true" />
+                                    <telerik:RadMenuItem Text="Performance" NavigateUrl="Performance.aspx" />
                                 </Items>
                             </telerik:RadMenu>
                         </telerik:LayoutColumn>
 
                          <%--Buttons--%>
-                        <telerik:LayoutColumn Span="0" Push="3">
-                            
-                           <telerik:RadLinkButton runat="server" CssClass="loginButton" ID="loginButton" Primary="true" Text="Login" NavigateUrl="Login.aspx"></telerik:RadLinkButton>
-                            <telerik:RadButton runat="server" CssClass="logoutButton"  ID="logoutButton" Primary="true" Text="Logout" RenderMode="Lightweight" onclick="Logout"></telerik:RadButton>   
+                        <telerik:LayoutColumn Span="0">
+                          <div class="pull-right">
+                            <telerik:RadLinkButton runat="server" CssClass="loginButton" ID="loginButton" Primary="true" Text="Login" NavigateUrl="Login.aspx"></telerik:RadLinkButton>
+                           <telerik:RadButton runat="server" CssClass="logoutButton"  ID="logoutButton" Primary="true" Text="Logout" RenderMode="Lightweight" onclick="Logout"></telerik:RadButton>   
+                          </div>
+                           
                         </telerik:LayoutColumn>
 
                     </Columns>

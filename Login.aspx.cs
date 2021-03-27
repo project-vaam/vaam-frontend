@@ -14,12 +14,12 @@ public partial class DummyTest : Page
 
     }
 
-    protected async void Login2_LogginIn(object sender, LoginCancelEventArgs e)
+    protected async void LogginIn(object sender, LoginCancelEventArgs e)
     {
         e.Cancel = true;
 
-        String username = (Login2.FindControl("UserName") as TextBox).Text;
-        String password = (Login2.FindControl("Password") as TextBox).Text;
+        String username = (Login.FindControl("UserName") as TextBox).Text;
+        String password = (Login.FindControl("Password") as TextBox).Text;
 
         var body = new { username, password };
 

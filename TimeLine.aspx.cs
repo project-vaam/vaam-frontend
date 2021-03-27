@@ -32,25 +32,25 @@ public partial class TimeLine : Page
         
         if (!IsPostBack)
         {
-            /*Task<List<LifetimeEvent>> task = */
-            //RadTimeline1.DataSource = task.Result;
-            //RadTimeline1.DataBind();
+            displayMould.Visible = false;
             callMoulds();
-            //GetMouldLifetimeEvents();
+           
             
         }
     }
-    public async void GetMouldLifetimeEvents(object sender, DropDownListEventArgs e)
+    public async void GetMouldLifetimeEvents(object sender, DropDownListEventArgs molde)
     {
         var events = new List<LifetimeEvent>();
-        currentMould.InnerText = "Timeline do " + e.Text;
+        displayMould.Visible = true;
+        currentMould.InnerText = "Timeline do " + molde.Text;
+        
 
         using (var httpClient = new HttpClient())
         {
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds/" + e.Text + "/eventsUsersWorkstations").ConfigureAwait(false))  //http://project-vaam.pt/api/login/token
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds/" + molde.Text + "/eventsUsersWorkstations").ConfigureAwait(false))  //http://project-vaam.pt/api/login/token
             {
                 var status = response.IsSuccessStatusCode;
                 if (status == true)
@@ -58,10 +58,18 @@ public partial class TimeLine : Page
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine(apiResponse);
 
-                    events = JsonConvert.DeserializeObject<List<LifetimeEvent>>(apiResponse, new JsonSerializerSettings
+                    try
                     {
-                        MissingMemberHandling = MissingMemberHandling.Ignore // For Empty Arrays
-                    });
+                        events = JsonConvert.DeserializeObject<List<LifetimeEvent>>(apiResponse, new JsonSerializerSettings
+                        {
+                            MissingMemberHandling = MissingMemberHandling.Ignore // For Empty Arrays
+                        });
+                    }
+                    catch (Exception)
+                    {
+                        DisplayError.InnerText = "Timeline do " + molde.Text + " não se encontra disponível para visualização.";
+                    }
+                   
 
 
                     foreach(var eventLife in events)

@@ -20,10 +20,14 @@
         </telerik:RadDropDownList>
      </div>
 
-    <div style="text-align:center">
+    <div id="displayMould" runat="server" style="text-align:center">
         <h1><span id="currentMould" runat="server"></span></h1>
+        <hr />
     </div>
-    <hr />
+    
+    <div id="DisplayError" runat="server" style="text-align:center">
+        <h1><span id="Span1" runat="server"></span></h1>
+    </div>
 
     <div class="demo-container" runat="server">
 

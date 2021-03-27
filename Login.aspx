@@ -20,8 +20,12 @@
  
             <div class="demo-container size-custom">
                 <asp:Panel runat="server" ID="Panel2">
+                    <div style="text-align:center">
+                        <h1>VAAM</h1>
+                    </div>
+                    <hr />
                     <h2>Login</h2>
-                    <asp:Login ID="Login2" runat="server" Width="100%" EnableViewState="false" OnClick="LoginPost" OnLoggingIn="Login2_LogginIn">
+                    <asp:Login ID="Login" runat="server" Width="100%" EnableViewState="false" OnLoggingIn="LogginIn">                   
                         <LayoutTemplate>
                             <table>
                                 <tr>
@@ -32,9 +36,11 @@
                                                     <asp:Label ID="UserNameLabel" runat="server" AssociatedControlID="UserName">User Name:</asp:Label>
                                                 </td>
                                                 <td>
-                                                    <asp:TextBox ID="UserName" runat="server"></asp:TextBox>
-                                                    <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName"
-                                                        ErrorMessage="User Name is required." ToolTip="User Name is required." ValidationGroup="Login1"></asp:RequiredFieldValidator>
+                                                    <div style="text-align:center">
+                                                        <asp:TextBox ID="UserName" runat="server"></asp:TextBox>
+                                                        <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName"
+                                                            ErrorMessage="User Name is required." ToolTip="User Name is required." ValidationGroup="Login1"></asp:RequiredFieldValidator>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -53,7 +59,7 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2" style="text-align: right;">
+                                                <td colspan="5" style="text-align: right;">
                                                     <asp:Button ID="LoginButton" runat="server" CommandName="Login" Text="Log In" ValidationGroup="Login1"></asp:Button>
                                                 </td>
                                             </tr>
