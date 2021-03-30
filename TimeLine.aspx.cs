@@ -60,6 +60,7 @@ public partial class TimeLine : Page
 
                     try
                     {
+                        DisplayError.InnerText = "";
                         events = JsonConvert.DeserializeObject<List<LifetimeEvent>>(apiResponse, new JsonSerializerSettings
                         {
                             MissingMemberHandling = MissingMemberHandling.Ignore // For Empty Arrays
@@ -98,8 +99,7 @@ public partial class TimeLine : Page
 
          
             using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds").ConfigureAwait(false))
-            {
-                Debug.WriteLine(response);
+            {              
 
                 var status = response.IsSuccessStatusCode;
                 if (status == true)
