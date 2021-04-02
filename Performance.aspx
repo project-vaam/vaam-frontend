@@ -3,33 +3,35 @@
 
 
 
-<asp:Content ID="Content0" ContentPlaceHolderID="head" Runat="Server">
+<asp:Content ID="headContent" ContentPlaceHolderID="head" Runat="Server">
    
 
 
     <link href="assets/styles/base.css" rel="stylesheet" />
     <link href="assets/styles/default.css" rel="stylesheet" />
     <script src="assets/scripts/functions.js"></script> 
-   <script type="text/javascript">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
 
-     
-       $(document).ready(function () {
+    <script type="text/javascript">
+      //$(document).ready(function () {
 
-           $("#width").val() = $(window).width();
-           $("#height").val() = $(window).height();
+      //    $("#width").val("Hello");
+      //    $("#height").val('$(window).height()');
 
-       });
-   </script>
+      // });
+    </script>
 </asp:Content>
-
  
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+<asp:Content ID="bodyContent" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
 
     <asp:HiddenField ID="width" runat="server" />
     <asp:HiddenField ID="height" runat="server" />
 
     <div>
-        <asp:Label ID="APIResult" Text="" runat="server"></asp:Label>           
+        <asp:Label ID="APIResult" Text="" runat="server"></asp:Label>
+        <div class="demo-container" runat="server">
+            <telerik:RadDiagram ID="RadDiagram1" runat="server"></telerik:RadDiagram>
+        </div>
     </div>
 
 </asp:Content>

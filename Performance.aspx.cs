@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,35 +15,36 @@ using Telerik.Web.UI;
 public partial class Performance : System.Web.UI.Page
 {
 
-    RadDiagram RadDiagram1 = new RadDiagram();
-
-
     protected void Page_Load(object sender, EventArgs e)
     {
-        var TheBrowserWidth = width.Value;
-        var TheBrowserHeight = height.Value;
+        //var TheBrowserWidth = width.Value;
+        //var TheBrowserHeight = height.Value;
 
         callWorkflows();
-      
 
+        Debug.WriteLine("tou");
+        Debug.WriteLine(width.Value);
         // General diagram settings
-        RadDiagram1.Width = new System.Web.UI.WebControls.Unit(width.Value); 
-        RadDiagram1.Height = new System.Web.UI.WebControls.Unit(height.Value);
+        //RadDiagram1.Width = 700;
+        //RadDiagram1.Height = 800;
 
-        RadDiagram1.ShapeDefaultsSettings.Width = 140;
+
+        RadDiagram1.ShapeDefaultsSettings.Width = 310;
         RadDiagram1.ShapeDefaultsSettings.Height = 30;
-        RadDiagram1.ShapeDefaultsSettings.StrokeSettings.Color = "#fff";
-        Form.Controls.Add(RadDiagram1);
+
+        // User Permition Settings
+        RadDiagram1.Selectable = false;
+        RadDiagram1.Pannable = false;
+        RadDiagram1.Editable = false;
 
         // Layout settings
         RadDiagram1.LayoutSettings.Enabled = true;
         RadDiagram1.LayoutSettings.Type = Telerik.Web.UI.Diagram.LayoutType.Layered;
-        RadDiagram1.LayoutSettings.Subtype = Telerik.Web.UI.Diagram.LayoutSubtype.Right;
-        RadDiagram1.LayoutSettings.VerticalSeparation = 20;
+        RadDiagram1.LayoutSettings.Subtype = Telerik.Web.UI.Diagram.LayoutSubtype.Down;
+        RadDiagram1.LayoutSettings.VerticalSeparation = 30;
         RadDiagram1.LayoutSettings.HorizontalSeparation = 30;
 
-       
-      
+
     }
 
     protected void AddDiagramShape(string shapeID, string contentText, RadDiagram diagram)
@@ -51,20 +53,38 @@ public partial class Performance : System.Web.UI.Page
         {
             Id = shapeID,
         };
+        
         shape.ContentSettings.Text = contentText;
-        //shape.ContentSettings.Color = contentColor;
+
+
+        //shape.Width = 150;
+        shape.StrokeSettings.DashType = Telerik.Web.UI.Diagram.StrokeDashType.Solid;
+        shape.StrokeSettings.Color = Color.Black.ToString();
+        shape.StrokeSettings.Width = 1.2;
+
+        shape.ContentSettings.Color = Color.White.ToString();
         //shape.FillSettings.Color = backgroundColor;
         diagram.ShapesCollection.Add(shape);
     }
 
-    protected void ConnectDiagramShapes(string startShapeID, string endShapeID, RadDiagram diagram)
+    protected void ConnectDiagramShapes(string startShapeID, string endShapeID, string textConnection, string colorHEXConnection, int widthConnection, RadDiagram diagram)
     {
         var connection = new DiagramConnection();
+
+        /* Settings */
         connection.FromSettings.ShapeId = startShapeID;
         connection.ToSettings.ShapeId = endShapeID;
+        connection.StrokeSettings.Color = "#000";
+        connection.StrokeSettings.Width = 1.2;
+
+        /*  Params */
+
+        if (widthConnection != -1) connection.StrokeSettings.Width = widthConnection;
+        if(colorHEXConnection != string.Empty) connection.StrokeSettings.Color = colorHEXConnection;
+        if(textConnection != string.Empty) connection.ContentSettings.Text = textConnection;
+
         diagram.ConnectionsCollection.Add(connection);
     }
-
 
     protected async void callWorkflows()
     {
@@ -87,23 +107,39 @@ public partial class Performance : System.Web.UI.Page
 
                     var nodes = jsonResponse["nodes"];
 
-                    var relations = jsonResponse["relations"];
+                    /* DEBUG JSON */
+                    APIResult.Text = jsonResponse["relations"].ToString();
 
-                    APIResult.Text = relations.ToString();                 
+                    var statistics = jsonResponse["statistics"];
 
+                                 
                     foreach (var node in nodes.Select((value, i) => new { i, value }))
                     {
-                        AddDiagramShape(node.i + "", node.value + " - " + node.i, RadDiagram1);                       
+                        JToken meanDuration = new JObject();
+
+                        foreach(var nodeStats in statistics["nodes"])
+                        {
+                            if(node.i == int.Parse(nodeStats["node"].ToString()))
+                            {
+                                meanDuration = nodeStats["meanDuration"];
+                                break;
+                            }
+                        }
+
+
+                        string diagramTitle = node.value + " ( " + displayDuration(meanDuration) + ")";
+
+                        AddDiagramShape(node.i.ToString(), diagramTitle, RadDiagram1);                       
                                                                
                     }
 
-                    foreach (var relation in relations.Select((value, i) => new { i, value }))
+                    foreach (var relation in statistics["relations"].Select((value, i) => new { i, value }))
                     {
                                                                   
-                        foreach (var destination in relation.value["to"].Select((value, i) => new { i, value }))
+                        foreach (var destination in relation.value["to"])
                         {                           
-                            Debug.WriteLine(destination.value);
-                            ConnectDiagramShapes(relation.value["from"].ToString(), destination.value.ToString(), RadDiagram1);
+                            Debug.WriteLine(destination["node"]);
+                            ConnectDiagramShapes(relation.value["from"].ToString(), destination["node"].ToString(), displayDuration(destination["meanDuration"]), "",-1, RadDiagram1);
                         }                       
                     }
                 }
@@ -142,4 +178,13 @@ public partial class Performance : System.Web.UI.Page
     //    public string Id { get; set; }
     //    public string Color { get; set; }
     //}
+
+    public string displayDuration(JToken duration)
+    {
+        return (int.Parse(duration["days"].ToString()) > 0 ? duration["days"] + " d " : "") +
+                            (int.Parse(duration["hours"].ToString()) > 0 ? duration["hours"] + " h " : "") +
+                            (int.Parse(duration["minutes"].ToString()) > 0 ? duration["minutes"] + " min " : "") +
+                            (int.Parse(duration["seconds"].ToString()) > 0 ? duration["seconds"] + " seg " : "") +
+                            (int.Parse(duration["millis"].ToString()) > 0 ? duration["millis"] + " ms " : "");
+    }
 }
