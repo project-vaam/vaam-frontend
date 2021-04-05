@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -14,20 +16,21 @@ using Telerik.Web.UI;
 
 public partial class Performance : System.Web.UI.Page
 {
-
     protected void Page_Load(object sender, EventArgs e)
     {
+       
+        if (!IsPostBack)
+        {
+            displayProcess.Visible = false;
+            //callProcesses();
+        }
+
         //var TheBrowserWidth = width.Value;
         //var TheBrowserHeight = height.Value;
 
-        callWorkflows();
-
-        Debug.WriteLine("tou");
-        Debug.WriteLine(width.Value);
         // General diagram settings
         //RadDiagram1.Width = 700;
         //RadDiagram1.Height = 800;
-
 
         RadDiagram1.ShapeDefaultsSettings.Width = 310;
         RadDiagram1.ShapeDefaultsSettings.Height = 30;
@@ -44,10 +47,9 @@ public partial class Performance : System.Web.UI.Page
         RadDiagram1.LayoutSettings.VerticalSeparation = 30;
         RadDiagram1.LayoutSettings.HorizontalSeparation = 30;
 
-
     }
 
-    protected void AddDiagramShape(string shapeID, string contentText, RadDiagram diagram)
+    protected void AddDiagramShape(string shapeID, string contentText,string color, RadDiagram diagram)
     {
         var shape = new DiagramShape()
         {
@@ -56,14 +58,13 @@ public partial class Performance : System.Web.UI.Page
         
         shape.ContentSettings.Text = contentText;
 
-
         //shape.Width = 150;
         shape.StrokeSettings.DashType = Telerik.Web.UI.Diagram.StrokeDashType.Solid;
         shape.StrokeSettings.Color = Color.Black.ToString();
         shape.StrokeSettings.Width = 1.2;
 
         shape.ContentSettings.Color = Color.White.ToString();
-        //shape.FillSettings.Color = backgroundColor;
+        shape.FillSettings.Color = color;
         diagram.ShapesCollection.Add(shape);
     }
 
@@ -74,8 +75,8 @@ public partial class Performance : System.Web.UI.Page
         /* Settings */
         connection.FromSettings.ShapeId = startShapeID;
         connection.ToSettings.ShapeId = endShapeID;
-        connection.StrokeSettings.Color = "#000";
-        connection.StrokeSettings.Width = 1.2;
+        connection.StrokeSettings.Color = colorHEXConnection;
+        connection.StrokeSettings.Width = widthConnection;
 
         /*  Params */
 
@@ -86,15 +87,41 @@ public partial class Performance : System.Web.UI.Page
         diagram.ConnectionsCollection.Add(connection);
     }
 
-    protected async void callWorkflows()
+    private static void DisplaySelection(Telerik.Web.UI.RadDropDownList dropdownlist, Label label)
     {
+        if (dropdownlist.SelectedText != String.Empty)
+        {
+            label.Text = "You selected: <b>" + dropdownlist.SelectedText + "</b> and yur index is: " + dropdownlist.SelectedValue;
+        }
+        else
+        {
+            label.Text = "RadDropDownList is empty";
+        }
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        callWorkflows(RadDropDownList4);
+    }
+
+    public async void callWorkflows(RadDropDownList dropdownlist)
+    {
+  
+        displayProcess.Visible = true;
+        currentProcess.InnerText = "Performance do processo " + dropdownlist.SelectedText;
+
+        //resets the diagram
+        DisplayError.InnerText = "";
+        RadDiagram1.ShapesCollection.Clear();
+        RadDiagram1.ConnectionsCollection.Clear();
+
         using (var httpClient = new HttpClient())
         {
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-
-            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "workflow-network/alpha-miner/processes/25").ConfigureAwait(false))
+          
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "workflow-network/alpha-miner/processes/" + dropdownlist.SelectedValue).ConfigureAwait(false))
             {
                 Debug.WriteLine(response);
 
@@ -105,21 +132,16 @@ public partial class Performance : System.Web.UI.Page
 
                     JObject jsonResponse = JObject.Parse(apiResponse);
 
-                    var nodes = jsonResponse["nodes"];
-
-                    /* DEBUG JSON */
-                    APIResult.Text = jsonResponse["relations"].ToString();
-
+                    var nodes = jsonResponse["nodes"];                                   
                     var statistics = jsonResponse["statistics"];
 
-                                 
                     foreach (var node in nodes.Select((value, i) => new { i, value }))
                     {
                         JToken meanDuration = new JObject();
 
-                        foreach(var nodeStats in statistics["nodes"])
+                        foreach (var nodeStats in statistics["nodes"])
                         {
-                            if(node.i == int.Parse(nodeStats["node"].ToString()))
+                            if (node.i == int.Parse(nodeStats["node"].ToString()))
                             {
                                 meanDuration = nodeStats["meanDuration"];
                                 break;
@@ -128,56 +150,111 @@ public partial class Performance : System.Web.UI.Page
 
 
                         string diagramTitle = node.value + " ( " + displayDuration(meanDuration) + ")";
-
-                        AddDiagramShape(node.i.ToString(), diagramTitle, RadDiagram1);                       
+                        string color = shapesColor(meanDuration);
                                                                
+                       AddDiagramShape(node.i.ToString(), diagramTitle, color, RadDiagram1);
+
                     }
 
                     foreach (var relation in statistics["relations"].Select((value, i) => new { i, value }))
                     {
-                                                                  
+
                         foreach (var destination in relation.value["to"])
-                        {                           
-                            Debug.WriteLine(destination["node"]);
-                            ConnectDiagramShapes(relation.value["from"].ToString(), destination["node"].ToString(), displayDuration(destination["meanDuration"]), "",-1, RadDiagram1);
-                        }                       
+                        {
+                            
+                            string color = "";
+                            int width = 1;
+
+                            JToken duration = new JObject();
+                            duration = destination["meanDuration"];
+
+
+                            if (int.Parse(duration["days"].ToString()) != 0) //demora muito tempo
+                            {
+                                color = "#FC0000";  //red
+                                width = 5;
+
+                            }
+                            else if (int.Parse(duration["hours"].ToString()) != 0)//depende de quantas horas demora
+                            {
+                                if (int.Parse(duration["hours"].ToString()) >= 3)
+                                {
+                                    color = "#FC0000";  //red, demora muito tempo
+                                    width = 10;
+                                }
+                                else if (int.Parse(duration["hours"].ToString()) >= 1 && int.Parse(duration["hours"].ToString()) <= 3) //demora entre 1 e 3 horas
+                                {
+                                    color = "#FF7A7A"; //low red demora tempo media
+                                    width = 7;
+                                }
+                            }
+                            else //apenas demora alguns minutos
+                            {
+                                color = "#FFCDCD"; //white  o tempo esta ok
+                                width = 5;
+                            }
+
+                            ConnectDiagramShapes(relation.value["from"].ToString(), destination["node"].ToString(), displayDuration(destination["meanDuration"]), color, width, RadDiagram1);
+                        }
                     }
                 }
                 else
                 {
-                    Debug.WriteLine("Something went bad.");
-
-                  
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    //int numericStatusCode = (int)response.StatusCode;
+                    //Debug.WriteLine(numericStatusCode);
+                    Debug.WriteLine(apiResponse);
+                    DisplayError.InnerText = apiResponse;
                 }
             }
         }
     }
 
-    //public static class Nodes
+    //protected async void callProcesses()
     //{
-    //    public static Node Nadal = new Node() { Name = "R. Nadal", Id = "nadal", Color = "#f18100" };
-    //    public static Node Djokovic = new Node() { Name = "N. Djokovic", Id = "djokovic", Color = "#8cb20f" };
-    //    public static Node Youzhny = new Node() { Name = "M. Youzhny", Id = "youzhny", Color = "#ae5e08" };
-    //    public static Node Murray = new Node() { Name = "A. Murray", Id = "murray", Color = "#d75234" };
-    //    public static Node Wawrinka = new Node() { Name = "S. Wawrinka", Id = "wawrinka", Color = "#f8c43a" };
-    //    public static Node Gasquet = new Node() { Name = "R. Gasquet", Id = "gasquet", Color = "#5f9fee" };
-    //    public static Node Ferrer = new Node() { Name = "D. Ferrer", Id = "ferrer", Color = "#1958a6" };
-    //    public static Node Robredo = new Node() { Name = "T. Robredo", Id = "Robredo", Color = "#6da000" };
+
+    //    using (var httpClient = new HttpClient())
+    //    {
+    //        string token = (string)Session["sessionToken"];
+    //        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+
+    //        using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "processes").ConfigureAwait(false))
+    //        {
+
+    //            var status = response.IsSuccessStatusCode;
+    //            if (status == true)
+    //            {
+    //                string apiResponse = await response.Content.ReadAsStringAsync();
+
+    //                JArray obj = JsonConvert.DeserializeObject<JArray>(apiResponse);
+
+    //                ArrayList ListID = new ArrayList();
+    //                ArrayList ListName = new ArrayList();
+
+    //                foreach (JObject item in obj)
+    //                {
+    //                    string processId = item["id"].ToString();
+    //                    ListID.Add(processId);
+
+    //                    string processName = item["name"].ToString();
+    //                    ListName.Add(processName);
+
+    //                    RadDropDownList1.DataValueField = "2";
+    //                    RadDropDownList1.DataSourceID = "ListID";
+    //                    RadDropDownList1.DataSource = ListID;
+
+    //                    RadDropDownList1.DataBind();
+    //                }
+    //            }
+    //            else
+    //            {
+    //                Debug.WriteLine("Something went bad.");
+    //            }
+    //        }
+    //    }
     //}
 
-    //public class Workflow
-    //{
-    //    public string Name { get; set; }
-
-    //    public IList<Node> Node { get; set; }
-    //}
-
-    //public class Node
-    //{
-    //    public string Name { get; set; }
-    //    public string Id { get; set; }
-    //    public string Color { get; set; }
-    //}
 
     public string displayDuration(JToken duration)
     {
@@ -187,4 +264,68 @@ public partial class Performance : System.Web.UI.Page
                             (int.Parse(duration["seconds"].ToString()) > 0 ? duration["seconds"] + " seg " : "") +
                             (int.Parse(duration["millis"].ToString()) > 0 ? duration["millis"] + " ms " : "");
     }
+
+    public string shapesColor(JToken duration)
+    {
+        string color = "";
+                 
+        if (int.Parse(duration["days"].ToString()) != 0) //demora muito tempo
+        {
+            color = "#FC0000";  //red
+
+        }
+        else if (int.Parse(duration["hours"].ToString()) != 0)//depende de quantas horas demora
+        {
+            if (int.Parse(duration["hours"].ToString()) >= 3)
+            {
+                color = "#FC0000";  //red, demora muito tempo
+            }
+            else if (int.Parse(duration["hours"].ToString()) >= 1 && int.Parse(duration["hours"].ToString()) <= 3) //demora entre 1 e 3 horas
+            {
+                color = "#FF9494"; //low red demora tempo media
+            }
+        }
+        else //apenas demora alguns minutos
+        {
+            color = "#FFFFFF"; //white  o tempo esta ok
+        }
+
+        return color;
+    }
+
+
+    //public Tuple<string, int> connectionsStyle(JToken duration) //n funca assim :( Tuple n existe na nossa versao de c# shall we update ? :0
+    //{
+    //    string color = "";
+    //    int width = 1;
+
+
+    //    if (int.Parse(duration["days"].ToString()) != 0) //demora muito tempo
+    //    {
+    //        color = "#FC0000";  //red
+    //        width = 5;
+
+    //    }
+    //    else if (int.Parse(duration["hours"].ToString()) != 0)//depende de quantas horas demora
+    //    {
+    //        if (int.Parse(duration["hours"].ToString()) >= 3)
+    //        {
+    //            color = "#FC0000";  //red, demora muito tempo
+    //            width = 5;
+    //        }
+    //        else if (int.Parse(duration["hours"].ToString()) >= 1 && int.Parse(duration["hours"].ToString()) <= 3) //demora entre 1 e 3 horas
+    //        {
+    //            color = "#FF9494"; //low red demora tempo media
+    //            width = 3;
+    //        }
+    //    }
+    //    else //apenas demora alguns minutos
+    //    {
+    //        color = "#FFFFFF"; //white  o tempo esta ok
+    //        width = 1;
+    //    }
+
+    //    return (color, width);
+    //}    
 }
+
