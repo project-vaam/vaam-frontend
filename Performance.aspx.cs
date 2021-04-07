@@ -132,7 +132,7 @@ public partial class Performance : System.Web.UI.Page
 
                     JObject jsonResponse = JObject.Parse(apiResponse);
 
-                    var nodes = jsonResponse["nodes"];                                   
+                    var nodes = jsonResponse["nodes"];
                     var statistics = jsonResponse["statistics"];
 
                     foreach (var node in nodes.Select((value, i) => new { i, value }))
@@ -151,8 +151,8 @@ public partial class Performance : System.Web.UI.Page
 
                         string diagramTitle = node.value + " ( " + displayDuration(meanDuration) + ")";
                         string color = shapesColor(meanDuration);
-                                                               
-                       AddDiagramShape(node.i.ToString(), diagramTitle, color, RadDiagram1);
+
+                        AddDiagramShape(node.i.ToString(), diagramTitle, color, RadDiagram1);
 
                     }
 
@@ -161,7 +161,7 @@ public partial class Performance : System.Web.UI.Page
 
                         foreach (var destination in relation.value["to"])
                         {
-                            
+
                             string color = "";
                             int width = 1;
 
@@ -204,57 +204,21 @@ public partial class Performance : System.Web.UI.Page
                     //int numericStatusCode = (int)response.StatusCode;
                     //Debug.WriteLine(numericStatusCode);
                     Debug.WriteLine(apiResponse);
-                    DisplayError.InnerText = apiResponse;
+
+
+                    try
+                    {
+                        DisplayError.InnerText = JObject.Parse(apiResponse)["message"].ToString();
+                    }catch(Exception ex)
+                    {
+                        DisplayError.InnerText = apiResponse;
+                    }
+
+                    //DisplayError.InnerText = IsValidJson(apiResponse) ? JObject.Parse(apiResponse)["message"].ToString() : apiResponse;
                 }
             }
         }
     }
-
-    //protected async void callProcesses()
-    //{
-
-    //    using (var httpClient = new HttpClient())
-    //    {
-    //        string token = (string)Session["sessionToken"];
-    //        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-
-    //        using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "processes").ConfigureAwait(false))
-    //        {
-
-    //            var status = response.IsSuccessStatusCode;
-    //            if (status == true)
-    //            {
-    //                string apiResponse = await response.Content.ReadAsStringAsync();
-
-    //                JArray obj = JsonConvert.DeserializeObject<JArray>(apiResponse);
-
-    //                ArrayList ListID = new ArrayList();
-    //                ArrayList ListName = new ArrayList();
-
-    //                foreach (JObject item in obj)
-    //                {
-    //                    string processId = item["id"].ToString();
-    //                    ListID.Add(processId);
-
-    //                    string processName = item["name"].ToString();
-    //                    ListName.Add(processName);
-
-    //                    RadDropDownList1.DataValueField = "2";
-    //                    RadDropDownList1.DataSourceID = "ListID";
-    //                    RadDropDownList1.DataSource = ListID;
-
-    //                    RadDropDownList1.DataBind();
-    //                }
-    //            }
-    //            else
-    //            {
-    //                Debug.WriteLine("Something went bad.");
-    //            }
-    //        }
-    //    }
-    //}
-
 
     public string displayDuration(JToken duration)
     {

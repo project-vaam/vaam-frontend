@@ -15,7 +15,7 @@
        
         <h5>Selecione o Molde</h5>
        
-        <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" DefaultMessage="Escolha um modulo" AutoPostBack="true"
+        <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" DefaultMessage="Escolha um Molde" AutoPostBack="true"
             OnSelectedIndexChanged="GetMouldLifetimeEvents" runat="server">
         </telerik:RadDropDownList>
      </div>

@@ -33,8 +33,8 @@ public class DropDownListDataObject : Page
                       
             client.Headers.Add(HttpRequestHeader.ContentType, "application/json");
 
-            string sessionID = Session["sessionToken"].ToString();
-            client.Headers[HttpRequestHeader.Authorization] = "Bearer " + sessionID;
+            string token = (string)Session["sessionToken"];
+            client.Headers[HttpRequestHeader.Authorization] = "Bearer " + token;
 
             String responseStr = client.DownloadString(new Uri(Constants.URL_BACKEND_CONNECTION + "processes"));
 

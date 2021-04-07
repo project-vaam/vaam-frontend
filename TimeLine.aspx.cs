@@ -33,9 +33,8 @@ public partial class TimeLine : Page
         if (!IsPostBack)
         {
             displayMould.Visible = false;
+            RadTimeline1.Visible = false;
             callMoulds();
-           
-            
         }
     }
     public async void GetMouldLifetimeEvents(object sender, DropDownListEventArgs molde)
@@ -65,21 +64,23 @@ public partial class TimeLine : Page
                         {
                             MissingMemberHandling = MissingMemberHandling.Ignore // For Empty Arrays
                         });
+
+                        foreach (var eventLife in events)
+                        {
+                            Debug.WriteLine(eventLife.AverageEventDurationForActivityMillis);
+                        }
+
+                        RadTimeline1.DataSource = events;
+                        RadTimeline1.DataBind();
+
+
+                        RadTimeline1.Visible = true;
                     }
                     catch (Exception)
                     {
+                        RadTimeline1.Visible = false;
                         DisplayError.InnerText = "Timeline do " + molde.Text + " não se encontra disponível para visualização.";
                     }
-                   
-
-
-                    foreach(var eventLife in events)
-                    {
-                        Debug.WriteLine(eventLife.AverageEventDurationForActivityMillis);
-                    }
-                        
-                    RadTimeline1.DataSource = events;
-                    RadTimeline1.DataBind();
                 }
                 else
                 {
