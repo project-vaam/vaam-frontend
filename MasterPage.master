@@ -40,7 +40,7 @@
                                     <telerik:RadMenuItem IsSeparator="true" />
                                     <telerik:RadMenuItem Text="Timeline" NavigateUrl="Timeline.aspx" />
                                     <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Performance" NavigateUrl="Performance.aspx" />
+                                    <telerik:RadMenuItem Text="Performance" NavigateUrl="Performance.aspx" />                                                                
                                 </Items>
                             </telerik:RadMenu>
                         </telerik:LayoutColumn>

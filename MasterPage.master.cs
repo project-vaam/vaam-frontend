@@ -7,8 +7,7 @@ public partial class MasterPage : System.Web.UI.MasterPage
     {
 
         if (Session["sessionToken"] != null)
-        {
-            
+        {         
             loginButton.Visible = false;
             // loginButton.Visible = true;
         }

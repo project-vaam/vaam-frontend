@@ -18,11 +18,16 @@ public partial class Performance : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-       
+        if (Session["sessionToken"] == null)
+        {
+
+            Page.Response.Redirect("Login.aspx", true);
+        }
+
         if (!IsPostBack)
         {
-            displayProcess.Visible = false;
-            //callProcesses();
+            displayProcess.Visible = false;            
+            callProcesses();
         }
 
         //var TheBrowserWidth = width.Value;
@@ -36,9 +41,9 @@ public partial class Performance : System.Web.UI.Page
         RadDiagram1.ShapeDefaultsSettings.Height = 30;
 
         // User Permition Settings
-        RadDiagram1.Selectable = false;
-        RadDiagram1.Pannable = false;
-        RadDiagram1.Editable = false;
+        //RadDiagram1.Selectable = false;
+        //RadDiagram1.Pannable = false;
+        //RadDiagram1.Editable = false;
 
         // Layout settings
         RadDiagram1.LayoutSettings.Enabled = true;
@@ -47,6 +52,13 @@ public partial class Performance : System.Web.UI.Page
         RadDiagram1.LayoutSettings.VerticalSeparation = 30;
         RadDiagram1.LayoutSettings.HorizontalSeparation = 30;
 
+        //Arrows
+        RadDiagram1.ConnectionDefaultsSettings.EndCap = Telerik.Web.UI.Diagram.ConnectionEndCap.ArrowEnd;
+      
+        RadDiagram1.ConnectionDefaultsSettings.Editable = true;
+        //RadDiagram1.ConnectionDefaultsSettings.EndCapSettings.StrokeSettings.Width = 100;
+        //RadDiagram1.ConnectionDefaultsSettings.EndCapSettings.FillSettings.Color = "#152BEC"
+        //RadDiagram1.ConnectionDefaultsSettings.EndCapSettings.FillSettings.Opacity = 5;         
     }
 
     protected void AddDiagramShape(string shapeID, string contentText,string color, RadDiagram diagram)
@@ -74,29 +86,17 @@ public partial class Performance : System.Web.UI.Page
 
         /* Settings */
         connection.FromSettings.ShapeId = startShapeID;
-        connection.ToSettings.ShapeId = endShapeID;
+        connection.ToSettings.ShapeId = endShapeID;       
         connection.StrokeSettings.Color = colorHEXConnection;
+       
         connection.StrokeSettings.Width = widthConnection;
 
         /*  Params */
-
-        if (widthConnection != -1) connection.StrokeSettings.Width = widthConnection;
+        if(widthConnection != -1) connection.StrokeSettings.Width = widthConnection;
         if(colorHEXConnection != string.Empty) connection.StrokeSettings.Color = colorHEXConnection;
         if(textConnection != string.Empty) connection.ContentSettings.Text = textConnection;
 
         diagram.ConnectionsCollection.Add(connection);
-    }
-
-    private static void DisplaySelection(Telerik.Web.UI.RadDropDownList dropdownlist, Label label)
-    {
-        if (dropdownlist.SelectedText != String.Empty)
-        {
-            label.Text = "You selected: <b>" + dropdownlist.SelectedText + "</b> and yur index is: " + dropdownlist.SelectedValue;
-        }
-        else
-        {
-            label.Text = "RadDropDownList is empty";
-        }
     }
 
     protected void Button1_Click(object sender, EventArgs e)
@@ -161,7 +161,6 @@ public partial class Performance : System.Web.UI.Page
 
                         foreach (var destination in relation.value["to"])
                         {
-
                             string color = "";
                             int width = 1;
 
@@ -215,6 +214,42 @@ public partial class Performance : System.Web.UI.Page
                     }
 
                     //DisplayError.InnerText = IsValidJson(apiResponse) ? JObject.Parse(apiResponse)["message"].ToString() : apiResponse;
+                }
+            }
+        }
+    }
+
+    protected async void callProcesses()
+    {
+
+        using (var httpClient = new HttpClient())
+        {
+            string token = (string)Session["sessionToken"];
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "processes").ConfigureAwait(false))
+            {
+
+                var status = response.IsSuccessStatusCode;
+               
+                if (status == true)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                  
+                    JArray obj = JsonConvert.DeserializeObject<JArray>(apiResponse);
+
+
+                    foreach (JObject item in obj)
+                    {                      
+                        string value = item["id"].ToString();
+                        string text = item["name"].ToString();                      
+                        RadDropDownList4.Items.Add(new DropDownListItem(text, value));                      
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("Something went bad.");
                 }
             }
         }

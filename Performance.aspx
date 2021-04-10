@@ -7,8 +7,8 @@
    
 
 
-    <link href="assets/styles/base.css" rel="stylesheet" />
-    <link href="assets/styles/default.css" rel="stylesheet" />
+        <link href="assets/styles/base.css" rel="stylesheet" />
+        <link href="assets/styles/default.css" rel="stylesheet" />
     <script src="assets/scripts/functions.js"></script> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
 
@@ -30,32 +30,24 @@
     <div>
         <h5>Selecione o Processo</h5>
        
-        <%--<telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" DefaultMessage="Escolha um Processo" AutoPostBack="true"
-            OnSelectedIndexChanged="callWorkflows" runat="server">
-        </telerik:RadDropDownList>--%>
-
         <telerik:RadDropDownList
             id="RadDropDownList4"
             runat="server"
             datavaluefield="ID"
-            datatextfield="Text"
-            datasourceid="ObjectDataSource1"> 
-           
+            datatextfield="Text">           
         </telerik:RadDropDownList>
-         <telerik:RadButton RenderMode="Lightweight" runat="server" Text="Select" ID="RadButton1"  OnClick="Button1_Click" />
-            <p>
-                <asp:Label runat="server" ID="Label2" />
-            </p>
+
+        <telerik:RadButton RenderMode="Lightweight" runat="server" Text="Select" ID="RadButton1"  OnClick="Button1_Click" />
+        <p>
+            <asp:Label runat="server" ID="Label2" />
+        </p>
 
         <div id="displayProcess" runat="server" style="text-align:center">
             <h1><span id="currentProcess" runat="server"></span></h1>
             <hr />
         </div>
-
-        <asp:ObjectDataSource ID="ObjectDataSource1" TypeName="DropDownListDataObject" SelectMethod="GetItems"
-            runat="server"></asp:ObjectDataSource>
-       
-        <div id="DisplayError" runat="server" style="text-align:center">
+      
+        <div id="DisplayError" runat="server" style="text-align:center" >
             <h1><span id="Span1" runat="server"></span></h1>
         </div>
 

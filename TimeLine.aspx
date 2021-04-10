@@ -11,8 +11,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <div>
-        
-       
+             
         <h5>Selecione o Molde</h5>
        
         <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" DefaultMessage="Escolha um Molde" AutoPostBack="true"
