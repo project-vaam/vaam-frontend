@@ -1,0 +1,35 @@
+﻿.performance-btn {
+    border-radius: 16px 0px 0px 16px !important;
+    border: none;
+}
+
+.performance-btn span {
+    font-size: 1.1rem;
+    padding: 5px;
+}
+
+.performance-btn.rbToggled {
+    background: #337ab7 !important;
+}
+
+.performance-btn.rbToggled span {
+    color: white;
+}
+
+.frequency-btn {
+    border-radius: 0px 16px 16px 0px !important;
+}
+
+.frequency-btn span {
+    font-size: 1.1rem;
+    padding: 5px;
+}
+
+
+.frequency-btn.rbToggled {
+    background: #337ab7 !important;
+}
+
+.frequency-btn.rbToggled span {
+    color: white;
+}
