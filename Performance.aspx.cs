@@ -112,6 +112,11 @@ public partial class Performance : System.Web.UI.Page
     /*Funcao do code behind para fazer os pedidos, tudo o resto pode ir com o caralho, alterar de forma a receber os novos inputs"*/
     protected async void GetWorkFlows(string processID) //chamar no load Page
     {
+        errorMessage.InnerText = "";
+        showError.Visible = false;
+
+
+
         using (var httpClient = new HttpClient())
         {
             string token = (string)Session["sessionToken"];
@@ -147,8 +152,9 @@ public partial class Performance : System.Web.UI.Page
                 else
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine(apiResponse);
-
+                    Debug.WriteLine("Something went bad");
+                    errorMessage.InnerText = apiResponse;
+                    showError.Visible = true;
                 }
             }
         }

@@ -40,7 +40,9 @@
                                     <telerik:RadMenuItem IsSeparator="true" />
                                     <telerik:RadMenuItem Text="Timeline" NavigateUrl="Timeline.aspx" />
                                     <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Performance" NavigateUrl="Performance.aspx" />                                                                
+                                    <telerik:RadMenuItem Text="Performance" NavigateUrl="Performance.aspx" /> 
+                                    <telerik:RadMenuItem IsSeparator="true" />
+                                    <telerik:RadMenuItem Text="Cytoscape_POC" NavigateUrl="Cytoscape_POC.aspx" /> 
                                 </Items>
                             </telerik:RadMenu>
                         </telerik:LayoutColumn>
@@ -95,6 +97,9 @@
                     </Columns>
                 </telerik:LayoutRow>
 
+               
+                
+
                 <%--Footer--%>
                 <telerik:LayoutRow>
                     <Columns>
@@ -106,7 +111,97 @@
                 </telerik:LayoutRow>
             </Rows>
         </telerik:RadPageLayout>
+
        </div>
+
+        
     </form>
+    
+     
+  <%--  <div id="cy"></div>
+    <script>
+        var cy = cytoscape({
+
+            wheelSensitivity: 0.5,
+            minZoom: 0.1,
+            maxZoom: 1,
+            container: document.getElementById('cy'), // container to render in
+
+            elements: [ // list of graph elements to start with
+                { // node a
+                    data: { id: 'a', name: 'teste' }
+                },
+                { // node b
+                    data: { id: 'b', name: 'teste' }
+                },
+                { // node c
+                    data: { id: 'c', name: 'teste' }
+                },
+                { // edge ab
+                    data: { id: 'ab', source: 'a', target: 'b', name: 'teste' },
+                },
+                {
+                    data: { id: 'bc', source: 'b', target: 'c', name: 'teste' },
+
+                },
+                {
+                    data: { id: 'ca', source: 'c', target: 'a', name: 'teste' }
+                },
+                {
+                    data: { id: 'ca2', source: 'c', target: 'a', name: 'teste' }
+                },
+                {
+                    data: { id: 'aa', source: 'a', target: 'a', name: 'teste' }
+                },
+
+            ],
+
+            style: [ // the stylesheet for the graph
+                {
+                    selector: 'node',
+                    style: {
+                        "shape": 'rectangle',
+                        "background-color": "#FFB7B7",
+                        "label": "data(name)",
+                        'width': '350',
+                        "height": "40",
+                        "border-width": 2,
+                        "border-color": "#484848",
+                        "font-size": "16px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "color": "#222222"
+                    }
+                },
+
+                {
+
+                    selector: 'edge',
+                    style: {
+                        'width': 7,
+                        'curve-style': 'bezier',
+                        "content": "data(name)",
+                        "line-color": "#FF8A8A",
+                        'target-arrow-color': '#FF8A8A',
+                        "font-size": "32px",
+                        "color": "#222222",
+                        "loop-direction": "0deg",
+                        'target-arrow-shape': 'triangle',
+                        "loop-sweep": "45deg",
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px"
+                    }
+                }
+            ],
+
+
+            layout: {
+                name: 'breadthfirst',
+                rows: 1
+            }
+
+        });
+
+    </script>--%>
 </body>
 </html>
