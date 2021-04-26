@@ -1,5 +1,4 @@
 ﻿
-
 var cy = null
 
 var currentProcess = {
@@ -291,6 +290,7 @@ function renderPerformanceGraph() {
             nodesMaxTime = currentProcess.nodeTimes[i];
         }
     }
+
     process.data.nodesMaxTime = nodesMaxTime;
 
     //edges max time
@@ -304,7 +304,11 @@ function renderPerformanceGraph() {
     }
     process.data.edgesMaxTime = edgesMaxTime;
 
-
+    /* Add time to color scales */
+    for (let i = 1; i < 5; i++) {
+        document.getElementById(`level-${i}-state`).textContent = timeConvertMinutes((nodesMaxTime / 5) * i)
+        document.getElementById(`level-${i}-arrows`).textContent = timeConvertMinutes((edgesMaxTime / 5) * i)
+    }
 
     //add nodes to graph
     for (var i = 0; i < process.data.nodes.length; i++) {
@@ -758,5 +762,11 @@ function durationToString(duration) {
         ((moment.duration({ "minutes": duration }).seconds() !== 0) ? moment.duration({ "minutes": duration }).seconds() + "S" : "");
 }
 
+function timeConvertMinutes(minAux) {
+    let hours = minAux / 60
+    let hoursFloor = Math.floor(hours)
+    let min = (hours - hoursFloor) * 60
 
+    return min < 1 && min > 0 ? `${(min * 60).toFixed(3)} segundos` : `${hoursFloor}h ${min.toFixed(0)}min`
+}
 

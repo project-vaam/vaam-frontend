@@ -25,11 +25,61 @@
     padding: 5px;
 }
 
-
 .frequency-btn.rbToggled {
     background: #337ab7 !important;
 }
 
 .frequency-btn.rbToggled span {
     color: white;
+}
+
+/* Color Scale Visualization */
+.text-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.text-wrapper h4{
+    margin: 16px 0px !important;
+}
+
+.group-box-wrapper {
+    height: 200px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.group-box {
+    display: flex;
+}
+
+.box-wrapper-stages {
+    height: 200px;
+    width: 100px;
+    background: linear-gradient(to bottom, #be1300 20%, #f25831 20% 40%, #ff9457 40% 60%,#ffce89 60% 80%, #fff0d9 80%);
+    clip-path: polygon(60% 100%, 100% 100%, 100% 0, 0 0);
+    text-align: end;
+}
+
+.box-wrapper-arrows {
+    height: 200px;
+    width: 100px;
+    background-image: linear-gradient(180deg, #b91200, #787679);
+    clip-path: polygon(0 100%, 40% 100%, 100% 0, 0 0);
+}
+
+
+.stages-text-wrapper{
+    height: 200px;
+    /*position: absolute;*/
+    margin-right: 8px;
+}
+
+.scale-text {
+    height: 37px;
+    color: black;
+
 }
