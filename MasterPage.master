@@ -40,7 +40,13 @@
                                     <telerik:RadMenuItem IsSeparator="true" />
                                     <telerik:RadMenuItem Text="Timeline" NavigateUrl="Timeline.aspx" />
                                     <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Performance" NavigateUrl="Performance.aspx" /> 
+                                    <telerik:RadMenuItem Text="Diagramas">
+                                        <GroupSettings Width="250px" />
+                                        <Items>
+                                            <telerik:RadMenuItem Text="Performance e Frequência" NavigateUrl="PerformanceFrequency.aspx" /> 
+                                            <telerik:RadMenuItem Text="Conformance" NavigateUrl="Conformance.aspx" />
+                                        </Items>    
+                                    </telerik:RadMenuItem>
                                     <telerik:RadMenuItem IsSeparator="true" />
                                     <telerik:RadMenuItem Text="Cytoscape_POC" NavigateUrl="Cytoscape_POC.aspx" /> 
                                 </Items>
@@ -48,7 +54,7 @@
                         </telerik:LayoutColumn>
 
                          <%--Buttons--%>
-                        <telerik:LayoutColumn Span="0">
+                        <telerik:LayoutColumn style="margin-left: auto;" Span="0">
                           <div class="pull-right">
                             <telerik:RadLinkButton runat="server" CssClass="loginButton" ID="loginButton" Primary="true" Text="Login" NavigateUrl="Login.aspx"></telerik:RadLinkButton>
                            <telerik:RadButton runat="server" CssClass="logoutButton"  ID="logoutButton" Primary="true" Text="Logout" RenderMode="Lightweight" onclick="Logout"></telerik:RadButton>   

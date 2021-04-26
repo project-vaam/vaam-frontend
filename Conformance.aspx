@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeFile="Performance.aspx.cs" Async="true" Inherits="Performance" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeFile="Conformance.aspx.cs" Async="true" Inherits="Performance" %>
 
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 
@@ -13,7 +13,7 @@
     <script src="assets/scripts/functions.js"></script>
     <!-- <script src="assets/scripts/graphs.js"></script> -->
     <script type="text/javascript" src="assets/scripts/graphs.js"></script>
-    <link href="assets/styles/pages/performance.css" rel="stylesheet" />
+    <link href="assets/styles/pages/performanceFrequency.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.18.2/cytoscape.min.js"></script>
      <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -92,7 +92,7 @@
             <telerik:RadButton RenderMode="Lightweight" ID="HeuristicRadioBtn" runat="server" Text="Heuristic Miner" ToggleType="Radio" OnClick="HeuristicRadioBtn_Click"
                 ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton>
 
-            <telerik:RadButton RenderMode="Lightweight" ID="InductiveRadioBtn" runat="server" Text="Inductive Miner" ToggleType="Radio" OnClick="InductiveRadioBtn_Click"
+            <telerik:RadButton RenderMode="Lightweight" ID="InductiveRadioBtn" runat="server" Text="Inductive Miner (??)" ToggleType="Radio" OnClick="InductiveRadioBtn_Click"
                 ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton> 
             </div>
 
@@ -107,7 +107,7 @@
             </div>
 
             <%-- Radio Type Diagram Buttons --%>
-            <div style="display: flex; align-items: center; justify-content: center; width: 100%;margin-top: 16px;">
+            <%--<div style="display: flex; align-items: center; justify-content: center; width: 100%;margin-top: 16px;">
                 <telerik:RadButton
                     CssClass="performance-btn"
                     Checked="true"
@@ -127,10 +127,10 @@
                     Text="Frequência"
                     AutoPostBack="false"
                     ToggleType="Radio"/>
-            </div>
+            </div>--%>
             
             <%-- DropDown --%>
-            <h4 style="margin-top: 16px !important">Selecione o Processo</h4>
+            <h4 style="margin-top: 16px !important">Selecione o s</h4>
             <telerik:RadDropDownList
                 ID="RadDropDownList4"
                 runat="server"
