@@ -13,46 +13,26 @@
     <script src="assets/scripts/functions.js"></script>
     <!-- <script src="assets/scripts/graphs.js"></script> -->
     <script type="text/javascript" src="assets/scripts/graphs.js"></script>
-    <link href="assets/styles/pages/performanceFrequency.css" rel="stylesheet" />
+    <link href="assets/styles/pages/conformance.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.18.2/cytoscape.min.js"></script>
      <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <script type="text/javascript">
-      //$(document).ready(function () {
 
-      //    $("#width").val("Hello");
-      //    $("#height").val('$(window).height()');
+        //<![CDATA[
 
-      // });
+        function OnDateSelected(sender, eventArgs) {
+            var date1 = sender.get_selectedDate();
+            date1.setDate(date1.getDate() + 31);
+            var datepicker = $find("<%= RadDatePicker2.ClientID %>");
+            datepicker.set_maxDate(date1);
+        }
+
+
+            //]]>
     </script>
-
-    <style lang="css">
-        .content-wrapper{
-            height: 100%;
-            min-height: 80vh;
-            width: 100%;
-
-            display: flex;
-        }
-
-        .diagram-wrapper{ 
-            width: 100%;
-            flex-grow: 2;
-            display: flex;
-        }
-
-        .menu-wrapper{
-            width: 400px;
-
-            flex-shrink: 0;
-            border: 1px solid dimgrey;
-
-            border-radius: 0px 20px 20px 0px;
-            padding: 16px;
-        }
-    </style>
 </asp:Content>
 
 <asp:Content ID="bodyContent" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
@@ -128,9 +108,10 @@
                     AutoPostBack="false"
                     ToggleType="Radio"/>
             </div>--%>
-            
+
+            <h3 style="text-align:center;margin-bottom: 0px;">Detalhes do Processo</h3>
             <%-- DropDown --%>
-            <h4 style="margin-top: 16px !important">Selecione o s</h4>
+            <h4 style="margin-top: 16px !important">Selecione o processo:</h4>
             <telerik:RadDropDownList
                 ID="RadDropDownList4"
                 runat="server"
@@ -138,39 +119,115 @@
                 DataTextField="Text">
             </telerik:RadDropDownList>
 
-            <div id="showDiagram" style="display: flex; width: 100%; align-items: center; justify-content: center; margin-top: 16px;">
+            <%-- Time Interval --%>
+            <h4 style="margin-top: 16px !important">Intervalo de Tempo:</h4>
+            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker1" Width="80%" ClientEvents-OnDateSelected="OnDateSelected" runat="server" DateInput-Label="Data Inicial: ">
+            </telerik:RadDatePicker>
+            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker2" Width="80%" style="margin-top:6px;" runat="server" DateInput-Label="Data Final:&nbsp;&nbsp;">
+            </telerik:RadDatePicker>
+            <br />
+            <asp:CompareValidator ID="dateCompareValidator" runat="server" ControlToValidate="Raddatepicker2"
+                            ControlToCompare="RadDatePicker1" Operator="GreaterThan" Type="Date" ErrorMessage="A Data Final tem que ser posterior à Inicial">
+            </asp:CompareValidator>
+
+            <%-- Moulds --%>
+            <h4 style="margin-top: 0px !important">Molde:</h4>
+            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox1" runat="server" CheckBoxes="true" EnableCheckAllItemsCheckBox="true" Width="400" Skin="Bootstrap">
+                <Items>
+                    <telerik:RadComboBoxItem Text="Australia" runat="server" />
+                    <telerik:RadComboBoxItem Text="Austria" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bahrain" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bangladesh" runat="server" />
+                    <telerik:RadComboBoxItem Text="Belgium" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bhutan" runat="server" />
+                </Items>
+            </telerik:RadComboBox>
+
+            <%-- Activities --%>
+            <h4 style="margin-top: 16px !important">Atividades:</h4>
+            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox2" runat="server" CheckBoxes="true" EnableCheckAllItemsCheckBox="true" Width="400" Skin="Bootstrap">
+                <Items>
+                    <telerik:RadComboBoxItem Text="Australia" runat="server" />
+                    <telerik:RadComboBoxItem Text="Austria" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bahrain" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bangladesh" runat="server" />
+                    <telerik:RadComboBoxItem Text="Belgium" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bhutan" runat="server" />
+                </Items>
+            </telerik:RadComboBox>
+
+            <%-- Moulds --%>
+            <h4 style="margin-top: 16px !important">Operadores:</h4>
+            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox3" runat="server" CheckBoxes="true" EnableCheckAllItemsCheckBox="true" Width="400" Skin="Bootstrap">
+                <Items>
+                    <telerik:RadComboBoxItem Text="Australia" runat="server" />
+                    <telerik:RadComboBoxItem Text="Austria" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bahrain" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bangladesh" runat="server" />
+                    <telerik:RadComboBoxItem Text="Belgium" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bhutan" runat="server" />
+                </Items>
+            </telerik:RadComboBox>
+           
+            <h3 style="text-align:center;margin-bottom: 0px;">Modelo a comparar</h3>
+            <%-- Time Interval --%>
+            <h4 style="margin-top: 16px !important">Intervalo de Tempo:</h4>
+            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker3" Width="80%" ClientEvents-OnDateSelected="OnDateSelected" runat="server" DateInput-Label="Data Inicial: ">
+            </telerik:RadDatePicker>
+            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker4" Width="80%" style="margin-top:6px;" runat="server" DateInput-Label="Data Final:&nbsp;&nbsp;">
+            </telerik:RadDatePicker>
+            <br />
+            <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToValidate="Raddatepicker2"
+                            ControlToCompare="RadDatePicker1" Operator="GreaterThan" Type="Date" ErrorMessage="A Data Final tem que ser posterior à Inicial">
+            </asp:CompareValidator>
+
+            <%-- Moulds --%>
+            <h4 style="margin-top: 0px !important">Molde:</h4>
+            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox4" runat="server" CheckBoxes="true" EnableCheckAllItemsCheckBox="true" Width="400" Skin="Bootstrap">
+                <Items>
+                    <telerik:RadComboBoxItem Text="Australia" runat="server" />
+                    <telerik:RadComboBoxItem Text="Austria" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bahrain" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bangladesh" runat="server" />
+                    <telerik:RadComboBoxItem Text="Belgium" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bhutan" runat="server" />
+                </Items>
+            </telerik:RadComboBox>
+
+            <%-- Activities --%>
+            <h4 style="margin-top: 16px !important">Atividades:</h4>
+            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox5" runat="server" CheckBoxes="true" EnableCheckAllItemsCheckBox="true" Width="400" Skin="Bootstrap">
+                <Items>
+                    <telerik:RadComboBoxItem Text="Australia" runat="server" />
+                    <telerik:RadComboBoxItem Text="Austria" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bahrain" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bangladesh" runat="server" />
+                    <telerik:RadComboBoxItem Text="Belgium" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bhutan" runat="server" />
+                </Items>
+            </telerik:RadComboBox>
+
+            <%-- Moulds --%>
+            <h4 style="margin-top: 16px !important">Operadores:</h4>
+            <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBox6" runat="server" CheckBoxes="true" EnableCheckAllItemsCheckBox="true" Width="400" Skin="Bootstrap">
+                <Items>
+                    <telerik:RadComboBoxItem Text="Australia" runat="server" />
+                    <telerik:RadComboBoxItem Text="Austria" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bahrain" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bangladesh" runat="server" />
+                    <telerik:RadComboBoxItem Text="Belgium" runat="server" />
+                    <telerik:RadComboBoxItem Text="Bhutan" runat="server" />
+                </Items>
+            </telerik:RadComboBox>
+
+
+            <telerik:RadCheckBox runat="server" ID="EstimatedCheckbox" style="margin-top:16px;text-align: center;width: 100%;" Checked="true" Text="Incluir Ativididades com Fim Estimado" AutoPostBack="false">
+            </telerik:RadCheckBox>
+
+            <div id="showDiagram" style="display: flex; width: 100%; align-items: center; justify-content: center; margin-top: 4px; margin-bottom:32px;">
                  <%-- Button CREATE DropDown --%>
             <telerik:RadButton RenderMode="Lightweight" runat="server" Text="Gerar Diagrama"   OnClick="ShowDiagram_Click" Height="60px" />
             </div>
-           
-
-             <h3 style="text-align:center;margin-bottom: 0px;">Escala de Cores</h3>
-            <div class="text-wrapper">
-                <h4>Estados</h4>
-                <h4>Setas</h4>
-            </div>
-             <div class="group-box-wrapper">
-                 <div class="stages-text-wrapper">
-                     <div class="scale-text"></div>
-                     <div class="scale-text" id="level-4-state"></div>
-                     <div class="scale-text" id="level-3-state"></div>
-                     <div class="scale-text" id="level-2-state"></div>
-                     <div class="scale-text" id="level-1-state"></div>
-                     <div class="scale-text""></div>
-                 </div>
-                 <div class="group-box">
-                    <div class="box-wrapper-stages"></div>
-                    <div class="box-wrapper-arrows"></div>
-                </div>
-                 <div class="stages-text-wrapper">
-                     <div class="scale-text"></div>
-                     <div class="scale-text" id="level-4-arrows"></div>
-                     <div class="scale-text" id="level-3-arrows"></div>
-                     <div class="scale-text" id="level-2-arrows"></div>
-                     <div class="scale-text" id="level-1-arrows"></div>
-                     <div class="scale-text"></div>
-                 </div>
-             </div>
         </div>
     </div>
 

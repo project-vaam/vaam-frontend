@@ -30,7 +30,7 @@
 
                         <%--Main Nav--%>
                         <telerik:LayoutColumn Span="0">
-                            <telerik:RadMenu ID="RadMenu1" runat="server" RenderMode="Auto">
+                            <telerik:RadMenu ID="RadMenu1" runat="server" RenderMode="Auto" Skin="Bootstrap">
                                 <Items>
                                     <telerik:RadMenuItem Text="Home" NavigateUrl="Default.aspx" />
                                     <telerik:RadMenuItem IsSeparator="true" />
