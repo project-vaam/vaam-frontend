@@ -6,8 +6,6 @@
 
 <asp:Content ID="headContent" ContentPlaceHolderID="head" runat="Server">
 
-
-
     <link href="assets/styles/base.css" rel="stylesheet" />
     <link href="assets/styles/default.css" rel="stylesheet" />
     <script src="assets/scripts/functions.js"></script>
@@ -130,12 +128,14 @@
             </div>--%>
             
             <%-- DropDown --%>
-            <h4 style="margin-top: 16px !important">Selecione o s</h4>
+            <h4 style="margin-top: 16px !important">Selecione o processo</h4>
             <telerik:RadDropDownList
-                ID="RadDropDownList4"
-                runat="server"
+                ID="RadDropDownList4"             
                 DataValueField="ID"
-                DataTextField="Text">
+                DataTextField="Text"
+                AutoPostBack="true"
+                OnSelectedIndexChanged="callFilterInformation"
+                runat="server">
             </telerik:RadDropDownList>
 
             <div id="showDiagram" style="display: flex; width: 100%; align-items: center; justify-content: center; margin-top: 16px;">

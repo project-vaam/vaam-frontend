@@ -102,7 +102,52 @@ public partial class Performance : System.Web.UI.Page
                 }
                 else
                 {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine(apiResponse);
                     Debug.WriteLine("Something went bad.");
+                }
+            }
+        }
+    }
+
+    public async void callFilterInformation(object sender, DropDownListEventArgs molde)
+    {
+        Debug.WriteLine("getting all info");
+        using (var httpClient = new HttpClient())
+        {
+            string token = (string)Session["sessionToken"];
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "conformance/" + RadDropDownList4.SelectedValue + "/filterInformation").ConfigureAwait(false))
+            {
+
+                var status = response.IsSuccessStatusCode;
+
+                if (status == true)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+
+                    Debug.WriteLine(apiResponse);
+
+
+                    /** POPULAR UM DROPDOWN EXEMPLO **/
+
+                    //JArray obj = JsonConvert.DeserializeObject<JArray>(apiResponse);
+
+                    //foreach (JObject item in obj)
+                    //{
+                    //    string value = item["id"].ToString();
+                    //    string text = item["name"].ToString();
+                    //    RadDropDownList4.Items.Add(new DropDownListItem(text, value));
+                    //}
+                }
+                else
+                {
+
+                    Debug.WriteLine("Something went bad.");
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine(apiResponse);
                 }
             }
         }

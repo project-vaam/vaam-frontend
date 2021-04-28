@@ -107,7 +107,7 @@
             </div>
 
             <%-- Radio Type Diagram Buttons --%>
-            <div style="display: flex; align-items: center; justify-content: center; width: 100%;margin-top: 16px;">
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%;margin-top: 16px;" id="tipoGrafico"  runat="server">
                 <telerik:RadButton
                     CssClass="performance-btn"
                     Checked="true"
@@ -143,41 +143,44 @@
             <telerik:RadButton RenderMode="Lightweight" runat="server" Text="Gerar Diagrama"   OnClick="ShowDiagram_Click" Height="60px" />
             </div>
            
-
-             <h3 style="text-align:center;margin-bottom: 0px;">Escala de Cores</h3>
-            <div class="text-wrapper">
-                <h4>Estados</h4>
-                <h4>Setas</h4>
-            </div>
-             <div class="group-box-wrapper">
-                 <div class="stages-text-wrapper">
-                     <div class="scale-text"></div>
-                     <div class="scale-text" id="level-4-state"></div>
-                     <div class="scale-text" id="level-3-state"></div>
-                     <div class="scale-text" id="level-2-state"></div>
-                     <div class="scale-text" id="level-1-state"></div>
-                     <div class="scale-text""></div>
+            <div id="escalaCores" runat="server">
+                 <h3 style="text-align:center;margin-bottom: 0px;">Escala de Cores</h3>
+                 <div class="text-wrapper">
+                     <h4>Estados</h4>
+                     <h4>Setas</h4>
                  </div>
-                 <div class="group-box">
-                    <div class="box-wrapper-stages"></div>
-                    <div class="box-wrapper-arrows"></div>
-                </div>
-                 <div class="stages-text-wrapper">
-                     <div class="scale-text"></div>
-                     <div class="scale-text" id="level-4-arrows"></div>
-                     <div class="scale-text" id="level-3-arrows"></div>
-                     <div class="scale-text" id="level-2-arrows"></div>
-                     <div class="scale-text" id="level-1-arrows"></div>
-                     <div class="scale-text"></div>
+                 <div class="group-box-wrapper">
+                     <div class="stages-text-wrapper">
+                         <div class="scale-text"></div>
+                         <div class="scale-text" id="level-4-state"></div>
+                         <div class="scale-text" id="level-3-state"></div>
+                         <div class="scale-text" id="level-2-state"></div>
+                         <div class="scale-text" id="level-1-state"></div>
+                         <div class="scale-text""></div>
+                     </div>
+                     <div class="group-box">
+                        <div class="box-wrapper-stages"></div>
+                        <div class="box-wrapper-arrows"></div>
+                    </div>
+                     <div class="stages-text-wrapper">
+                         <div class="scale-text"></div>
+                         <div class="scale-text" id="level-4-arrows"></div>
+                         <div class="scale-text" id="level-3-arrows"></div>
+                         <div class="scale-text" id="level-2-arrows"></div>
+                         <div class="scale-text" id="level-1-arrows"></div>
+                         <div class="scale-text"></div>
+                     </div>
                  </div>
-             </div>
+            </div>   
+            
         </div>
     </div>
 
      <script>
                 var process = <%=processes%>
-                 console.log("CALLING ....");
-                 generateGraph(process);   
+                console.log("CALLING ....");
+                console.log(process)
+                generateGraph(process);   
      </script>
 
 </asp:Content>

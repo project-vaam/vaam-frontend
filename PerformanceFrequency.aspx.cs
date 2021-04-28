@@ -28,7 +28,9 @@ public partial class Performance : System.Web.UI.Page
         if (!IsPostBack)
         {
             thresholdField.Visible = false;
-            displayProcess.Visible = false;            
+            displayProcess.Visible = false;
+            escalaCores.Visible = false;
+            tipoGrafico.Visible = true;
             callProcesses();
         }
 
@@ -107,15 +109,22 @@ public partial class Performance : System.Web.UI.Page
         }
     }
 
-
-
-    /*Funcao do code behind para fazer os pedidos, tudo o resto pode ir com o caralho, alterar de forma a receber os novos inputs"*/
+   
     protected async void GetWorkFlows(string processID) //chamar no load Page
     {
         errorMessage.InnerText = "";
         showError.Visible = false;
 
+        if (PerformanceBtn.Checked && !InductiveRadioBtn.Checked)
+        {
+            escalaCores.Visible = true;
+        }
+        else
+        {
+            escalaCores.Visible = false;
+        }
 
+        
 
         using (var httpClient = new HttpClient())
         {
@@ -127,10 +136,9 @@ public partial class Performance : System.Web.UI.Page
             if (!AlphaRadioBtn.Checked)
             {
                 threshold = "?threshold=" + ThresholdSlider.Value.ToString().Replace(",",".");
-                workflowURL = HeuristicRadioBtn.Checked ? "workflow-network/heuristic-miner/processes/" : "workflow-network/inductive-miner/processes/";
+                workflowURL = HeuristicRadioBtn.Checked ? "workflow-network/heuristic-miner/processes/" : "workflow-network/inductive-miner/processes/";                
             }
-
-
+ 
             string completeURL = workflowURL + processID + threshold;
             Debug.WriteLine(completeURL);
 
@@ -144,7 +152,7 @@ public partial class Performance : System.Web.UI.Page
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
                     JObject jsonResponse = JObject.Parse(apiResponse);
-                    //Debug.WriteLine(jsonResponse);
+                    
 
                     processes = "{isPerformance: '"+PerformanceBtn.Checked+"', data: "+apiResponse + "}";
                     Debug.WriteLine(processes);
@@ -163,14 +171,18 @@ public partial class Performance : System.Web.UI.Page
     public void AlphaRadioBtn_Click(object sender, EventArgs e)
     {
         thresholdField.Visible = false;
+        tipoGrafico.Visible = true;
     }
     public void HeuristicRadioBtn_Click(object sender, EventArgs e)
     {
         thresholdField.Visible = true;
+        tipoGrafico.Visible = true;
     }
     public void InductiveRadioBtn_Click(object sender, EventArgs e)
     {
         thresholdField.Visible = true;
+        tipoGrafico.Visible = false;
+        escalaCores.Visible = false;
     }
     //public async void callWorkflows(RadDropDownList dropdownlist)
     //{

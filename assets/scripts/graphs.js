@@ -16,44 +16,57 @@ function generatePerformance(process) {
     
 }
 
+
 function generateGraph(process) { 
 
-    if (process.isPerformance === "True") {
-        console.log("performance");
-        //nodes timers
-        let nodeTimes = [];
-        for (let i = 0; i < process.data.statistics.nodes.length; i++) {
-            let meanDuration = process.data.statistics.nodes[i].meanDuration.days + '.' + process.data.statistics.nodes[i].meanDuration.hours + ':' +
-                process.data.statistics.nodes[i].meanDuration.minutes + ':' + process.data.statistics.nodes[i].meanDuration.seconds + '.' + process.data.statistics.nodes[i].meanDuration.millis;
-
-            nodeTimes[i] = moment.duration(meanDuration).asMinutes();
-
+    if (process.data.info == "Inductive Mining") {
+      
+        if (process.isPerformance === "True") {                   
+            renderPerformanceGraph();
         }
-        currentProcess.nodeTimes = nodeTimes;
-        //console.log("relationTimes:" + nodeTimes)
-        
-        //relations timers
-        let relationTimes = [];
-        for (let i = 0; i < process.data.statistics.relations.length; i++) {
-            let relationTimesTemp = [];
-            for (let j = 0; j < process.data.statistics.relations[i].to.length; j++) {
-                let meanDuration = process.data.statistics.relations[i].to[j].meanDuration.days + '.' + process.data.statistics.relations[i].to[j].meanDuration.hours + ':' +
-                    process.data.statistics.relations[i].to[j].meanDuration.minutes + ':' + process.data.statistics.relations[i].to[j].meanDuration.seconds + '.' + process.data.statistics.relations[i].to[j].meanDuration.millis;
-                relationTimesTemp[j] = moment.duration(meanDuration).asMinutes();
-            }
-            relationTimes[i] = relationTimesTemp;
-        }
-       
-        currentProcess.relationTimes = relationTimes;
-
-        console.log("relationTimes:" + relationTimes)
-         console.log("nodeTimes:" + nodeTimes)
-
-        renderPerformanceGraph();
-    } else {
-        console.log("frequency");
-        renderFrequencyGraph();
     }
+    else
+    {
+        if (process.isPerformance === "True") {
+
+            //nodes timers
+            let nodeTimes = [];
+            for (let i = 0; i < process.data.statistics.nodes.length; i++) {
+                let meanDuration = process.data.statistics.nodes[i].meanDuration.days + '.' + process.data.statistics.nodes[i].meanDuration.hours + ':' +
+                    process.data.statistics.nodes[i].meanDuration.minutes + ':' + process.data.statistics.nodes[i].meanDuration.seconds + '.' + process.data.statistics.nodes[i].meanDuration.millis;
+
+                nodeTimes[i] = moment.duration(meanDuration).asMinutes();
+
+            }
+            currentProcess.nodeTimes = nodeTimes;
+            //console.log("relationTimes:" + nodeTimes)
+
+            //relations timers
+            let relationTimes = [];
+            for (let i = 0; i < process.data.statistics.relations.length; i++) {
+                let relationTimesTemp = [];
+                for (let j = 0; j < process.data.statistics.relations[i].to.length; j++) {
+                    let meanDuration = process.data.statistics.relations[i].to[j].meanDuration.days + '.' + process.data.statistics.relations[i].to[j].meanDuration.hours + ':' +
+                        process.data.statistics.relations[i].to[j].meanDuration.minutes + ':' + process.data.statistics.relations[i].to[j].meanDuration.seconds + '.' + process.data.statistics.relations[i].to[j].meanDuration.millis;
+                    relationTimesTemp[j] = moment.duration(meanDuration).asMinutes();
+                }
+                relationTimes[i] = relationTimesTemp;
+            }
+
+            currentProcess.relationTimes = relationTimes;
+
+            console.log("relationTimes:" + relationTimes)
+            console.log("nodeTimes:" + nodeTimes)
+
+            renderPerformanceGraph();
+        } else {
+
+            console.log("frequency");
+            renderFrequencyGraph();
+        }
+    }
+
+    
 }
 
 
@@ -66,7 +79,6 @@ function generateGraph(process) {
 
 
 function renderPerformanceGraph() {
-    console.log("performance");
     cy = cytoscape(
         {
             wheelSensitivity: 0.1,
@@ -284,61 +296,92 @@ function renderPerformanceGraph() {
         }
     );
 
+    if (process.data.info != "Inductive Mining") {
 
-    //find max time
-    //nodes max time
-    let nodesMaxTime = 0;
-    for (let i = 0; i < currentProcess.nodeTimes.length; i++) {
-        if (currentProcess.nodeTimes[i] > nodesMaxTime) {
-            nodesMaxTime = currentProcess.nodeTimes[i];
-        }
-    }
-
-    process.data.nodesMaxTime = nodesMaxTime;
-
-    //edges max time
-    let edgesMaxTime = 0;
-    for (let i = 0; i < currentProcess.relationTimes.length; i++) {
-        for (let j = 0; j < currentProcess.relationTimes[i].length; j++) {
-            if (currentProcess.relationTimes[i][j] > edgesMaxTime) {
-                edgesMaxTime = currentProcess.relationTimes[i][j];
+        //nodes max time
+        let nodesMaxTime = 0;
+        for (let i = 0; i < currentProcess.nodeTimes.length; i++) {
+            if (currentProcess.nodeTimes[i] > nodesMaxTime) {
+                nodesMaxTime = currentProcess.nodeTimes[i];
             }
         }
-    }
-    process.data.edgesMaxTime = edgesMaxTime;
 
-    /* Add time to color scales */
-    for (let i = 1; i < 5; i++) {
-        document.getElementById(`level-${i}-state`).textContent = timeConvertMinutes((nodesMaxTime / 5) * i)
-        document.getElementById(`level-${i}-arrows`).textContent = timeConvertMinutes((edgesMaxTime / 5) * i)
-    }
+        process.data.nodesMaxTime = nodesMaxTime;
 
-    //add nodes to graph
-    for (var i = 0; i < process.data.nodes.length; i++) {
-        let styleType = Math.floor(currentProcess.nodeTimes[i] * 4 / nodesMaxTime);
-        cy.add({
-            data: {
-                id: i,
-                label: process.data.nodes[i] + ' (' + convertToHours(currentProcess.nodeTimes[i]) + ')',
-                type: styleType
+        //edges max time
+        let edgesMaxTime = 0;
+        for (let i = 0; i < currentProcess.relationTimes.length; i++) {
+            for (let j = 0; j < currentProcess.relationTimes[i].length; j++) {
+                if (currentProcess.relationTimes[i][j] > edgesMaxTime) {
+                    edgesMaxTime = currentProcess.relationTimes[i][j];
+                }
             }
         }
-        );
-    }
+        process.data.edgesMaxTime = edgesMaxTime;
 
-    //add relations to graph
-    for (var i = 0; i < process.data.relations.length; i++) {
-        for (var j = 0; j < process.data.relations[i].to.length; j++) {
-            let styleType = Math.round(currentProcess.relationTimes[i][j] * 4 / edgesMaxTime);
+        /* Add time to color scales */
+        for (let i = 1; i < 5; i++) {
+            document.getElementById(`level-${i}-state`).textContent = timeConvertMinutes((nodesMaxTime / 5) * i)
+            document.getElementById(`level-${i}-arrows`).textContent = timeConvertMinutes((edgesMaxTime / 5) * i)
+        }
+
+        //add nodes to graph
+        console.log(process.data.nodes)
+        for (var i = 0; i < process.data.nodes.length; i++) {
+            let styleType = Math.floor(currentProcess.nodeTimes[i] * 4 / nodesMaxTime);        
             cy.add({
                 data: {
-                    id: 'relation' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
-                    source: process.data.relations[i].from,
-                    target: process.data.relations[i].to[j],
-                    label: convertToHours(currentProcess.relationTimes[i][j]),
+                    id: i,
+                    label: process.data.nodes[i] + " " + convertToHours(currentProcess.nodeTimes[i]),
                     type: styleType
                 }
-            });
+            }
+            );
+        }
+
+        //add relations to graph
+        for (var i = 0; i < process.data.relations.length; i++) {
+            for (var j = 0; j < process.data.relations[i].to.length; j++) {
+                let styleType = Math.round(currentProcess.relationTimes[i][j] * 4 / edgesMaxTime);
+                cy.add({
+                    data: {
+                        id: 'relation' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
+                        source: process.data.relations[i].from,
+                        target: process.data.relations[i].to[j],
+                        label: convertToHours(currentProcess.relationTimes[i][j]),
+                        type: styleType
+                    }
+                });
+            }
+        }
+    } else { 
+        //INDUCTIVE 
+        //add nodes to graph       
+        for (var i = 0; i < process.data.nodes.length; i++) {            
+            cy.add({
+                data: {
+                    id: i,
+                    label: process.data.nodes[i],  
+                    type: 1
+                }
+            }
+            );
+        }
+
+        //add relations to graph
+        console.log(process.data.relations.length)
+        for (var i = 0; i < process.data.relations.length; i++) {
+            for (var j = 0; j < process.data.relations[i].to.length; j++) {  
+                console.log(process.data.relations[i]) 
+                cy.add({
+                    data: {
+                        id: 'relation' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
+                        source: process.data.relations[i].from,
+                        target: process.data.relations[i].to[j],                       
+                        type: 1
+                    }
+                });
+            }
         }
     }
 
