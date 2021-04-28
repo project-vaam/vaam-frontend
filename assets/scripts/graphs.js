@@ -1,5 +1,4 @@
-﻿
-var cy = null
+﻿var cy = null
 
 var currentProcess = {
     nodeTimes: [],
@@ -9,13 +8,15 @@ var currentProcess = {
 };
 
 
-// var process = <%=processes%>; //gets the selected process and his data from asp net codebehind   
-
-//console.log(process);
-
-function generateGraph(process) {
+function generatePerformance(process) {
 
     console.log(process);
+    renderConformanceGraph();
+
+    
+}
+
+function generateGraph(process) { 
 
     if (process.isPerformance === "True") {
         console.log("performance");
@@ -29,7 +30,8 @@ function generateGraph(process) {
 
         }
         currentProcess.nodeTimes = nodeTimes;
-        console.log("performanceII");
+        //console.log("relationTimes:" + nodeTimes)
+        
         //relations timers
         let relationTimes = [];
         for (let i = 0; i < process.data.statistics.relations.length; i++) {
@@ -41,7 +43,11 @@ function generateGraph(process) {
             }
             relationTimes[i] = relationTimesTemp;
         }
+       
         currentProcess.relationTimes = relationTimes;
+
+        console.log("relationTimes:" + relationTimes)
+         console.log("nodeTimes:" + nodeTimes)
 
         renderPerformanceGraph();
     } else {
@@ -56,13 +62,11 @@ function generateGraph(process) {
 
 
 
-
-
 /*-----------------Performance Diagram*-------------------*/
 
 
 function renderPerformanceGraph() {
-    console.log("performanceIII");
+    console.log("performance");
     cy = cytoscape(
         {
             wheelSensitivity: 0.1,
@@ -280,7 +284,6 @@ function renderPerformanceGraph() {
         }
     );
 
-    console.log("performanceIV");
 
     //find max time
     //nodes max time
@@ -316,7 +319,7 @@ function renderPerformanceGraph() {
         cy.add({
             data: {
                 id: i,
-                label: process.data.nodes[i] + ' (' + durationToString(currentProcess.nodeTimes[i]) + ')',
+                label: process.data.nodes[i] + ' (' + convertToHours(currentProcess.nodeTimes[i]) + ')',
                 type: styleType
             }
         }
@@ -332,7 +335,7 @@ function renderPerformanceGraph() {
                     id: 'relation' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
                     source: process.data.relations[i].from,
                     target: process.data.relations[i].to[j],
-                    label: durationToString(currentProcess.relationTimes[i][j]),
+                    label: convertToHours(currentProcess.relationTimes[i][j]),
                     type: styleType
                 }
             });
@@ -750,17 +753,377 @@ function renderFrequencyGraph() {
 
 
 
-function durationToString(duration) {
-    if (duration == 0) {
-        durationToString
-        return "0S";
+/*-----------------Conformance Diagram-------------------*/
+
+function renderConformanceGraph() {
+
+    console.log("CONFORMANE ");
+    cy = cytoscape(
+        {
+            wheelSensitivity: 0.5,
+            minZoom: 0.1,
+            maxZoom: 1,
+            container: document.getElementById('cy'),
+            style: [
+                {
+                    //Nodes styles
+                    selector: 'node[type=0]',
+                    style: {
+                        "shape": 'rectangle',
+                        "background-color": "#FFFFFF",
+                        "label": "data(label)",
+                        'width': '350',
+                        "height": "40",
+                        "border-width": 2,
+                        "border-color": "#484848",
+                        "font-size": "16px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "text-wrap": "wrap",
+                        "text-max-width": "1000px",
+                        "color": "#222222"
+                    }
+                },
+                {
+                    selector: 'node[type=1]',
+                    style: {
+                        "shape": 'rectangle',
+                        "background-color": "#acbcff",
+                        "label": "data(label)",
+                        'width': '350',
+                        "height": "40",
+                        "border-width": 2,
+                        "border-color": "#484848",
+                        "font-size": "16px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "color": "#222222"
+                    }
+                },
+                {
+                    selector: 'node[type=2]',
+                    style: {
+                        "shape": 'rectangle',
+                        "background-color": "#748fff",
+                        "label": "data(label)",
+                        'width': '350',
+                        "height": "40",
+                        "border-width": 2,
+                        "border-color": "#484848",
+                        "font-size": "16px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "color": "#222222"
+                    }
+                },
+                {
+                    selector: 'node[type=3]',
+                    style: {
+                        "shape": 'rectangle',
+                        "background-color": "#365eff",
+                        "label": "data(label)",
+                        'width': '350',
+                        "height": "40",
+                        "border-width": 2,
+                        "border-color": "#484848",
+                        "font-size": "16px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "color": "#222222"
+                    }
+                },
+                {
+                    selector: 'node[type=4]',
+                    style: {
+                        "shape": 'rectangle',
+                        "background-color": "#0032ff",
+                        "label": "data(label)",
+                        'width': '350',
+                        "height": "40",
+                        "border-width": 2,
+                        "border-color": "#484848",
+                        "font-size": "16px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "color": "#FFFFFF"
+                    }
+                },
+                {
+                    //process start node
+                    selector: 'node[type=20]',
+                    style: {
+                        "shape": 'ellipse',
+                        "background-color": "#3f3f3f",
+                        "border-width": 4,
+                        "border-color": "#131313",
+                        'width': '50',
+                        "height": "50",
+                        "font-size": "16px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "text-wrap": "wrap",
+                        "text-max-width": "1000px",
+                        "color": "#FF2222"
+                    }
+                },
+
+                //Edges styles
+                {
+                    selector: 'edge[type=0]',
+                    style: {
+                        'width': 3,
+                        'curve-style': 'bezier',
+                        "content": "data(name)",
+                        "line-color": "#D1D1D1",
+                        'target-arrow-color': '#D1D1D1',
+                        "font-size": "32px",
+                        "color": "#222222",
+                        "loop-direction": "0deg",
+                        'target-arrow-shape': 'triangle',
+                        "loop-sweep": "45deg",
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px"
+                    }
+                },
+                {
+                    selector: 'edge[type=1]',
+                    style: {
+                        'width': 5,
+                        'curve-style': 'bezier',
+                        "content": "data(name)",
+                        "line-color": "#acbcff",
+                        'target-arrow-color': '#acbcff',
+                        "font-size": "32px",
+                        "color": "#222222",
+                        "loop-direction": "0deg",
+                        'target-arrow-shape': 'triangle',
+                        "loop-sweep": "45deg",
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px"
+                    }
+                },
+                {
+                    selector: 'edge[type=2]',
+                    style: {
+                        'width': 7,
+                        'curve-style': 'bezier',
+                        "content": "data(name)",
+                        "line-color": "#748fff",
+                        'target-arrow-color': '#748fff',
+                        "font-size": "32px",
+                        "color": "#222222",
+                        "loop-direction": "0deg",
+                        'target-arrow-shape': 'triangle',
+                        "loop-sweep": "45deg",
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px"
+                    }
+                },
+                {
+                    selector: 'edge[type=3]',
+                    style: {
+                        'width': 9,
+                        'curve-style': 'bezier',
+                        "content": "data(name)",
+                        "line-color": "#365eff",
+                        'target-arrow-color': '#365eff',
+                        "font-size": "32px",
+                        "color": "#222222",
+                        "loop-direction": "0deg",
+                        'target-arrow-shape': 'triangle',
+                        "loop-sweep": "45deg",
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px"
+                    }
+                },
+                {
+                    selector: 'edge[type=4]',
+                    style: {
+                        'width': 13,
+                        'curve-style': 'bezier',
+                        "content": "data(name)",
+                        "line-color": "#0032ff",
+                        'target-arrow-color': '#0032ff',
+                        "font-size": "32px",
+                        "color": "#222222",
+                        "loop-direction": "0deg",
+                        'target-arrow-shape': 'triangle',
+                        "loop-sweep": "45deg",
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px"
+                    }
+                },
+                {
+                    //process start edge
+                    selector: 'edge[type=20]',
+                    style: {
+                        'width': 8,
+                        'curve-style': 'bezier',
+                        'line-color': "#232323",
+                        'target-arrow-color': '#232323',
+                        "font-size": "32px",
+                        "color": "#222222",
+                        "loop-direction": "0deg",
+                        'target-arrow-shape': 'triangle',
+                        "loop-sweep": "45deg",
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px",
+                        "text-outline-color": "#222222",
+                        "text-outline-width": "0.3px"
+                    }
+                },
+            ],
+        });
+
+
+    
+    //Nodes
+    
+    let nodes = process.data.nodes;   
+    nodes.forEach(function (node, index) {
+
+        let typeValue = 0;
+
+        cy.add({
+            data: {
+                id: index,
+                label: node,
+                type: typeValue
+                
+            },
+        }
+        );
+    });
+
+    //edges
+    for (let i = 0; i < process.data.relations.length; i++) {
+        for (let j = 0; j < process.data.relations[i].to.length; j++) {
+            //determinar cor do nó
+            let typeValue = 0;
+
+            //let prevLabel = "\n Modelo: " + convertToHours(process.data.nodes.taskDurations[i].duration);
+
+            cy.add({
+                data: {
+                    id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j].node,
+                    source: process.data.relations[i].from,
+                    target: process.data.relations[i].to[j].node,
+                    //label: prevLabel + " / " + realLabel,                 
+                }
+            });
+        }
     }
 
-    return ((moment.duration({ "minutes": duration }).days() !== 0) ? moment.duration({ "minutes": duration }).days() + "D " : "") +
-        ((moment.duration({ "minutes": duration }).hours() !== 0) ? moment.duration({ "minutes": duration }).hours() + "H " : "") +
-        ((moment.duration({ "minutes": duration }).minutes() !== 0) ? moment.duration({ "minutes": duration }).minutes() + "M " : "") +
-        ((moment.duration({ "minutes": duration }).seconds() !== 0) ? moment.duration({ "minutes": duration }).seconds() + "S" : "");
+    //n funciona :(
+    //edges = process.data.nodes;
+    //edges.forEach(function (node, i) {
+    //    console.log(process.data.relations[i].to)
+    //    process.data.relations[i].to.forEach(function (node, j) {
+
+    //        let typeValue = 0;
+
+    //        cy.add({
+    //            data: {
+    //                id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j].node,
+    //                source: process.data.relations[i].from,
+    //                target: process.data.relations[i].to[j].node,
+    //                label: prevLabel + " / " + realLabel,                 
+    //            }
+    //        });
+
+    //    });
+    //});
+
+
+    //starting nodes
+    let startEvents = process.data.startEvents;
+    startEvents.forEach(function (node, i) {
+
+
+        cy.add({
+            data: {
+                id: 'start-' + i,
+                type: 20
+            },
+        });
+
+        cy.add({
+            data: {
+                id: 'edge_start-' + i,
+                source: 'start-' + i,
+                target: process.data.startEvents[i].node,
+                type: 20
+            }
+        });
+    });
+
+
+   
+    //end nodes
+    for (let i = 0; i < process.data.endEvents.length; i++) {
+        cy.add({
+            data: {
+                id: 'end-' + i,
+                type: 20
+            },
+        });
+        cy.add({
+            data: {
+                id: 'edge_end-' + i,
+                source: process.data.endEvents[i].node,
+                target: 'end-' + i,
+                type: 20
+            }
+        });
+    }
+
+    
+    
+    let customBreadthfirst = {
+        name: 'breadthfirst',
+
+        fit: true, // whether to fit the viewport to the graph
+        directed: true, // whether the tree is directed downwards (or edges can point in any direction if false)
+        padding: 10, // padding on fit
+        circle: false, // put depths in concentric circles if true, put depths top down if false
+        grid: false, // whether to create an even grid into which the DAG is placed (circle:false only)
+        spacingFactor: 0.90, // positive spacing factor, larger => more space between nodes (N.B. n/a if causes overlap)
+        boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+        avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+        nodeDimensionsIncludeLabels: false, // Excludes the label when calculating node bounding boxes for the layout algorithm
+        roots: undefined, // the roots of the trees
+        maximal: false, // whether to shift nodes down their natural BFS depths in order to avoid upwards edges (DAGS only)
+        animate: false, // whether to transition the node positions
+        animationDuration: 500, // duration of animation in ms if enabled
+        animationEasing: undefined, // easing of animation if enabled,
+        animateFilter: function (node, i) {
+            return true;
+        }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
+        ready: undefined, // callback on layoutready
+        stop: undefined, // callback on layoutstop
+        transform: function (node, position) {
+            return position;
+        } // transform a given node position. Useful for changing flow direction in discrete layouts
+    };
+
+    cy.layout(customBreadthfirst).run();
 }
+
+function convertToHours(duration) {
+
+   
+    let hours = (duration / 60);
+    let rhours = Math.floor(hours);
+
+    let min = (hours - rhours) * 60;
+    let rminutes = Math.round(min);
+
+    if (rhours == 0) {
+        return rminutes + " min";
+    }
+    return rhours + "h " + rminutes + " min";
+}
+
 
 function timeConvertMinutes(minAux) {
     let hours = minAux / 60

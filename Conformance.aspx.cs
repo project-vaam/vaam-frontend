@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
@@ -122,6 +123,11 @@ public partial class Performance : System.Web.UI.Page
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+            string json = "{ \"isEstimatedEnd\":" + "false";
+            json += " }";
+
+        HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
             string threshold = "", workflowURL = "conformance/performance/alpha-miner/model/";
 
             if (!AlphaRadioBtn.Checked)
@@ -135,17 +141,16 @@ public partial class Performance : System.Web.UI.Page
             string completeURL = workflowURL + processID + threshold;
             Debug.WriteLine(completeURL);
 
-            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + completeURL).ConfigureAwait(false))
+            using (var response = await httpClient.PostAsync(Constants.URL_BACKEND_CONNECTION + completeURL, content).ConfigureAwait(false))
             {
-                Debug.WriteLine(response);
+               
 
                 var status = response.IsSuccessStatusCode;
                 if (status == true)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
-                    JObject jsonResponse = JObject.Parse(apiResponse);
-                    Debug.WriteLine(jsonResponse);
+                           
 
                     processes = "{data: " + apiResponse + "}";
                     Debug.WriteLine(processes);

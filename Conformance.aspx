@@ -175,9 +175,15 @@
     </div>
 
      <script>
-                var process = <%=processes%>
-                 console.log("CALLING ....");
-                 generateGraph(process);   
+         var process = <%=processes%>
+
+         if (process) {
+             console.log("CALLING ....");
+             generatePerformance(process);
+         } else {
+             console.log("No data to generate graph");
+         }
+            
      </script>
 
 </asp:Content>
