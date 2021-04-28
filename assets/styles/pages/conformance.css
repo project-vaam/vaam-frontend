@@ -1,0 +1,76 @@
+﻿.content-wrapper {
+    height: 100%;
+    min-height: 80vh;
+    width: 100%;
+    display: flex;
+}
+
+.diagram-wrapper {
+    width: 100%;
+    flex-grow: 2;
+    display: flex;
+}
+
+.menu-wrapper {
+    width: 410px;
+    flex-shrink: 0;
+    border: 1px solid dimgrey;
+    border-radius: 0px 20px 20px 0px;
+    padding: 16px;
+
+    height: 80vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+/* Color Scale Visualization */
+.text-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.text-wrapper h4{
+    margin: 16px 0px !important;
+}
+
+.group-box-wrapper {
+    height: 200px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.group-box {
+    display: flex;
+}
+
+.box-wrapper-stages {
+    height: 200px;
+    width: 100px;
+    background: linear-gradient(to bottom, #be1300 20%, #f25831 20% 40%, #ff9457 40% 60%,#ffce89 60% 80%, #fff0d9 80%);
+    clip-path: polygon(60% 100%, 100% 100%, 100% 0, 0 0);
+    text-align: end;
+}
+
+.box-wrapper-arrows {
+    height: 200px;
+    width: 100px;
+    background-image: linear-gradient(180deg, #b91200, #787679);
+    clip-path: polygon(0 100%, 40% 100%, 100% 0, 0 0);
+}
+
+
+.stages-text-wrapper{
+    height: 200px;
+    /*position: absolute;*/
+    margin-right: 8px;
+}
+
+.scale-text {
+    height: 37px;
+    color: black;
+
+}

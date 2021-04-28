@@ -31,39 +31,56 @@ public partial class Performance : System.Web.UI.Page
             thresholdField.Visible = false;
             displayProcess.Visible = false;            
             callProcesses();
+            System.Threading.Thread.Sleep(500);
+            callFilterInformation(null, null);
         }
+    }
 
-        ////var TheBrowserWidth = width.Value;
-        ////var TheBrowserHeight = height.Value;
+    protected override void OnPreRender(EventArgs e)
+    {
+        base.OnPreRender(e);
 
-        //// General diagram settings
+        RadDatePicker1.Culture = new System.Globalization.CultureInfo("pt-PT");
 
-        ////RadDiagram1.Width = 700;
-        ////RadDiagram1.Height = 800;
+        RadDatePicker2.Culture = new System.Globalization.CultureInfo("pt-PT");
 
-        //RadDiagram1.ShapeDefaultsSettings.Width = 310;
-        //RadDiagram1.ShapeDefaultsSettings.Height = 30;
 
-        //// User Permition Settings
+        RadDatePicker1.DatePopupButton.Visible = true;
+        RadDatePicker1.ShowPopupOnFocus = true;
+        RadDatePicker2.DatePopupButton.Visible = true;
+        RadDatePicker2.ShowPopupOnFocus = true;
 
-        ////RadDiagram1.Selectable = false;
-        ////RadDiagram1.Pannable = false;
-        ////RadDiagram1.Editable = false;
+        RadDatePicker1.EnableScreenBoundaryDetection = true;
+        RadDatePicker1.PopupDirection = (Telerik.Web.UI.DatePickerPopupDirection)Enum.ToObject(typeof(Telerik.Web.UI.DatePickerPopupDirection), 22);
+        RadDatePicker2.EnableScreenBoundaryDetection = true;
+        RadDatePicker2.PopupDirection = (Telerik.Web.UI.DatePickerPopupDirection)Enum.ToObject(typeof(Telerik.Web.UI.DatePickerPopupDirection), 22);
 
-        //// Layout settings
-        //RadDiagram1.LayoutSettings.Enabled = true;
-        //RadDiagram1.LayoutSettings.Type = Telerik.Web.UI.Diagram.LayoutType.Layered;
-        //RadDiagram1.LayoutSettings.Subtype = Telerik.Web.UI.Diagram.LayoutSubtype.Down;
-        //RadDiagram1.LayoutSettings.VerticalSeparation = 30;
-        //RadDiagram1.LayoutSettings.HorizontalSeparation = 30;
+        CalendarAnimationType animationType = (CalendarAnimationType)Enum.Parse(typeof(CalendarAnimationType), "Fade");
+        RadDatePicker1.ShowAnimation.Type = animationType;
+        RadDatePicker1.HideAnimation.Type = animationType;
+        RadDatePicker1.Calendar.FastNavigationSettings.ShowAnimation.Type = animationType;
+        RadDatePicker1.Calendar.FastNavigationSettings.HideAnimation.Type = animationType;
+        RadDatePicker2.ShowAnimation.Type = animationType;
+        RadDatePicker2.HideAnimation.Type = animationType;
+        RadDatePicker2.Calendar.FastNavigationSettings.ShowAnimation.Type = animationType;
+        RadDatePicker2.Calendar.FastNavigationSettings.HideAnimation.Type = animationType;
 
-        ////Arrows
-        //RadDiagram1.ConnectionDefaultsSettings.EndCap = Telerik.Web.UI.Diagram.ConnectionEndCap.ArrowEnd;
-      
-        //RadDiagram1.ConnectionDefaultsSettings.Editable = true;
-        ////RadDiagram1.ConnectionDefaultsSettings.EndCapSettings.StrokeSettings.Width = 100;
-        ////RadDiagram1.ConnectionDefaultsSettings.EndCapSettings.FillSettings.Color = "#152BEC"
-        ////RadDiagram1.ConnectionDefaultsSettings.EndCapSettings.FillSettings.Opacity = 5;         
+        //if (!tbDuration.Value.HasValue)
+        //{
+        //    tbDuration.Value = RadDatePicker1.ShowAnimation.Duration;
+        //}
+        //else
+        //{
+        //    RadDatePicker1.ShowAnimation.Duration = (int)tbDuration.Value.Value;
+        //    RadDatePicker1.HideAnimation.Duration = (int)tbDuration.Value.Value;
+        //    RadDatePicker1.Calendar.FastNavigationSettings.ShowAnimation.Duration = (int)tbDuration.Value.Value;
+        //    RadDatePicker1.Calendar.FastNavigationSettings.HideAnimation.Duration = (int)tbDuration.Value.Value;
+
+        //    RadDatePicker2.ShowAnimation.Duration = (int)tbDuration.Value.Value;
+        //    RadDatePicker2.HideAnimation.Duration = (int)tbDuration.Value.Value;
+        //    RadDatePicker2.Calendar.FastNavigationSettings.ShowAnimation.Duration = (int)tbDuration.Value.Value;
+        //    RadDatePicker2.Calendar.FastNavigationSettings.HideAnimation.Duration = (int)tbDuration.Value.Value;
+        //}
     }
 
 
@@ -118,8 +135,8 @@ public partial class Performance : System.Web.UI.Page
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-
-            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "conformance/" + RadDropDownList4.SelectedValue + "/filterInformation").ConfigureAwait(false))
+           
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "conformance/" + RadDropDownList4.SelectedValue  + "/filterInformation").ConfigureAwait(false))
             {
 
                 var status = response.IsSuccessStatusCode;
@@ -128,19 +145,55 @@ public partial class Performance : System.Web.UI.Page
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
-                    Debug.WriteLine(apiResponse);
 
 
-                    /** POPULAR UM DROPDOWN EXEMPLO **/
+                    JObject obj = JsonConvert.DeserializeObject<JObject>(apiResponse);
 
-                    //JArray obj = JsonConvert.DeserializeObject<JArray>(apiResponse);
 
-                    //foreach (JObject item in obj)
-                    //{
-                    //    string value = item["id"].ToString();
-                    //    string text = item["name"].ToString();
-                    //    RadDropDownList4.Items.Add(new DropDownListItem(text, value));
-                    //}
+
+                    ArrayList moldesList = new ArrayList();
+                    ArrayList activitiesList = new ArrayList();
+                    ArrayList operatorsList = new ArrayList();
+
+                    Debug.WriteLine(obj["resources"]);
+
+
+
+                    foreach (var item in obj["activities"])
+                    {
+                        
+                        activitiesList.Add(item);
+                        Debug.WriteLine(item);
+                        RadComboBoxActivities.DataSource = activitiesList;
+                        RadComboBoxActivities.DataBind();
+
+                        RadComboBoxActivities2.DataSource = activitiesList;
+                        RadComboBoxActivities2.DataBind();
+                    }
+
+                    foreach (var item in obj["moulds"])
+                    {
+
+                        moldesList.Add(item);
+                        Debug.WriteLine(item);
+                        RadComboBoxMoulds.DataSource = moldesList;
+                        RadComboBoxMoulds.DataBind();
+
+                        RadComboBoxMoulds2.DataSource = moldesList;
+                        RadComboBoxMoulds2.DataBind();
+                    }
+
+                    foreach (var item in obj["resources"])
+                    {
+
+                        operatorsList.Add(item);
+                        Debug.WriteLine(item);
+                        RadComboBoxOperadores.DataSource = operatorsList;
+                        RadComboBoxOperadores.DataBind();
+
+                        RadComboBoxOperadores2.DataSource = operatorsList;
+                        RadComboBoxOperadores2.DataBind();
+                    }
                 }
                 else
                 {
