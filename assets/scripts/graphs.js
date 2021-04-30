@@ -13,20 +13,19 @@ function generatePerformance(process) {
     console.log(process);
     renderConformanceGraph();
 
-    
+
 }
 
 
-function generateGraph(process) { 
+function generateGraph(process) {
 
     if (process.data.info == "Inductive Mining") {
-      
-        if (process.isPerformance === "True") {                   
+
+        if (process.isPerformance === "True") {
             renderPerformanceGraph();
         }
     }
-    else
-    {
+    else {
         if (process.isPerformance === "True") {
 
             //nodes timers
@@ -66,13 +65,8 @@ function generateGraph(process) {
         }
     }
 
-    
+
 }
-
-
-
-
-
 
 
 /*-----------------Performance Diagram*-------------------*/
@@ -92,14 +86,14 @@ function renderPerformanceGraph() {
                     //Nodes styles
                     selector: 'node[type=0]',
                     style: {
-                        "shape": 'rectangle',
+                        "shape": 'round-rectangle',
                         "background-color": "#fff0d9",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#222222"
@@ -108,14 +102,14 @@ function renderPerformanceGraph() {
                 {
                     selector: 'node[type=1]',
                     style: {
-                        "shape": 'rectangle',
+                        "shape": 'round-rectangle',
                         "background-color": "#ffce89",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#222222"
@@ -124,14 +118,14 @@ function renderPerformanceGraph() {
                 {
                     selector: 'node[type=2]',
                     style: {
-                        "shape": 'rectangle',
+                        "shape": 'round-rectangle',
                         "background-color": "#ff9457",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#222222"
@@ -140,14 +134,14 @@ function renderPerformanceGraph() {
                 {
                     selector: 'node[type=3]',
                     style: {
-                        "shape": 'rectangle',
+                        "shape": 'round-rectangle',
                         "background-color": "#f25831",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#222222"
@@ -156,14 +150,14 @@ function renderPerformanceGraph() {
                 {
                     selector: 'node[type=4]',
                     style: {
-                        "shape": 'rectangle',
+                        "shape": 'round-rectangle',
                         "background-color": "#be1300",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#FFFFFF"
@@ -328,7 +322,7 @@ function renderPerformanceGraph() {
         //add nodes to graph
         console.log(process.data.nodes)
         for (var i = 0; i < process.data.nodes.length; i++) {
-            let styleType = Math.floor(currentProcess.nodeTimes[i] * 4 / nodesMaxTime);        
+            let styleType = Math.floor(currentProcess.nodeTimes[i] * 4 / nodesMaxTime);
             cy.add({
                 data: {
                     id: i,
@@ -354,14 +348,14 @@ function renderPerformanceGraph() {
                 });
             }
         }
-    } else { 
+    } else {
         //INDUCTIVE 
         //add nodes to graph       
-        for (var i = 0; i < process.data.nodes.length; i++) {            
+        for (var i = 0; i < process.data.nodes.length; i++) {
             cy.add({
                 data: {
                     id: i,
-                    label: process.data.nodes[i],  
+                    label: process.data.nodes[i],
                     type: 1
                 }
             }
@@ -371,13 +365,13 @@ function renderPerformanceGraph() {
         //add relations to graph
         console.log(process.data.relations.length)
         for (var i = 0; i < process.data.relations.length; i++) {
-            for (var j = 0; j < process.data.relations[i].to.length; j++) {  
-                console.log(process.data.relations[i]) 
+            for (var j = 0; j < process.data.relations[i].to.length; j++) {
+                console.log(process.data.relations[i])
                 cy.add({
                     data: {
                         id: 'relation' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
                         source: process.data.relations[i].from,
-                        target: process.data.relations[i].to[j],                       
+                        target: process.data.relations[i].to[j],
                         type: 1
                     }
                 });
@@ -431,7 +425,7 @@ function renderPerformanceGraph() {
         padding: 10, // padding on fit
         circle: false, // put depths in concentric circles if true, put depths top down if false
         grid: false, // whether to create an even grid into which the DAG is placed (circle:false only)
-        spacingFactor: 0.90, // positive spacing factor, larger => more space between nodes (N.B. n/a if causes overlap)
+        spacingFactor: 1.3, // positive spacing factor, larger => more space between nodes (N.B. n/a if causes overlap)
         boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
         avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
         nodeDimensionsIncludeLabels: false, // Excludes the label when calculating node bounding boxes for the layout algorithm
@@ -471,14 +465,14 @@ function renderFrequencyGraph() {
                     //Nodes styles
                     selector: 'node[type=0]',
                     style: {
-                        "shape": 'rectangle',
+                        "shape": 'round-rectangle',
                         "background-color": "#FFFFFF",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "text-wrap": "wrap",
@@ -489,14 +483,14 @@ function renderFrequencyGraph() {
                 {
                     selector: 'node[type=1]',
                     style: {
-                        "shape": 'rectangle',
-                        "background-color": "#acbcff",
+                        "shape": 'round-rectangle',
+                        "background-color": "#7f87ff",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#222222"
@@ -505,14 +499,14 @@ function renderFrequencyGraph() {
                 {
                     selector: 'node[type=2]',
                     style: {
-                        "shape": 'rectangle',
-                        "background-color": "#748fff",
+                        "shape": 'round-rectangle',
+                        "background-color": "#404bff",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#222222"
@@ -521,33 +515,17 @@ function renderFrequencyGraph() {
                 {
                     selector: 'node[type=3]',
                     style: {
-                        "shape": 'rectangle',
-                        "background-color": "#365eff",
+                        "shape": 'round-rectangle',
+                        "background-color": "#000eff",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#222222"
-                    }
-                },
-                {
-                    selector: 'node[type=4]',
-                    style: {
-                        "shape": 'rectangle',
-                        "background-color": "#0032ff",
-                        "label": "data(label)",
-                        'width': '350',
-                        "height": "40",
-                        "border-width": 2,
-                        "border-color": "#484848",
-                        "font-size": "16px",
-                        "text-valign": "center",
-                        "text-halign": "center",
-                        "color": "#FFFFFF"
                     }
                 },
                 {
@@ -593,8 +571,8 @@ function renderFrequencyGraph() {
                         'width': 5,
                         'curve-style': 'bezier',
                         "content": "data(name)",
-                        "line-color": "#acbcff",
-                        'target-arrow-color': '#acbcff',
+                        "line-color": "#7f87ff",
+                        'target-arrow-color': '#7f87ff',
                         "font-size": "32px",
                         "color": "#222222",
                         "loop-direction": "0deg",
@@ -610,8 +588,8 @@ function renderFrequencyGraph() {
                         'width': 7,
                         'curve-style': 'bezier',
                         "content": "data(name)",
-                        "line-color": "#748fff",
-                        'target-arrow-color': '#748fff',
+                        "line-color": "#404bff",
+                        'target-arrow-color': '#404bff',
                         "font-size": "32px",
                         "color": "#222222",
                         "loop-direction": "0deg",
@@ -627,25 +605,8 @@ function renderFrequencyGraph() {
                         'width': 9,
                         'curve-style': 'bezier',
                         "content": "data(name)",
-                        "line-color": "#365eff",
-                        'target-arrow-color': '#365eff',
-                        "font-size": "32px",
-                        "color": "#222222",
-                        "loop-direction": "0deg",
-                        'target-arrow-shape': 'triangle',
-                        "loop-sweep": "45deg",
-                        "text-margin-y": "-15px",
-                        "source-text-offset": "50px"
-                    }
-                },
-                {
-                    selector: 'edge[type=4]',
-                    style: {
-                        'width': 13,
-                        'curve-style': 'bezier',
-                        "content": "data(name)",
-                        "line-color": "#0032ff",
-                        'target-arrow-color': '#0032ff',
+                        "line-color": "#000eff",
+                        'target-arrow-color': '#000eff',
                         "font-size": "32px",
                         "color": "#222222",
                         "loop-direction": "0deg",
@@ -698,7 +659,7 @@ function renderFrequencyGraph() {
 
     //Nodes\\
     for (let i = 0; i < process.data.nodes.length; i++) {
-        let typeValue = Math.round(process.data.statistics.nodes[i].frequency * 4 / maxFrequency);
+        let typeValue = Math.round(process.data.statistics.nodes[i].frequency * 3 / maxFrequency);
         //asd[typeValue] = process.data.data.statistics.nodes[i].frequency;
         cy.add({
             data: {
@@ -714,7 +675,7 @@ function renderFrequencyGraph() {
     //Edges\\
     for (let i = 0; i < process.data.relations.length; i++) {
         for (let j = 0; j < process.data.relations[i].to.length; j++) {
-            let typeValue = Math.round(process.data.statistics.relations[i].to[j].frequency * 4 / maxFrequency);
+            let typeValue = Math.round(process.data.statistics.relations[i].to[j].frequency * 3 / maxFrequency);
             cy.add({
                 data: {
                     id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
@@ -817,9 +778,9 @@ function renderConformanceGraph() {
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "text-wrap": "wrap",
@@ -830,14 +791,14 @@ function renderConformanceGraph() {
                 {
                     selector: 'node[type=1]',
                     style: {
-                        "shape": 'rectangle',
+                        "shape": 'round-rectangle',
                         "background-color": "#acbcff",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#222222"
@@ -846,14 +807,14 @@ function renderConformanceGraph() {
                 {
                     selector: 'node[type=2]',
                     style: {
-                        "shape": 'rectangle',
+                        "shape": 'round-rectangle',
                         "background-color": "#748fff",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#222222"
@@ -862,14 +823,14 @@ function renderConformanceGraph() {
                 {
                     selector: 'node[type=3]',
                     style: {
-                        "shape": 'rectangle',
+                        "shape": 'round-rectangle',
                         "background-color": "#365eff",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#222222"
@@ -878,14 +839,14 @@ function renderConformanceGraph() {
                 {
                     selector: 'node[type=4]',
                     style: {
-                        "shape": 'rectangle',
+                        "shape": 'round-rectangle',
                         "background-color": "#0032ff",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 2,
+                        "border-width": 3,
                         "border-color": "#484848",
-                        "font-size": "16px",
+                        "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#FFFFFF"
@@ -1019,10 +980,10 @@ function renderConformanceGraph() {
         });
 
 
-    
+
     //Nodes
-    
-    let nodes = process.data.nodes;   
+
+    let nodes = process.data.nodes;
     nodes.forEach(function (node, index) {
 
         let typeValue = 0;
@@ -1032,7 +993,7 @@ function renderConformanceGraph() {
                 id: index,
                 label: node,
                 type: typeValue
-                
+
             },
         }
         );
@@ -1101,7 +1062,7 @@ function renderConformanceGraph() {
     });
 
 
-   
+
     //end nodes
     for (let i = 0; i < process.data.endEvents.length; i++) {
         cy.add({
@@ -1120,8 +1081,8 @@ function renderConformanceGraph() {
         });
     }
 
-    
-    
+
+
     let customBreadthfirst = {
         name: 'breadthfirst',
 
@@ -1154,7 +1115,7 @@ function renderConformanceGraph() {
 
 function convertToHours(duration) {
 
-   
+
     let hours = (duration / 60);
     let rhours = Math.floor(hours);
 
