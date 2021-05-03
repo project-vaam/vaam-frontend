@@ -131,12 +131,17 @@
             
             <%-- DropDown --%>
             <h4 style="margin-top: 16px !important">Selecione o Processo</h4>
-            <telerik:RadDropDownList
-                ID="RadDropDownList4"
+            <telerik:RadComboBox 
+                RenderMode="Lightweight"
+                ID="RadComboBoxProcess" 
+                AllowCustomText="true" 
                 runat="server"
                 DataValueField="ID"
-                DataTextField="Text">
-            </telerik:RadDropDownList>
+                DataTextField="Text"
+                AutoPostBack="True"
+                Filter="Contains"
+                Width="400px">
+            </telerik:RadComboBox>
 
             <div id="showDiagram" style="display: flex; width: 100%; align-items: center; justify-content: center; margin-top: 16px;">
                  <%-- Button CREATE DropDown --%>
