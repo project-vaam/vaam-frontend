@@ -147,6 +147,7 @@
                 Width="400">
             </telerik:RadComboBox>
            
+            <%---------------- MODELO A COMPARAR ----------------%>
             <h3 style="text-align:center;margin-bottom: 0px;">Modelo a comparar</h3>
             <%-- Time Interval --%>
             <h4 style="margin-top: 16px !important">Intervalo de Tempo:</h4>
@@ -155,9 +156,7 @@
             <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker4" Width="80%" style="margin-top:6px;" runat="server" DateInput-Label="Data Final:&nbsp;&nbsp;">
             </telerik:RadDatePicker>
             <br />
-            <%--<asp:CompareValidator ID="CompareValidator1" runat="server" ControlToValidate="RadDatePicker4"
-                            ControlToCompare="RadDatePicker3" Operator="GreaterThan" Type="Date" ErrorMessage="A Data Final tem que ser posterior à Inicial">
-            </asp:CompareValidator>--%>
+
 
             <%-- Moulds --%>
             <h4 style="margin-top: 0px !important">Molde:</h4>

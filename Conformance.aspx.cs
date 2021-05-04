@@ -121,11 +121,10 @@ public partial class Conformance : System.Web.UI.Page
         {
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            Debug.WriteLine("AQUI");
 
             if (RadComboBoxProcess.SelectedValue == "")
             {               
-                RadComboBoxProcess.SelectedIndex = 1;               
+                RadComboBoxProcess.SelectedIndex = 0;               
             }
           
            
@@ -196,7 +195,7 @@ public partial class Conformance : System.Web.UI.Page
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine(apiResponse);
                 }
-            }
+            }            
         }
     }
 
@@ -206,10 +205,10 @@ public partial class Conformance : System.Web.UI.Page
         errorMessage.InnerText = "";
         showError.Visible = false;
   
-        string json, url;
+        string json;
         json = "{ \"isEstimatedEnd\":" + EstimatedCheckbox.Checked.ToString().ToLower() + "}";
 
-        /* Case Payload */
+        /* Modelo BASE Payload */
         var isEstimatedEnd = EstimatedCheckbox.Checked.ToString().ToLower();
 
         string endDate = null;
@@ -218,7 +217,7 @@ public partial class Conformance : System.Web.UI.Page
         string[] activities = null;
         string[] resources = null;
 
-        if (RadDatePicker1.SelectedDate.HasValue)
+        if (RadDatePicker1.SelectedDate.HasValue && RadDatePicker2.SelectedDate.HasValue)
         {            
             startDate = RadDatePicker1.SelectedDate.Value.ToString("d-M-yyyy");
 
@@ -249,85 +248,114 @@ public partial class Conformance : System.Web.UI.Page
 
         var payload = new { isEstimatedEnd, moulds , resources, activities, startDate, endDate };
 
-        Debug.WriteLine("CasePayload");
+        Debug.WriteLine("Base Payload");
         Debug.WriteLine(JsonConvert.SerializeObject(payload).ToString());
 
-        /* Modelo Payload */
-        string endDate2 = null;
-        string startDate2 = null;
-        string[] moulds2 = null;
-        string[] activities2 = null;
-        string[] resources2 = null;
+        /* Modelo CASE Payload */
 
-        if (RadDatePicker2.SelectedDate.HasValue)
+        string[] nodes = null;
+        if (RadDatePicker3.SelectedDate.HasValue && RadDatePicker4.SelectedDate.HasValue)
         {
-            startDate2 = RadDatePicker1.SelectedDate.Value.ToString("d-M-yyyy");
+            startDate = RadDatePicker3.SelectedDate.Value.ToString("d-M-yyyy");
 
-            endDate2 = RadDatePicker2.SelectedDate.Value.ToString("d-M-yyyy");
+            endDate = RadDatePicker4.SelectedDate.Value.ToString("d-M-yyyy");
         }
 
-        string mouldsString2 = RadComboBoxMoulds.Text.ToString();
+        string mouldsString2 = RadComboBoxMoulds2.Text.ToString();
 
         if (mouldsString2 != "")
         {
             moulds = mouldsString2.Split(',').Select(p => p.Trim()).ToArray();
         }
 
-        string activitiesString2 = RadComboBoxActivities.Text.ToString();
+        string activitiesString2 = RadComboBoxActivities2.Text.ToString();
        
         if (activitiesString2 != "")
         {
-            activities = activitiesString2.Split(',').Select(p => p.Trim()).ToArray();
+            nodes = activitiesString2.Split(',').Select(p => p.Trim()).ToArray();
         }
 
-        string resourcesString2 = RadComboBoxOperadores.Text.ToString();
+        string resourcesString2 = RadComboBoxOperadores2.Text.ToString();
 
         if (resourcesString2 != "")
         {
             resources = resourcesString2.Split(',').Select(p => p.Trim()).ToArray();
         }
+ 
 
-        if (RadDatePicker1.SelectedDate.HasValue)
-        {
-             startDate2 = RadDatePicker3.SelectedDate.Value.ToString("d-M-yyyy");
+        var payloadCase = new { isEstimatedEnd, moulds, resources, nodes, startDate, endDate };
 
-             endDate2 = RadDatePicker4.SelectedDate.Value.ToString("d-M-yyyy");
-        }      
-
-        var payload2 = new { isEstimatedEnd, moulds2, resources2, activities2, startDate2, endDate2 };
-
-        Debug.WriteLine("ModeloPayload");
-        Debug.WriteLine(JsonConvert.SerializeObject(payload2).ToString());
-
+        Debug.WriteLine("Case Payload");
+        Debug.WriteLine(JsonConvert.SerializeObject(payloadCase).ToString());
+        
         using (var httpClient = new HttpClient())
         {
+            /* TOKEN */
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(payload).ToString(), Encoding.UTF8, "application/json");
+            Debug.WriteLine("RETRIEVING CASE MODEL...");
+            /* CONFIG FETCH - PREPARE URL & CONTENT */
+            string completeURL = "conformance/performance/process/" + processID;
+            Debug.WriteLine(completeURL);
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(payloadCase).ToString(), Encoding.UTF8, "application/json"); 
+            
+            /* RETRIEVE CASE DIAGRAM */
+            using (var response = await httpClient.PostAsync(Constants.URL_BACKEND_CONNECTION + completeURL, content).ConfigureAwait(false))
+            {
+                var status = response.IsSuccessStatusCode;
+
+                if (status == true)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+
+                    if (response.ReasonPhrase.ToString() == "No Content")
+                    {
+                        errorMessage.InnerText = "Os filtros escolhidos não tem dados.";
+                        showError.Visible = true;
+                    }
+
+                    Debug.WriteLine(response.ReasonPhrase.ToString());
+                    Debug.WriteLine(apiResponse);
+
+                    processes = apiResponse; // Add Case Response to Processes so it can be manipulated
+                }
+                else
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("Something went bad");
+                    Debug.WriteLine(apiResponse);
+                    errorMessage.InnerText = apiResponse;
+                    showError.Visible = true;
+                }
+            }
+
 
             string threshold = "", workflowURL = "conformance/performance/alpha-miner/model/";
 
             if (!AlphaRadioBtn.Checked)
             {
                 workflowURL = "conformance/performance/heuristic-miner/model/";
-                threshold = "?threshold=" + ThresholdSlider.Value.ToString().Replace(",",".");
+                threshold = "?threshold=" + ThresholdSlider.Value.ToString().Replace(",", ".");
                 //workflowURL = HeuristicRadioBtn.Checked ? "/conformance/performance/heuristic-miner/model/" : "workflow-network/inductive-miner/processes/";
             }
 
-
-            string completeURL = workflowURL + processID + threshold;
+            /* CONFIG FETCH - PREPARE URL & CONTENT */
+            completeURL = workflowURL + processID + threshold;
             Debug.WriteLine(completeURL);
+            content = new StringContent(JsonConvert.SerializeObject(payload).ToString(), Encoding.UTF8, "application/json");
 
+            /* FETCH DIAGRAM */
             using (var response = await httpClient.PostAsync(Constants.URL_BACKEND_CONNECTION + completeURL, content).ConfigureAwait(false))
-            {               
+            {
                 var status = response.IsSuccessStatusCode;
-                
+
                 if (status == true)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
-                    if (response.ReasonPhrase.ToString() == "No Content"){
+                    if (response.ReasonPhrase.ToString() == "No Content")
+                    {
                         errorMessage.InnerText = "Os filtros escolhidos não tem dados.";
                         showError.Visible = true;
                     }
@@ -336,18 +364,19 @@ public partial class Conformance : System.Web.UI.Page
                     Debug.WriteLine(response.ReasonPhrase.ToString());
                     Debug.WriteLine(apiResponse);
 
-                    processes = "{data: " + apiResponse + "}";
+                    processes = "{\"base\": " + apiResponse + ", \"case\": " + processes + "}"; // Add Bases to total processes, so the diagram can be generated
                     Debug.WriteLine(processes);
                 }
                 else
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine("Something went bad grap");
+                    Debug.WriteLine("Something went bad");
                     Debug.WriteLine(apiResponse);
                     errorMessage.InnerText = apiResponse;
                     showError.Visible = true;
                 }
             }
+
         }
     }
 
