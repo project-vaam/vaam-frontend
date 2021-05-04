@@ -252,8 +252,11 @@ public partial class Conformance : System.Web.UI.Page
         Debug.WriteLine(JsonConvert.SerializeObject(payload).ToString());
 
         /* Modelo CASE Payload */
-
+        endDate = null;
+        startDate = null;
+        moulds = null;
         string[] nodes = null;
+
         if (RadDatePicker3.SelectedDate.HasValue && RadDatePicker4.SelectedDate.HasValue)
         {
             startDate = RadDatePicker3.SelectedDate.Value.ToString("d-M-yyyy");
