@@ -8,7 +8,7 @@ var currentProcess = {
 };
 
 
-function generatePerformance(process) {
+function generateConformance(process) {
 
     console.log(process);
     renderConformanceGraph();
@@ -773,8 +773,9 @@ function renderConformanceGraph() {
                     //Nodes styles
                     selector: 'node[type=0]',
                     style: {
+                        "padding-relative-to": "width",
                         "shape": 'rectangle',
-                        "background-color": "#FFFFFF",
+                        "background-color": "#77E543",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",

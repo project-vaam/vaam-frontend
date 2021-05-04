@@ -19,12 +19,12 @@
     <script type="text/javascript">
 
         /* Datepicker Clientside Config */
-        function OnDateSelected(sender, eventArgs) {
+      <%--  function OnDateSelected(sender, eventArgs) {
             var date1 = sender.get_selectedDate();
             date1.setDate(date1.getDate() + 31);
             var datepicker = $find("<%= RadDatePicker2.ClientID %>");
             datepicker.set_maxDate(date1);
-        }
+        }--%>
 
     </script>
 </asp:Content>
@@ -94,14 +94,14 @@
 
             <%-- Time Interval --%>
             <h4 style="margin-top: 16px !important">Intervalo de Tempo:</h4>
-            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker1" Width="80%" ClientEvents-OnDateSelected="OnDateSelected" runat="server" DateInput-Label="Data Inicial: ">
+            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker1" Width="80%" runat="server" DateInput-Label="Data Inicial: ">
             </telerik:RadDatePicker>
             <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker2" Width="80%" style="margin-top:6px;" runat="server" DateInput-Label="Data Final:&nbsp;&nbsp;">
             </telerik:RadDatePicker>
             <br />
-            <asp:CompareValidator ID="dateCompareValidator" runat="server" ControlToValidate="Raddatepicker2"
+            <%--<asp:CompareValidator ID="dateCompareValidator" runat="server" ControlToValidate="Raddatepicker2"
                             ControlToCompare="RadDatePicker1" Operator="GreaterThan" Type="Date" ErrorMessage="A Data Final tem que ser posterior à Inicial">
-            </asp:CompareValidator>
+            </asp:CompareValidator>--%>
 
             <%-- Moulds --%>
             <h4 style="margin-top: 0px !important">Molde:</h4>
@@ -150,14 +150,14 @@
             <h3 style="text-align:center;margin-bottom: 0px;">Modelo a comparar</h3>
             <%-- Time Interval --%>
             <h4 style="margin-top: 16px !important">Intervalo de Tempo:</h4>
-            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker3" Width="80%" ClientEvents-OnDateSelected="OnDateSelected" runat="server" DateInput-Label="Data Inicial: ">
+            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker3" Width="80%" runat="server" DateInput-Label="Data Inicial: ">
             </telerik:RadDatePicker>
             <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker4" Width="80%" style="margin-top:6px;" runat="server" DateInput-Label="Data Final:&nbsp;&nbsp;">
             </telerik:RadDatePicker>
             <br />
-            <asp:CompareValidator ID="CompareValidator1" runat="server" ControlToValidate="Raddatepicker2"
-                            ControlToCompare="RadDatePicker1" Operator="GreaterThan" Type="Date" ErrorMessage="A Data Final tem que ser posterior à Inicial">
-            </asp:CompareValidator>
+            <%--<asp:CompareValidator ID="CompareValidator1" runat="server" ControlToValidate="RadDatePicker4"
+                            ControlToCompare="RadDatePicker3" Operator="GreaterThan" Type="Date" ErrorMessage="A Data Final tem que ser posterior à Inicial">
+            </asp:CompareValidator>--%>
 
             <%-- Moulds --%>
             <h4 style="margin-top: 0px !important">Molde:</h4>
@@ -213,11 +213,15 @@
     </div>
 
      <script>
-         var process = <%=processes%>
+
+        var process = <%=processes%>
+
+        console.log("degubg here")
+        console.log(process)
 
          if (process) {
              console.log("CALLING ....");
-             generatePerformance(process);
+             generateConformance(process);
          } else {
              console.log("No data to generate graph");
          }

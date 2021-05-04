@@ -29,8 +29,11 @@ public partial class Conformance : System.Web.UI.Page
         if (!IsPostBack)
         {
             thresholdField.Visible = false;
-            displayProcess.Visible = false;            
+            displayProcess.Visible = false;
+            
             callProcesses();
+            
+            Debug.WriteLine(RadComboBoxProcess.SelectedIndex);
             System.Threading.Thread.Sleep(500);
             callFilterInformation(null,null);
         }
@@ -118,8 +121,15 @@ public partial class Conformance : System.Web.UI.Page
         {
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            Debug.WriteLine(RadComboBoxProcess.SelectedValue);
+            Debug.WriteLine("AQUI");
+
+            if (RadComboBoxProcess.SelectedValue == "")
+            {               
+                RadComboBoxProcess.SelectedIndex = 1;               
+            }
+          
            
+
             using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "conformance/" + RadComboBoxProcess.SelectedValue + "/filterInformation").ConfigureAwait(false))
             {
 
@@ -128,7 +138,7 @@ public partial class Conformance : System.Web.UI.Page
                 if (status == true)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-
+                    Debug.WriteLine(apiResponse);
 
 
                     JObject obj = JsonConvert.DeserializeObject<JObject>(apiResponse);
@@ -182,7 +192,7 @@ public partial class Conformance : System.Web.UI.Page
                 else
                 {
 
-                    Debug.WriteLine("Something went bad.");
+                    Debug.WriteLine("Something went badinfo.");
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine(apiResponse);
                 }
@@ -195,18 +205,106 @@ public partial class Conformance : System.Web.UI.Page
     {
         errorMessage.InnerText = "";
         showError.Visible = false;
+  
+        string json, url;
+        json = "{ \"isEstimatedEnd\":" + EstimatedCheckbox.Checked.ToString().ToLower() + "}";
 
+        /* Case Payload */
+        var isEstimatedEnd = EstimatedCheckbox.Checked.ToString().ToLower();
 
+        string endDate = null;
+        string startDate = null;
+        string[] moulds = null;
+        string[] activities = null;
+        string[] resources = null;
+
+        if (RadDatePicker1.SelectedDate.HasValue)
+        {            
+            startDate = RadDatePicker1.SelectedDate.Value.ToString("d-M-yyyy");
+
+            endDate = RadDatePicker2.SelectedDate.Value.ToString("d-M-yyyy");
+        }
+
+        string mouldsString = RadComboBoxMoulds.Text.ToString();
+
+        if (mouldsString != "")
+        {
+            moulds = mouldsString.Split(',').Select(p => p.Trim()).ToArray();
+        }
+     
+        string activitiesString = RadComboBoxActivities.Text.ToString();
+        if (activitiesString != "")
+        {
+            activities = activitiesString.Split(',').Select(p => p.Trim()).ToArray();
+        }
+       
+        string resourcesString = RadComboBoxOperadores.Text.ToString();
+
+        if (resourcesString != "")
+        {
+            resources = resourcesString.Split(',').Select(p => p.Trim()).ToArray();
+        }
+
+       
+
+        var payload = new { isEstimatedEnd, moulds , resources, activities, startDate, endDate };
+
+        Debug.WriteLine("CasePayload");
+        Debug.WriteLine(JsonConvert.SerializeObject(payload).ToString());
+
+        /* Modelo Payload */
+        string endDate2 = null;
+        string startDate2 = null;
+        string[] moulds2 = null;
+        string[] activities2 = null;
+        string[] resources2 = null;
+
+        if (RadDatePicker2.SelectedDate.HasValue)
+        {
+            startDate2 = RadDatePicker1.SelectedDate.Value.ToString("d-M-yyyy");
+
+            endDate2 = RadDatePicker2.SelectedDate.Value.ToString("d-M-yyyy");
+        }
+
+        string mouldsString2 = RadComboBoxMoulds.Text.ToString();
+
+        if (mouldsString2 != "")
+        {
+            moulds = mouldsString2.Split(',').Select(p => p.Trim()).ToArray();
+        }
+
+        string activitiesString2 = RadComboBoxActivities.Text.ToString();
+       
+        if (activitiesString2 != "")
+        {
+            activities = activitiesString2.Split(',').Select(p => p.Trim()).ToArray();
+        }
+
+        string resourcesString2 = RadComboBoxOperadores.Text.ToString();
+
+        if (resourcesString2 != "")
+        {
+            resources = resourcesString2.Split(',').Select(p => p.Trim()).ToArray();
+        }
+
+        if (RadDatePicker1.SelectedDate.HasValue)
+        {
+             startDate2 = RadDatePicker3.SelectedDate.Value.ToString("d-M-yyyy");
+
+             endDate2 = RadDatePicker4.SelectedDate.Value.ToString("d-M-yyyy");
+        }      
+
+        var payload2 = new { isEstimatedEnd, moulds2, resources2, activities2, startDate2, endDate2 };
+
+        Debug.WriteLine("ModeloPayload");
+        Debug.WriteLine(JsonConvert.SerializeObject(payload2).ToString());
 
         using (var httpClient = new HttpClient())
         {
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            string json = "{ \"isEstimatedEnd\":" + "false";
-            json += " }";
-
-        HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(payload).ToString(), Encoding.UTF8, "application/json");
 
             string threshold = "", workflowURL = "conformance/performance/alpha-miner/model/";
 
@@ -222,15 +320,21 @@ public partial class Conformance : System.Web.UI.Page
             Debug.WriteLine(completeURL);
 
             using (var response = await httpClient.PostAsync(Constants.URL_BACKEND_CONNECTION + completeURL, content).ConfigureAwait(false))
-            {
-               
-
+            {               
                 var status = response.IsSuccessStatusCode;
+                
                 if (status == true)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
-                           
+                    if (response.ReasonPhrase.ToString() == "No Content"){
+                        errorMessage.InnerText = "Os filtros escolhidos não tem dados.";
+                        showError.Visible = true;
+                    }
+
+                    Debug.WriteLine("im here");
+                    Debug.WriteLine(response.ReasonPhrase.ToString());
+                    Debug.WriteLine(apiResponse);
 
                     processes = "{data: " + apiResponse + "}";
                     Debug.WriteLine(processes);
@@ -238,7 +342,8 @@ public partial class Conformance : System.Web.UI.Page
                 else
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine("Something went bad");
+                    Debug.WriteLine("Something went bad grap");
+                    Debug.WriteLine(apiResponse);
                     errorMessage.InnerText = apiResponse;
                     showError.Visible = true;
                 }
