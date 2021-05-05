@@ -791,7 +791,7 @@ function renderConformanceGraph() {
                     selector: 'node[type=1]', //red
                     style: {
                         "shape": 'round-rectangle',
-                        "background-color": "#ba0000",
+                        "background-color": "#0c9200",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
@@ -807,7 +807,7 @@ function renderConformanceGraph() {
                     selector: 'node[type=2]', //green
                     style: {
                         "shape": 'round-rectangle',
-                        "background-color": "#0c9200",
+                        "background-color": "#ba0000",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
