@@ -70,7 +70,7 @@ public partial class Performance : System.Web.UI.Page
 
     protected void ShowDiagram_Click(object sender, EventArgs e)
     {
-        GetWorkFlows(RadDropDownList4.SelectedValue);
+        GetWorkFlows(RadComboBoxProcess.SelectedValue);
     }
 
     protected async void callProcesses()
@@ -97,8 +97,8 @@ public partial class Performance : System.Web.UI.Page
                     foreach (JObject item in obj)
                     {
                         string value = item["id"].ToString();
-                        string text = item["name"].ToString();
-                        RadDropDownList4.Items.Add(new DropDownListItem(text, value));
+                        string text = item["id"].ToString() + " - " + item["name"].ToString();
+                        RadComboBoxProcess.Items.Add(new RadComboBoxItem(text, value));
                     }
                 }
                 else

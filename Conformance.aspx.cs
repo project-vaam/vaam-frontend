@@ -15,7 +15,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
-public partial class Performance : System.Web.UI.Page
+public partial class Conformance : System.Web.UI.Page
 {
     public string processes = "null";
     protected void Page_Load(object sender, EventArgs e)
@@ -29,13 +29,17 @@ public partial class Performance : System.Web.UI.Page
         if (!IsPostBack)
         {
             thresholdField.Visible = false;
-            displayProcess.Visible = false;            
+            displayProcess.Visible = false;
+            
             callProcesses();
+            
+            Debug.WriteLine(RadComboBoxProcess.SelectedIndex);
             System.Threading.Thread.Sleep(500);
-            callFilterInformation(null, null);
+            callFilterInformation(null,null);
         }
     }
 
+    /* Calendar DatePicker Settings*/
     protected override void OnPreRender(EventArgs e)
     {
         base.OnPreRender(e);
@@ -64,29 +68,12 @@ public partial class Performance : System.Web.UI.Page
         RadDatePicker2.HideAnimation.Type = animationType;
         RadDatePicker2.Calendar.FastNavigationSettings.ShowAnimation.Type = animationType;
         RadDatePicker2.Calendar.FastNavigationSettings.HideAnimation.Type = animationType;
-
-        //if (!tbDuration.Value.HasValue)
-        //{
-        //    tbDuration.Value = RadDatePicker1.ShowAnimation.Duration;
-        //}
-        //else
-        //{
-        //    RadDatePicker1.ShowAnimation.Duration = (int)tbDuration.Value.Value;
-        //    RadDatePicker1.HideAnimation.Duration = (int)tbDuration.Value.Value;
-        //    RadDatePicker1.Calendar.FastNavigationSettings.ShowAnimation.Duration = (int)tbDuration.Value.Value;
-        //    RadDatePicker1.Calendar.FastNavigationSettings.HideAnimation.Duration = (int)tbDuration.Value.Value;
-
-        //    RadDatePicker2.ShowAnimation.Duration = (int)tbDuration.Value.Value;
-        //    RadDatePicker2.HideAnimation.Duration = (int)tbDuration.Value.Value;
-        //    RadDatePicker2.Calendar.FastNavigationSettings.ShowAnimation.Duration = (int)tbDuration.Value.Value;
-        //    RadDatePicker2.Calendar.FastNavigationSettings.HideAnimation.Duration = (int)tbDuration.Value.Value;
-        //}
     }
 
 
     protected void ShowDiagram_Click(object sender, EventArgs e)
     {
-        GetWorkFlows(RadDropDownList4.SelectedValue);
+        GetWorkFlows(RadComboBoxProcess.SelectedValue);
     }
 
     protected async void callProcesses()
@@ -113,8 +100,8 @@ public partial class Performance : System.Web.UI.Page
                     foreach (JObject item in obj)
                     {
                         string value = item["id"].ToString();
-                        string text = item["name"].ToString();
-                        RadDropDownList4.Items.Add(new DropDownListItem(text, value));
+                        string text = item["id"].ToString() + " - " + item["name"].ToString();
+                        RadComboBoxProcess.Items.Add(new RadComboBoxItem(text, value));
                     }
                 }
                 else
@@ -127,7 +114,7 @@ public partial class Performance : System.Web.UI.Page
         }
     }
 
-    public async void callFilterInformation(object sender, DropDownListEventArgs molde)
+    public async void callFilterInformation(object o, RadComboBoxSelectedIndexChangedEventArgs e)
     {
         Debug.WriteLine("getting all info");
         using (var httpClient = new HttpClient())
@@ -135,8 +122,14 @@ public partial class Performance : System.Web.UI.Page
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+            if (RadComboBoxProcess.SelectedValue == "")
+            {               
+                RadComboBoxProcess.SelectedIndex = 0;               
+            }
+          
            
-            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "conformance/" + RadDropDownList4.SelectedValue  + "/filterInformation").ConfigureAwait(false))
+
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "conformance/" + RadComboBoxProcess.SelectedValue + "/filterInformation").ConfigureAwait(false))
             {
 
                 var status = response.IsSuccessStatusCode;
@@ -144,7 +137,7 @@ public partial class Performance : System.Web.UI.Page
                 if (status == true)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-
+                    Debug.WriteLine(apiResponse);
 
 
                     JObject obj = JsonConvert.DeserializeObject<JObject>(apiResponse);
@@ -198,69 +191,205 @@ public partial class Performance : System.Web.UI.Page
                 else
                 {
 
-                    Debug.WriteLine("Something went bad.");
+                    Debug.WriteLine("Something went badinfo.");
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine(apiResponse);
                 }
-            }
+            }            
         }
     }
 
 
-
-    /*Funcao do code behind para fazer os pedidos, tudo o resto pode ir com o caralho, alterar de forma a receber os novos inputs"*/
-    protected async void GetWorkFlows(string processID) //chamar no load Page
+    protected async void GetWorkFlows(string processID)
     {
         errorMessage.InnerText = "";
         showError.Visible = false;
+  
+       
+        /* Modelo BASE Payload */
+        var isEstimatedEnd = EstimatedCheckbox.Checked.ToString().ToLower();
+
+        string endDate = null;
+        string startDate = null;
+        string[] moulds = null;
+        string[] activities = null;
+        string[] resources = null;
+
+        if (RadDatePicker1.SelectedDate.HasValue && RadDatePicker2.SelectedDate.HasValue)
+        {            
+            startDate = RadDatePicker1.SelectedDate.Value.ToString("d-M-yyyy");
+
+            endDate = RadDatePicker2.SelectedDate.Value.ToString("d-M-yyyy");
+        }
+
+        string mouldsString = RadComboBoxMoulds.Text.ToString();
+
+        if (mouldsString != "")
+        {
+            moulds = mouldsString.Split(',').Select(p => p.Trim()).ToArray();
+        }
+     
+        string activitiesString = RadComboBoxActivities.Text.ToString();
+        if (activitiesString != "")
+        {
+            activities = activitiesString.Split(',').Select(p => p.Trim()).ToArray();
+        }
+       
+        string resourcesString = RadComboBoxOperadores.Text.ToString();
+
+        if (resourcesString != "")
+        {
+            resources = resourcesString.Split(',').Select(p => p.Trim()).ToArray();
+        }
+
+       
+
+        var payload = new { isEstimatedEnd, moulds , resources, activities, startDate, endDate };
+
+        Debug.WriteLine("Base Payload");
+        Debug.WriteLine(JsonConvert.SerializeObject(payload).ToString());
+
+        /* Modelo CASE Payload */
+        endDate = null;
+        startDate = null;
+        moulds = null;
+        string nodes = String.Empty;
+
+        if (RadDatePicker3.SelectedDate.HasValue && RadDatePicker4.SelectedDate.HasValue)
+        {
+            startDate = RadDatePicker3.SelectedDate.Value.ToString("d-M-yyyy");
+
+            endDate = RadDatePicker4.SelectedDate.Value.ToString("d-M-yyyy");
+        }
+
+        string mouldsString2 = RadComboBoxMoulds2.Text.ToString();
+
+        if (mouldsString2 != "")
+        {
+            moulds = mouldsString2.Split(',').Select(p => p.Trim()).ToArray();
+        }
+
+        string activitiesString2 = RadComboBoxActivities2.Text.ToString();
+       
+        if (activitiesString2 != "")
+        {
+            activities = activitiesString2.Split(',').Select(p => p.Trim()).ToArray();
+        }
+
+        string resourcesString2 = RadComboBoxOperadores2.Text.ToString();
+
+        if (resourcesString2 != "")
+        {
+            resources = resourcesString2.Split(',').Select(p => p.Trim()).ToArray();
+        }
+ 
 
 
-
+        
         using (var httpClient = new HttpClient())
         {
+            
+            /* TOKEN */
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            string json = "{ \"isEstimatedEnd\":" + "false";
-            json += " }";
-
-        HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
             string threshold = "", workflowURL = "conformance/performance/alpha-miner/model/";
 
             if (!AlphaRadioBtn.Checked)
             {
                 workflowURL = "conformance/performance/heuristic-miner/model/";
-                threshold = "?threshold=" + ThresholdSlider.Value.ToString().Replace(",",".");
+                threshold = "?threshold=" + ThresholdSlider.Value.ToString().Replace(",", ".");
                 //workflowURL = HeuristicRadioBtn.Checked ? "/conformance/performance/heuristic-miner/model/" : "workflow-network/inductive-miner/processes/";
             }
 
-
+            /* CONFIG FETCH - PREPARE URL & CONTENT */
             string completeURL = workflowURL + processID + threshold;
             Debug.WriteLine(completeURL);
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(payload).ToString(), Encoding.UTF8, "application/json");
 
+            /* FETCH DIAGRAM */
             using (var response = await httpClient.PostAsync(Constants.URL_BACKEND_CONNECTION + completeURL, content).ConfigureAwait(false))
             {
-               
-
                 var status = response.IsSuccessStatusCode;
+
                 if (status == true)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
-                           
+                    if (response.ReasonPhrase.ToString() == "No Content")
+                    {
+                        errorMessage.InnerText = "Os filtros escolhidos não tem dados.";
+                        showError.Visible = true;
+                    }
+                    else
+                    {
+                        processes = apiResponse;
+                        Debug.WriteLine(processes);
 
-                    processes = "{data: " + apiResponse + "}";
-                    Debug.WriteLine(processes);
+                        JObject obj = JsonConvert.DeserializeObject<JObject>(apiResponse);
+                        if (obj["nodes"] != null)
+                        {
+                            nodes = obj["nodes"].ToString().Replace("\r\n", "");
+                        }
+                        Debug.WriteLine("NODES READ:");
+                        Debug.WriteLine(nodes);
+                    }
+
+
+
+                    
+                   
                 }
                 else
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine("Something went bad");
+                    Debug.WriteLine(apiResponse);
                     errorMessage.InnerText = apiResponse;
                     showError.Visible = true;
                 }
             }
+
+            Debug.WriteLine("RETRIEVING CASE MODEL...");
+            /* CONFIG FETCH - PREPARE URL & CONTENT */
+            completeURL = "conformance/performance/process/" + processID;
+            Debug.WriteLine(completeURL);
+
+            Debug.WriteLine("Case Payload");
+            var payloadCase = new { isEstimatedEnd, moulds, resources, nodes, startDate, endDate };
+            Debug.WriteLine(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"));
+            content = new StringContent(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"), Encoding.UTF8, "application/json");
+
+            /* RETRIEVE CASE DIAGRAM */
+            using (var response = await httpClient.PostAsync(Constants.URL_BACKEND_CONNECTION + completeURL, content).ConfigureAwait(false))
+            {
+                var status = response.IsSuccessStatusCode;
+
+                if (status == true)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+
+                    if (response.ReasonPhrase.ToString() == "No Content")
+                    {
+                        errorMessage.InnerText = "Os filtros escolhidos não tem dados.";
+                        showError.Visible = true;
+                    }
+
+                    Debug.WriteLine(response.ReasonPhrase.ToString());
+                    Debug.WriteLine(apiResponse);
+
+                    processes = "{\"case\": " + apiResponse + ", \"base\": " + processes + "}"; // Add Bases to total processes, so the diagram can be generated
+                }
+                else
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("Something went bad");
+                    Debug.WriteLine(apiResponse);
+                    errorMessage.InnerText = apiResponse;
+                    showError.Visible = true;
+                }
+            }
+
         }
     }
 
@@ -276,232 +405,5 @@ public partial class Performance : System.Web.UI.Page
     {
         thresholdField.Visible = true;
     }
-    //public async void callWorkflows(RadDropDownList dropdownlist)
-    //{
-
-    //    displayProcess.Visible = true;
-    //    currentProcess.InnerText = "Performance do processo " + dropdownlist.SelectedText;
-
-    //    //resets the diagram
-    //    DisplayError.InnerText = "";
-    //    RadDiagram1.ShapesCollection.Clear();
-    //    RadDiagram1.ConnectionsCollection.Clear();
-
-    //    using (var httpClient = new HttpClient())
-    //    {
-    //        string token = (string)Session["sessionToken"];
-    //        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-
-    //        using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "workflow-network/alpha-miner/processes/" + dropdownlist.SelectedValue).ConfigureAwait(false))
-    //        {
-    //            Debug.WriteLine(response);
-
-    //            var status = response.IsSuccessStatusCode;
-    //            if (status == true)
-    //            {
-    //                string apiResponse = await response.Content.ReadAsStringAsync();
-
-    //                JObject jsonResponse = JObject.Parse(apiResponse);
-
-    //                var nodes = jsonResponse["nodes"];
-    //                var statistics = jsonResponse["statistics"];
-
-    //                foreach (var node in nodes.Select((value, i) => new { i, value }))
-    //                {
-    //                    JToken meanDuration = new JObject();
-
-    //                    foreach (var nodeStats in statistics["nodes"])
-    //                    {
-    //                        if (node.i == int.Parse(nodeStats["node"].ToString()))
-    //                        {
-    //                            meanDuration = nodeStats["meanDuration"];
-    //                            break;
-    //                        }
-    //                    }
-
-
-    //                    string diagramTitle = node.value + " ( " + displayDuration(meanDuration) + ")";
-    //                    string color = shapesColor(meanDuration);
-
-    //                    AddDiagramShape(node.i.ToString(), diagramTitle, color, RadDiagram1);
-
-    //                }
-
-    //                foreach (var relation in statistics["relations"].Select((value, i) => new { i, value }))
-    //                {
-
-    //                    foreach (var destination in relation.value["to"])
-    //                    {
-    //                        string color = "";
-    //                        int width = 1;
-
-    //                        JToken duration = new JObject();
-    //                        duration = destination["meanDuration"];
-
-
-    //                        if (int.Parse(duration["days"].ToString()) != 0) //demora muito tempo
-    //                        {
-    //                            color = "#FC0000";  //red
-    //                            width = 5;
-
-    //                        }
-    //                        else if (int.Parse(duration["hours"].ToString()) != 0)//depende de quantas horas demora
-    //                        {
-    //                            if (int.Parse(duration["hours"].ToString()) >= 3)
-    //                            {
-    //                                color = "#FC0000";  //red, demora muito tempo
-    //                                width = 10;
-    //                            }
-    //                            else if (int.Parse(duration["hours"].ToString()) >= 1 && int.Parse(duration["hours"].ToString()) <= 3) //demora entre 1 e 3 horas
-    //                            {
-    //                                color = "#FF7A7A"; //low red demora tempo media
-    //                                width = 7;
-    //                            }
-    //                        }
-    //                        else //apenas demora alguns minutos
-    //                        {
-    //                            color = "#FFCDCD"; //white  o tempo esta ok
-    //                            width = 5;
-    //                        }
-
-    //                        ConnectDiagramShapes(relation.value["from"].ToString(), destination["node"].ToString(), displayDuration(destination["meanDuration"]), color, width, RadDiagram1);
-    //                    }
-    //                }
-    //            }
-    //            else
-    //            {
-    //                string apiResponse = await response.Content.ReadAsStringAsync();
-    //                //int numericStatusCode = (int)response.StatusCode;
-    //                //Debug.WriteLine(numericStatusCode);
-    //                Debug.WriteLine(apiResponse);
-
-
-    //                try
-    //                {
-    //                    DisplayError.InnerText = JObject.Parse(apiResponse)["message"].ToString();
-    //                }
-    //                catch (Exception ex)
-    //                {
-    //                    DisplayError.InnerText = apiResponse;
-    //                }
-
-    //                //DisplayError.InnerText = IsValidJson(apiResponse) ? JObject.Parse(apiResponse)["message"].ToString() : apiResponse;
-    //            }
-    //        }
-    //    }
-    //}
-
-    //protected void AddDiagramShape(string shapeID, string contentText,string color, RadDiagram diagram)
-    //{
-    //    var shape = new DiagramShape()
-    //    {
-    //        Id = shapeID,
-    //    };
-
-    //    shape.ContentSettings.Text = contentText;
-
-    //    //shape.Width = 150;
-    //    shape.StrokeSettings.DashType = Telerik.Web.UI.Diagram.StrokeDashType.Solid;
-    //    shape.StrokeSettings.Color = Color.Black.ToString();
-    //    shape.StrokeSettings.Width = 1.2;
-
-    //    shape.ContentSettings.Color = Color.White.ToString();
-    //    shape.FillSettings.Color = color;
-    //    diagram.ShapesCollection.Add(shape);
-    //}
-
-    //protected void ConnectDiagramShapes(string startShapeID, string endShapeID, string textConnection, string colorHEXConnection, int widthConnection, RadDiagram diagram)
-    //{
-    //    var connection = new DiagramConnection();
-
-    //    /* Settings */
-    //    connection.FromSettings.ShapeId = startShapeID;
-    //    connection.ToSettings.ShapeId = endShapeID;       
-    //    connection.StrokeSettings.Color = colorHEXConnection;
-
-    //    connection.StrokeSettings.Width = widthConnection;
-
-    //    /*  Params */
-    //    if(widthConnection != -1) connection.StrokeSettings.Width = widthConnection;
-    //    if(colorHEXConnection != string.Empty) connection.StrokeSettings.Color = colorHEXConnection;
-    //    if(textConnection != string.Empty) connection.ContentSettings.Text = textConnection;
-
-    //    diagram.ConnectionsCollection.Add(connection);
-    //}
-
-    //public string displayDuration(JToken duration)
-    //{
-    //    return (int.Parse(duration["days"].ToString()) > 0 ? duration["days"] + " d " : "") +
-    //                        (int.Parse(duration["hours"].ToString()) > 0 ? duration["hours"] + " h " : "") +
-    //                        (int.Parse(duration["minutes"].ToString()) > 0 ? duration["minutes"] + " min " : "") +
-    //                        (int.Parse(duration["seconds"].ToString()) > 0 ? duration["seconds"] + " seg " : "") +
-    //                        (int.Parse(duration["millis"].ToString()) > 0 ? duration["millis"] + " ms " : "");
-    //}
-
-    //public string shapesColor(JToken duration)
-    //{
-    //    string color = "";
-
-    //    if (int.Parse(duration["days"].ToString()) != 0) //demora muito tempo
-    //    {
-    //        color = "#FC0000";  //red
-
-    //    }
-    //    else if (int.Parse(duration["hours"].ToString()) != 0)//depende de quantas horas demora
-    //    {
-    //        if (int.Parse(duration["hours"].ToString()) >= 3)
-    //        {
-    //            color = "#FC0000";  //red, demora muito tempo
-    //        }
-    //        else if (int.Parse(duration["hours"].ToString()) >= 1 && int.Parse(duration["hours"].ToString()) <= 3) //demora entre 1 e 3 horas
-    //        {
-    //            color = "#FF9494"; //low red demora tempo media
-    //        }
-    //    }
-    //    else //apenas demora alguns minutos
-    //    {
-    //        color = "#FFFFFF"; //white  o tempo esta ok
-    //    }
-
-    //    return color;
-    //}
-
-
-    //public Tuple<string, int> connectionsStyle(JToken duration) //n funca assim :( Tuple n existe na nossa versao de c# shall we update ? :0
-    //{
-    //    string color = "";
-    //    int width = 1;
-
-
-    //    if (int.Parse(duration["days"].ToString()) != 0) //demora muito tempo
-    //    {
-    //        color = "#FC0000";  //red
-    //        width = 5;
-
-    //    }
-    //    else if (int.Parse(duration["hours"].ToString()) != 0)//depende de quantas horas demora
-    //    {
-    //        if (int.Parse(duration["hours"].ToString()) >= 3)
-    //        {
-    //            color = "#FC0000";  //red, demora muito tempo
-    //            width = 5;
-    //        }
-    //        else if (int.Parse(duration["hours"].ToString()) >= 1 && int.Parse(duration["hours"].ToString()) <= 3) //demora entre 1 e 3 horas
-    //        {
-    //            color = "#FF9494"; //low red demora tempo media
-    //            width = 3;
-    //        }
-    //    }
-    //    else //apenas demora alguns minutos
-    //    {
-    //        color = "#FFFFFF"; //white  o tempo esta ok
-    //        width = 1;
-    //    }
-
-    //    return (color, width);
-    //}    
-
-
 }
 

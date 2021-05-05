@@ -8,25 +8,22 @@ var currentProcess = {
 };
 
 
-function generatePerformance(process) {
+function generateConformance(process) {
 
     console.log(process);
     renderConformanceGraph();
-
-    
 }
 
 
-function generateGraph(process) { 
+function generateGraph(process) {
 
     if (process.data.info == "Inductive Mining") {
-      
-        if (process.isPerformance === "True") {                   
+
+        if (process.isPerformance === "True") {
             renderPerformanceGraph();
         }
     }
-    else
-    {
+    else {
         if (process.isPerformance === "True") {
 
             //nodes timers
@@ -66,7 +63,7 @@ function generateGraph(process) {
         }
     }
 
-    
+
 }
 
 
@@ -323,7 +320,7 @@ function renderPerformanceGraph() {
         //add nodes to graph
         console.log(process.data.nodes)
         for (var i = 0; i < process.data.nodes.length; i++) {
-            let styleType = Math.floor(currentProcess.nodeTimes[i] * 4 / nodesMaxTime);        
+            let styleType = Math.floor(currentProcess.nodeTimes[i] * 4 / nodesMaxTime);
             cy.add({
                 data: {
                     id: i,
@@ -349,14 +346,14 @@ function renderPerformanceGraph() {
                 });
             }
         }
-    } else { 
+    } else {
         //INDUCTIVE 
         //add nodes to graph       
-        for (var i = 0; i < process.data.nodes.length; i++) {            
+        for (var i = 0; i < process.data.nodes.length; i++) {
             cy.add({
                 data: {
                     id: i,
-                    label: process.data.nodes[i],  
+                    label: process.data.nodes[i],
                     type: 1
                 }
             }
@@ -366,13 +363,13 @@ function renderPerformanceGraph() {
         //add relations to graph
         console.log(process.data.relations.length)
         for (var i = 0; i < process.data.relations.length; i++) {
-            for (var j = 0; j < process.data.relations[i].to.length; j++) {  
-                console.log(process.data.relations[i]) 
+            for (var j = 0; j < process.data.relations[i].to.length; j++) {
+                console.log(process.data.relations[i])
                 cy.add({
                     data: {
                         id: 'relation' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
                         source: process.data.relations[i].from,
-                        target: process.data.relations[i].to[j],                       
+                        target: process.data.relations[i].to[j],
                         type: 1
                     }
                 });
@@ -762,10 +759,10 @@ function renderFrequencyGraph() {
 
 function renderConformanceGraph() {
 
-    console.log("CONFORMANE ");
+    console.log("CONFORMANCE");
     cy = cytoscape(
         {
-            wheelSensitivity: 0.5,
+            wheelSensitivity: 0.1,
             minZoom: 0.1,
             maxZoom: 1,
             container: document.getElementById('cy'),
@@ -774,8 +771,9 @@ function renderConformanceGraph() {
                     //Nodes styles
                     selector: 'node[type=0]',
                     style: {
-                        "shape": 'rectangle',
-                        "background-color": "#FFFFFF",
+                        "padding-relative-to": "width",
+                        "shape": 'round-rectangle',
+                        "background-color": "#77E543",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
@@ -790,9 +788,9 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'node[type=1]',
+                    selector: 'node[type=1]', //red
                     style: {
-                        "shape": 'round-rectangle',
+                        "shape": 'rectangle',
                         "background-color": "#acbcff",
                         "label": "data(label)",
                         'width': '350',
@@ -806,9 +804,9 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'node[type=2]',
+                    selector: 'node[type=2]', //green
                     style: {
-                        "shape": 'round-rectangle',
+                        "shape": 'rectangle',
                         "background-color": "#748fff",
                         "label": "data(label)",
                         'width': '350',
@@ -820,11 +818,11 @@ function renderConformanceGraph() {
                         "text-halign": "center",
                         "color": "#222222"
                     }
-                },
+                }, 
                 {
-                    selector: 'node[type=3]',
+                    selector: 'node[type=3]', //yellow
                     style: {
-                        "shape": 'round-rectangle',
+                        "shape": 'rectangle',
                         "background-color": "#365eff",
                         "label": "data(label)",
                         'width': '350',
@@ -840,14 +838,14 @@ function renderConformanceGraph() {
                 {
                     selector: 'node[type=4]',
                     style: {
-                        "shape": 'round-rectangle',
+                        "shape": 'rectangle',
                         "background-color": "#0032ff",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
-                        "border-width": 3,
+                        "border-width": 2,
                         "border-color": "#484848",
-                        "font-size": "18px",
+                        "font-size": "16px",
                         "text-valign": "center",
                         "text-halign": "center",
                         "color": "#FFFFFF"
@@ -942,23 +940,6 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'edge[type=4]',
-                    style: {
-                        'width': 13,
-                        'curve-style': 'bezier',
-                        "content": "data(name)",
-                        "line-color": "#0032ff",
-                        'target-arrow-color': '#0032ff',
-                        "font-size": "32px",
-                        "color": "#222222",
-                        "loop-direction": "0deg",
-                        'target-arrow-shape': 'triangle',
-                        "loop-sweep": "45deg",
-                        "text-margin-y": "-15px",
-                        "source-text-offset": "50px"
-                    }
-                },
-                {
                     //process start edge
                     selector: 'edge[type=20]',
                     style: {
@@ -981,28 +962,57 @@ function renderConformanceGraph() {
         });
 
 
-    
-    //Nodes
-    
-    let nodes = process.data.nodes;   
-    nodes.forEach(function (node, index) {
 
-        let typeValue = 0;
+    //Nodes
+
+    let nodes = process.base.nodes;
+    nodes.forEach(function (node, index) {
+        let typeValue = 0
+
+        for (let k = 0; k < process.case.nodes.length; k++) { // Verde
+            if (process.case.nodes[k].node === index) {
+                typeValue = 1
+            }
+        }
+
+        //Verificar se tempo execução é não conforme -> texto vermelho
+        //Procurar a ocorrência do nó em questão com maior duração (pior caso)
+        let maxDurationCase = {}
+        maxDurationCase.days = 
+        maxDurationCase.hours = 0
+        maxDurationCase.minutes = 0
+        maxDurationCase.seconds = 0
+      
+        for (let k = 0; k < process.case.nodes.length; k++) {
+            if (process.case.nodes[k].node === index && convertToSeconds(process.case.nodes[k].duration) > convertToSeconds(maxDurationCase)) {
+                maxDurationCase = process.case.nodes[k].duration
+            }
+        }
+
+        if (convertToSeconds(process.base.taskDurations[index].duration) > convertToSeconds(maxDurationCase) * 1.10) {
+            typeValue = 2; // Vermelho
+        } else if (convertToSeconds(process.base.taskDurations[index].duration) >= convertToSeconds(maxDurationCase) * 0.9 && convertToSeconds(process.base.taskDurations[index].duration) <= convertToSeconds(maxDurationCase) * 1.10) {
+            typeValue = 3; // Amarelinho
+        }
+
+        let processLabel = "\n Processo: " + durationToString(process.base.taskDurations[index].duration);
+
+        let modeloLabel = "Modelo: " + durationToString(maxDurationCase);
 
         cy.add({
             data: {
                 id: index,
-                label: node,
+                label: processLabel + " / " + modeloLabel,
                 type: typeValue
-                
+
             },
         }
         );
     });
 
     //edges
-    for (let i = 0; i < process.data.relations.length; i++) {
-        for (let j = 0; j < process.data.relations[i].to.length; j++) {
+    for (let i = 0; i < process.base.relations.length; i++) {
+        for (let j = 0; j < process.base.relations[i].to.length; j++) {
             //determinar cor do nó
             let typeValue = 0;
 
@@ -1010,9 +1020,9 @@ function renderConformanceGraph() {
 
             cy.add({
                 data: {
-                    id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j].node,
-                    source: process.data.relations[i].from,
-                    target: process.data.relations[i].to[j].node,
+                    id: 'edge' + process.base.relations[i].from + '-' + process.base.relations[i].to[j].node,
+                    source: process.base.relations[i].from,
+                    target: process.base.relations[i].to[j].node,
                     //label: prevLabel + " / " + realLabel,                 
                 }
             });
@@ -1041,10 +1051,8 @@ function renderConformanceGraph() {
 
 
     //starting nodes
-    let startEvents = process.data.startEvents;
+    let startEvents = process.base.startEvents;
     startEvents.forEach(function (node, i) {
-
-
         cy.add({
             data: {
                 id: 'start-' + i,
@@ -1056,16 +1064,16 @@ function renderConformanceGraph() {
             data: {
                 id: 'edge_start-' + i,
                 source: 'start-' + i,
-                target: process.data.startEvents[i].node,
+                target: process.base.startEvents[i].node,
                 type: 20
             }
         });
     });
 
 
-   
+
     //end nodes
-    for (let i = 0; i < process.data.endEvents.length; i++) {
+    for (let i = 0; i < process.base.endEvents.length; i++) {
         cy.add({
             data: {
                 id: 'end-' + i,
@@ -1075,15 +1083,15 @@ function renderConformanceGraph() {
         cy.add({
             data: {
                 id: 'edge_end-' + i,
-                source: process.data.endEvents[i].node,
+                source: process.base.endEvents[i].node,
                 target: 'end-' + i,
                 type: 20
             }
         });
     }
 
-    
-    
+
+
     let customBreadthfirst = {
         name: 'breadthfirst',
 
@@ -1114,9 +1122,17 @@ function renderConformanceGraph() {
     cy.layout(customBreadthfirst).run();
 }
 
+
+
+function convertToSeconds(duration) {
+    console.log(duration)
+    return duration.days * 86400 + duration.hours * 3600 + duration.minutes * 60 + duration.seconds;
+}
+
+
 function convertToHours(duration) {
 
-   
+
     let hours = (duration / 60);
     let rhours = Math.floor(hours);
 
@@ -1138,3 +1154,13 @@ function timeConvertMinutes(minAux) {
     return min < 1 && min > 0 ? `${(min * 60).toFixed(3)} segundos` : `${hoursFloor}h ${min.toFixed(0)}min`
 }
 
+
+function durationToString(duration) {
+    if (duration.days == 0 && duration.hours == 0 && duration.minutes == 0 && duration.seconds == 0) {
+        return "0S";
+    }
+    return ((duration.days !== 0) ? duration.days + "D " : "") +
+        ((duration.hours !== 0) ? duration.hours + "H " : "") +
+        ((duration.minutes !== 0) ? duration.minutes + "M " : "") +
+        ((duration.seconds !== 0) ? duration.seconds + "S" : "");
+}
