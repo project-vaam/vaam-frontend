@@ -205,9 +205,7 @@ public partial class Conformance : System.Web.UI.Page
         errorMessage.InnerText = "";
         showError.Visible = false;
   
-        string json;
-        json = "{ \"isEstimatedEnd\":" + EstimatedCheckbox.Checked.ToString().ToLower() + "}";
-
+       
         /* Modelo BASE Payload */
         var isEstimatedEnd = EstimatedCheckbox.Checked.ToString().ToLower();
 
@@ -255,7 +253,7 @@ public partial class Conformance : System.Web.UI.Page
         endDate = null;
         startDate = null;
         moulds = null;
-        string[] nodes = null;
+        string nodes = String.Empty;
 
         if (RadDatePicker3.SelectedDate.HasValue && RadDatePicker4.SelectedDate.HasValue)
         {
@@ -275,7 +273,7 @@ public partial class Conformance : System.Web.UI.Page
        
         if (activitiesString2 != "")
         {
-            nodes = activitiesString2.Split(',').Select(p => p.Trim()).ToArray();
+            activities = activitiesString2.Split(',').Select(p => p.Trim()).ToArray();
         }
 
         string resourcesString2 = RadComboBoxOperadores2.Text.ToString();
@@ -286,23 +284,82 @@ public partial class Conformance : System.Web.UI.Page
         }
  
 
-        var payloadCase = new { isEstimatedEnd, moulds, resources, nodes, startDate, endDate };
 
-        Debug.WriteLine("Case Payload");
-        Debug.WriteLine(JsonConvert.SerializeObject(payloadCase).ToString());
         
         using (var httpClient = new HttpClient())
         {
+            
             /* TOKEN */
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+            string threshold = "", workflowURL = "conformance/performance/alpha-miner/model/";
+
+            if (!AlphaRadioBtn.Checked)
+            {
+                workflowURL = "conformance/performance/heuristic-miner/model/";
+                threshold = "?threshold=" + ThresholdSlider.Value.ToString().Replace(",", ".");
+                //workflowURL = HeuristicRadioBtn.Checked ? "/conformance/performance/heuristic-miner/model/" : "workflow-network/inductive-miner/processes/";
+            }
+
+            /* CONFIG FETCH - PREPARE URL & CONTENT */
+            string completeURL = workflowURL + processID + threshold;
+            Debug.WriteLine(completeURL);
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(payload).ToString(), Encoding.UTF8, "application/json");
+
+            /* FETCH DIAGRAM */
+            using (var response = await httpClient.PostAsync(Constants.URL_BACKEND_CONNECTION + completeURL, content).ConfigureAwait(false))
+            {
+                var status = response.IsSuccessStatusCode;
+
+                if (status == true)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+
+                    if (response.ReasonPhrase.ToString() == "No Content")
+                    {
+                        errorMessage.InnerText = "Os filtros escolhidos não tem dados.";
+                        showError.Visible = true;
+                    }
+                    else
+                    {
+                        processes = apiResponse;
+                        Debug.WriteLine(processes);
+
+                        JObject obj = JsonConvert.DeserializeObject<JObject>(apiResponse);
+                        if (obj["nodes"] != null)
+                        {
+                            nodes = obj["nodes"].ToString().Replace("\r\n", "");
+                        }
+                        Debug.WriteLine("NODES READ:");
+                        Debug.WriteLine(nodes);
+                    }
+
+
+
+                    
+                   
+                }
+                else
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("Something went bad");
+                    Debug.WriteLine(apiResponse);
+                    errorMessage.InnerText = apiResponse;
+                    showError.Visible = true;
+                }
+            }
+
             Debug.WriteLine("RETRIEVING CASE MODEL...");
             /* CONFIG FETCH - PREPARE URL & CONTENT */
-            string completeURL = "conformance/performance/process/" + processID;
+            completeURL = "conformance/performance/process/" + processID;
             Debug.WriteLine(completeURL);
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(payloadCase).ToString(), Encoding.UTF8, "application/json"); 
-            
+
+            Debug.WriteLine("Case Payload");
+            var payloadCase = new { isEstimatedEnd, moulds, resources, nodes, startDate, endDate };
+            Debug.WriteLine(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"));
+            content = new StringContent(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"), Encoding.UTF8, "application/json");
+
             /* RETRIEVE CASE DIAGRAM */
             using (var response = await httpClient.PostAsync(Constants.URL_BACKEND_CONNECTION + completeURL, content).ConfigureAwait(false))
             {
@@ -321,54 +378,7 @@ public partial class Conformance : System.Web.UI.Page
                     Debug.WriteLine(response.ReasonPhrase.ToString());
                     Debug.WriteLine(apiResponse);
 
-                    processes = apiResponse; // Add Case Response to Processes so it can be manipulated
-                }
-                else
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine("Something went bad");
-                    Debug.WriteLine(apiResponse);
-                    errorMessage.InnerText = apiResponse;
-                    showError.Visible = true;
-                }
-            }
-
-
-            string threshold = "", workflowURL = "conformance/performance/alpha-miner/model/";
-
-            if (!AlphaRadioBtn.Checked)
-            {
-                workflowURL = "conformance/performance/heuristic-miner/model/";
-                threshold = "?threshold=" + ThresholdSlider.Value.ToString().Replace(",", ".");
-                //workflowURL = HeuristicRadioBtn.Checked ? "/conformance/performance/heuristic-miner/model/" : "workflow-network/inductive-miner/processes/";
-            }
-
-            /* CONFIG FETCH - PREPARE URL & CONTENT */
-            completeURL = workflowURL + processID + threshold;
-            Debug.WriteLine(completeURL);
-            content = new StringContent(JsonConvert.SerializeObject(payload).ToString(), Encoding.UTF8, "application/json");
-
-            /* FETCH DIAGRAM */
-            using (var response = await httpClient.PostAsync(Constants.URL_BACKEND_CONNECTION + completeURL, content).ConfigureAwait(false))
-            {
-                var status = response.IsSuccessStatusCode;
-
-                if (status == true)
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-
-                    if (response.ReasonPhrase.ToString() == "No Content")
-                    {
-                        errorMessage.InnerText = "Os filtros escolhidos não tem dados.";
-                        showError.Visible = true;
-                    }
-
-                    Debug.WriteLine("im here");
-                    Debug.WriteLine(response.ReasonPhrase.ToString());
-                    Debug.WriteLine(apiResponse);
-
-                    processes = "{\"base\": " + apiResponse + ", \"case\": " + processes + "}"; // Add Bases to total processes, so the diagram can be generated
-                    Debug.WriteLine(processes);
+                    processes = "{\"case\": " + apiResponse + ", \"base\": " + processes + "}"; // Add Bases to total processes, so the diagram can be generated
                 }
                 else
                 {
