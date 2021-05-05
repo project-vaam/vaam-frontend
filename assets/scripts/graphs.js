@@ -790,8 +790,8 @@ function renderConformanceGraph() {
                 {
                     selector: 'node[type=1]', //red
                     style: {
-                        "shape": 'rectangle',
-                        "background-color": "#acbcff",
+                        "shape": 'round-rectangle',
+                        "background-color": "#ba0000",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
@@ -806,8 +806,8 @@ function renderConformanceGraph() {
                 {
                     selector: 'node[type=2]', //green
                     style: {
-                        "shape": 'rectangle',
-                        "background-color": "#748fff",
+                        "shape": 'round-rectangle',
+                        "background-color": "#0c9200",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
@@ -822,8 +822,8 @@ function renderConformanceGraph() {
                 {
                     selector: 'node[type=3]', //yellow
                     style: {
-                        "shape": 'rectangle',
-                        "background-color": "#365eff",
+                        "shape": 'round-rectangle',
+                        "background-color": "#ffce00",
                         "label": "data(label)",
                         'width': '350',
                         "height": "40",
@@ -838,7 +838,7 @@ function renderConformanceGraph() {
                 {
                     selector: 'node[type=4]',
                     style: {
-                        "shape": 'rectangle',
+                        "shape": 'round-rectangle',
                         "background-color": "#0032ff",
                         "label": "data(label)",
                         'width': '350',
