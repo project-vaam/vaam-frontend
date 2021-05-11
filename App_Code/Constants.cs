@@ -10,5 +10,5 @@ public class Constants
      *  - On DEV, change to: http://localhost:8080/api/
      *  - On Staging, change to: http://project-vaam.pt/api/
     */
-    public const string URL_BACKEND_CONNECTION = "http://project-vaam.pt/api/";
+    public const string URL_BACKEND_CONNECTION = "http://localhost:8080/api/";
 }

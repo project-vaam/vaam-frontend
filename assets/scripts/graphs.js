@@ -87,7 +87,7 @@ function renderPerformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#fff0d9",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -103,7 +103,7 @@ function renderPerformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#ffce89",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -119,7 +119,7 @@ function renderPerformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#ff9457",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -135,7 +135,7 @@ function renderPerformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#f25831",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -151,7 +151,7 @@ function renderPerformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#be1300",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -185,7 +185,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=0]',
                     style: {
                         'width': 3,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(label)",
                         "line-color": "#787679",
                         'target-arrow-color': '#787679',
@@ -202,7 +202,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=1]',
                     style: {
                         'width': 5,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(label)",
                         "line-color": "#817073",
                         'target-arrow-color': '#817073',
@@ -219,7 +219,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=2]',
                     style: {
                         'width': 7,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(label)",
                         "line-color": "#817073",
                         'target-arrow-color': '#817073',
@@ -236,7 +236,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=3]',
                     style: {
                         'width': 9,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(label)",
                         "line-color": "#8f534d",
                         'target-arrow-color': '#8f534d',
@@ -253,7 +253,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=4]',
                     style: {
                         'width': 13,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(label)",
                         "line-color": "#b91200",
                         'target-arrow-color': '#b91200',
@@ -271,7 +271,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=20]',
                     style: {
                         'width': 8,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         'line-color': "#232323",
                         'target-arrow-color': '#232323',
                         "font-size": "32px",
@@ -378,18 +378,20 @@ function renderPerformanceGraph() {
     }
 
     //add process start 
-    for (let i = 0; i < process.data.startEvents.length; i++) {
+    if (process.data.startEvents.length > 0) {
         cy.add({
             data: {
-                id: 'start-' + i,
+                id: 'start',
                 type: 20
             },
         });
-
+    }
+  
+    for (let i = 0; i < process.data.startEvents.length; i++) {
         cy.add({
             data: {
                 id: 'edge_start-' + i,
-                source: 'start-' + i,
+                source: 'start',
                 target: process.data.startEvents[i].node,
                 type: 20
             }
@@ -397,19 +399,21 @@ function renderPerformanceGraph() {
     }
 
     //add process end activities
-    for (let i = 0; i < process.data.endEvents.length; i++) {
+    if (process.data.endEvents.length > 0) {
         cy.add({
             data: {
-                id: 'end-' + i,
+                id: 'end',
                 type: 20
             },
         });
+    }
 
+    for (let i = 0; i < process.data.endEvents.length; i++) {
         cy.add({
             data: {
                 id: 'edge_end-' + i,
                 source: process.data.endEvents[i].node,
-                target: 'end-' + i,
+                target: 'end',
                 type: 20
             }
         });
@@ -466,7 +470,7 @@ function renderFrequencyGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#FFFFFF",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -484,7 +488,7 @@ function renderFrequencyGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#7f87ff",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -500,7 +504,7 @@ function renderFrequencyGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#404bff",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -516,7 +520,7 @@ function renderFrequencyGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#000eff",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -550,7 +554,7 @@ function renderFrequencyGraph() {
                     selector: 'edge[type=0]',
                     style: {
                         'width': 3,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#D1D1D1",
                         'target-arrow-color': '#D1D1D1',
@@ -567,7 +571,7 @@ function renderFrequencyGraph() {
                     selector: 'edge[type=1]',
                     style: {
                         'width': 5,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#7f87ff",
                         'target-arrow-color': '#7f87ff',
@@ -584,7 +588,7 @@ function renderFrequencyGraph() {
                     selector: 'edge[type=2]',
                     style: {
                         'width': 7,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#404bff",
                         'target-arrow-color': '#404bff',
@@ -601,7 +605,7 @@ function renderFrequencyGraph() {
                     selector: 'edge[type=3]',
                     style: {
                         'width': 9,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#000eff",
                         'target-arrow-color': '#000eff',
@@ -619,7 +623,7 @@ function renderFrequencyGraph() {
                     selector: 'edge[type=20]',
                     style: {
                         'width': 8,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         'line-color': "#232323",
                         'target-arrow-color': '#232323',
                         "font-size": "32px",
@@ -674,50 +678,67 @@ function renderFrequencyGraph() {
     for (let i = 0; i < process.data.relations.length; i++) {
         for (let j = 0; j < process.data.relations[i].to.length; j++) {
             let typeValue = Math.round(process.data.statistics.relations[i].to[j].frequency * 3 / maxFrequency);
-            cy.add({
-                data: {
-                    id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
-                    source: process.data.relations[i].from,
-                    target: process.data.relations[i].to[j],
-                    name: process.data.statistics.relations[i].to[j].frequency,
-                    type: typeValue
-                }
-            });
+            if (process.data.statistics.relations[i].to[j].frequency > 0 ) {
+                cy.add({
+                    data: {
+                        id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
+                        source: process.data.relations[i].from,
+                        target: process.data.relations[i].to[j],
+                        name: process.data.statistics.relations[i].to[j].frequency,
+                        type: typeValue
+                    }
+                });
+            }
+           
         }
     }
 
+    
+
     //add process start and end nodes
-    for (let i = 0; i < process.data.startEvents.length; i++) {
+
+    if (process.data.startEvents.length > 0) {
         cy.add({
             data: {
-                id: 'start-' + i,
+                id: 'start',
                 type: 20
             },
         });
+    }
+   
+
+    for (let i = 0; i < process.data.startEvents.length; i++) {
+        
 
         cy.add({
             data: {
                 id: 'edge_start-' + i,
-                source: 'start-' + i,
+                source: 'start',
                 target: process.data.startEvents[i].node,
                 type: 20
             }
         });
     }
 
-    for (let i = 0; i < process.data.endEvents.length; i++) {
+
+
+    if (process.data.endEvents.length > 0) {
         cy.add({
             data: {
-                id: 'end-' + i,
+                id: 'end',
                 type: 20
             },
         });
+    }
+
+    for (let i = 0; i < process.data.endEvents.length; i++) {
+       
 
         cy.add({
             data: {
                 id: 'edge_end-' + i,
                 source: process.data.endEvents[i].node,
-                target: 'end-' + i,
+                target: 'end',
                 type: 20
             }
         });
@@ -775,7 +796,7 @@ function renderConformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#77E543",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -794,7 +815,7 @@ function renderConformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#43AC21",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -811,7 +832,7 @@ function renderConformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#E11815",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -828,7 +849,7 @@ function renderConformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#FFC900",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -862,7 +883,7 @@ function renderConformanceGraph() {
                     selector: 'edge[type=0]',
                     style: {
                         'width': 3,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#D1D1D1",
                         'target-arrow-color': '#D1D1D1',
@@ -879,7 +900,7 @@ function renderConformanceGraph() {
                     selector: 'edge[type=1]',
                     style: {
                         'width': 5,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#acbcff",
                         'target-arrow-color': '#acbcff',
@@ -896,7 +917,7 @@ function renderConformanceGraph() {
                     selector: 'edge[type=2]',
                     style: {
                         'width': 7,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#748fff",
                         'target-arrow-color': '#748fff',
@@ -913,7 +934,7 @@ function renderConformanceGraph() {
                     selector: 'edge[type=3]',
                     style: {
                         'width': 9,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#365eff",
                         'target-arrow-color': '#365eff',
@@ -931,7 +952,7 @@ function renderConformanceGraph() {
                     selector: 'edge[type=20]',
                     style: {
                         'width': 8,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         'line-color': "#232323",
                         'target-arrow-color': '#232323',
                         "font-size": "32px",

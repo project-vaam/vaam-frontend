@@ -17,7 +17,7 @@ using Telerik.Web.UI;
 
 public partial class Conformance : System.Web.UI.Page
 {
-    public string processes = "null";
+    public string processes = "null"; // "null" because of cytoscape diagrams
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Session["sessionToken"] == null)
@@ -30,7 +30,9 @@ public partial class Conformance : System.Web.UI.Page
         {
             thresholdField.Visible = false;
             displayProcess.Visible = false;
-            
+            RadComboBoxProcessToCompare.Enabled = false;
+
+
             callProcesses();
             
             Debug.WriteLine(RadComboBoxProcess.SelectedIndex);
@@ -70,6 +72,14 @@ public partial class Conformance : System.Web.UI.Page
         RadDatePicker2.Calendar.FastNavigationSettings.HideAnimation.Type = animationType;
     }
 
+    protected void RadCheckBoxProcessToCompare_Click(object sender, EventArgs e)
+    {
+        RadComboBoxProcessToCompare.Enabled = (bool) RadCheckBoxProcessToCompare.Checked;
+
+        if ((bool)!RadCheckBoxProcessToCompare.Checked) { 
+            RadComboBoxProcessToCompare.SelectedValue = RadComboBoxProcess.SelectedValue;
+        }
+    }
 
     protected void ShowDiagram_Click(object sender, EventArgs e)
     {
@@ -102,6 +112,7 @@ public partial class Conformance : System.Web.UI.Page
                         string value = item["id"].ToString();
                         string text = item["id"].ToString() + " - " + item["name"].ToString();
                         RadComboBoxProcess.Items.Add(new RadComboBoxItem(text, value));
+                        RadComboBoxProcessToCompare.Items.Add(new RadComboBoxItem(text, value));
                     }
                 }
                 else
@@ -116,6 +127,11 @@ public partial class Conformance : System.Web.UI.Page
 
     public async void callFilterInformation(object o, RadComboBoxSelectedIndexChangedEventArgs e)
     {
+        /*  Add Value to Combobox to Compare */ 
+        if(RadCheckBoxProcessToCompare.Checked == false) {
+            RadComboBoxProcessToCompare.SelectedValue = RadComboBoxProcess.SelectedValue;
+        }
+
         Debug.WriteLine("getting all info");
         using (var httpClient = new HttpClient())
         {
@@ -288,7 +304,6 @@ public partial class Conformance : System.Web.UI.Page
         
         using (var httpClient = new HttpClient())
         {
-            
             /* TOKEN */
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -390,6 +405,28 @@ public partial class Conformance : System.Web.UI.Page
                 }
             }
 
+            /* ******************** PROCESS TO COMPARE ******************** */
+            if ((bool)RadCheckBoxProcessToCompare.Checked)
+            {
+                Debug.WriteLine("Process to Compare: " + Constants.URL_BACKEND_CONNECTION + "conformance/deviations/" + processID + "/with/" + RadComboBoxProcessToCompare.SelectedValue);
+                string comparation;
+                using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "conformance/deviations/" + processID + "/with/" + RadComboBoxProcessToCompare.SelectedValue).ConfigureAwait(false))
+                {
+                    var status = response.IsSuccessStatusCode;
+
+                    if (status == true)
+                    {
+                        comparation = await response.Content.ReadAsStringAsync();
+                        Debug.WriteLine(comparation);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Something went bad with getting a process comparation.");
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        Debug.WriteLine(apiResponse);
+                    }
+                }
+            }
         }
     }
 
