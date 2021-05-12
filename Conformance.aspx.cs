@@ -34,8 +34,7 @@ public partial class Conformance : System.Web.UI.Page
 
 
             callProcesses();
-            
-            Debug.WriteLine(RadComboBoxProcess.SelectedIndex);
+           
             System.Threading.Thread.Sleep(500);
             callFilterInformation(null,null);
         }
@@ -153,19 +152,14 @@ public partial class Conformance : System.Web.UI.Page
                 if (status == true)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine(apiResponse);
 
 
                     JObject obj = JsonConvert.DeserializeObject<JObject>(apiResponse);
 
 
-
                     ArrayList moldesList = new ArrayList();
                     ArrayList activitiesList = new ArrayList();
                     ArrayList operatorsList = new ArrayList();
-
-                    Debug.WriteLine(obj["resources"]);
-
 
 
                     foreach (var item in obj["activities"])
@@ -259,7 +253,6 @@ public partial class Conformance : System.Web.UI.Page
         }
 
        
-
         var payload = new { isEstimatedEnd, moulds , resources, activities, startDate, endDate };
 
         Debug.WriteLine("Base Payload");
@@ -300,8 +293,7 @@ public partial class Conformance : System.Web.UI.Page
         }
  
 
-
-        
+       
         using (var httpClient = new HttpClient())
         {
             /* TOKEN */
@@ -346,14 +338,13 @@ public partial class Conformance : System.Web.UI.Page
                         {
                             nodes = obj["nodes"].ToString().Replace("\r\n", "");
                         }
-                        Debug.WriteLine("NODES READ:");
-                        Debug.WriteLine(nodes);
+                        //Debug.WriteLine("NODES READ:");
+                        //Debug.WriteLine(nodes);
                     }
 
 
 
-                    
-                   
+                                  
                 }
                 else
                 {
@@ -365,14 +356,14 @@ public partial class Conformance : System.Web.UI.Page
                 }
             }
 
-            Debug.WriteLine("RETRIEVING CASE MODEL...");
+            //Debug.WriteLine("RETRIEVING CASE MODEL...");
             /* CONFIG FETCH - PREPARE URL & CONTENT */
             completeURL = "conformance/performance/process/" + processID;
-            Debug.WriteLine(completeURL);
+            //Debug.WriteLine(completeURL);
 
-            Debug.WriteLine("Case Payload");
+            //Debug.WriteLine("Case Payload");
             var payloadCase = new { isEstimatedEnd, moulds, resources, nodes, startDate, endDate };
-            Debug.WriteLine(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"));
+            //Debug.WriteLine(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"));
             content = new StringContent(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"), Encoding.UTF8, "application/json");
 
             /* RETRIEVE CASE DIAGRAM */

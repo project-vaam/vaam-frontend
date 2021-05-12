@@ -809,7 +809,7 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'node[type=1]', //red
+                    selector: 'node[type=1]', //grenn
                     style: {
                         "padding-relative-to": "width",
                         "shape": 'round-rectangle',
@@ -826,13 +826,13 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'node[type=2]', //green
+                    selector: 'node[type=2]', //yellow
                     style: {
                         "padding-relative-to": "width",
                         "shape": 'round-rectangle',
-                        "background-color": "#E11815",
+                        "background-color": "#ffd436",
                         "label": "data(label)",
-                        'width': '250',
+                        'width': '360',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -843,13 +843,13 @@ function renderConformanceGraph() {
                     }
                 }, 
                 {
-                    selector: 'node[type=3]', //yellow
+                    selector: 'node[type=3]', //red
                     style: {
                         "padding-relative-to": "width",
                         "shape": 'round-rectangle',
-                        "background-color": "#FFC900",
+                        "background-color": "#E11815",
                         "label": "data(label)",
-                        'width': '250',
+                        'width': '360',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -884,10 +884,10 @@ function renderConformanceGraph() {
                     style: {
                         'width': 3,
                         'curve-style': 'unbundled-bezier',
-                        "content": "data(name)",
+                        "content": "data(label)",
                         "line-color": "#D1D1D1",
                         'target-arrow-color': '#D1D1D1',
-                        "font-size": "32px",
+                        "font-size": "20px",
                         "color": "#222222",
                         "loop-direction": "0deg",
                         'target-arrow-shape': 'triangle',
@@ -897,14 +897,14 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'edge[type=1]',
+                    selector: 'edge[type=1]', //green
                     style: {
                         'width': 5,
                         'curve-style': 'unbundled-bezier',
-                        "content": "data(name)",
-                        "line-color": "#acbcff",
-                        'target-arrow-color': '#acbcff',
-                        "font-size": "32px",
+                        "content": "data(label)",
+                        "line-color": "#43AC21",
+                        'target-arrow-color': '#43AC21',
+                        "font-size": "18px",
                         "color": "#222222",
                         "loop-direction": "0deg",
                         'target-arrow-shape': 'triangle',
@@ -914,14 +914,14 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'edge[type=2]',
+                    selector: 'edge[type=2]',//yellow
                     style: {
                         'width': 7,
                         'curve-style': 'unbundled-bezier',
-                        "content": "data(name)",
-                        "line-color": "#748fff",
-                        'target-arrow-color': '#748fff',
-                        "font-size": "32px",
+                        "content": "data(label)",
+                        "line-color": "#ffd436",
+                        'target-arrow-color': '#ffd436',
+                        "font-size": "18px",
                         "color": "#222222",
                         "loop-direction": "0deg",
                         'target-arrow-shape': 'triangle',
@@ -931,14 +931,14 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'edge[type=3]',
+                    selector: 'edge[type=3]',//red
                     style: {
                         'width': 9,
                         'curve-style': 'unbundled-bezier',
-                        "content": "data(name)",
-                        "line-color": "#365eff",
-                        'target-arrow-color': '#365eff',
-                        "font-size": "32px",
+                        "content": "data(label)",
+                        "line-color": "#E11815",
+                        'target-arrow-color': '#E11815',
+                        "font-size": "18px",
                         "color": "#222222",
                         "loop-direction": "0deg",
                         'target-arrow-shape': 'triangle',
@@ -998,9 +998,9 @@ function renderConformanceGraph() {
         }
 
         if (convertToSeconds(process.base.taskDurations[index].duration) > convertToSeconds(maxDurationCase) * 1.10) {
-            typeValue = 2; // Vermelho
+            typeValue = 3; // Vermelho
         } else if (convertToSeconds(process.base.taskDurations[index].duration) >= convertToSeconds(maxDurationCase) * 0.9 && convertToSeconds(process.base.taskDurations[index].duration) <= convertToSeconds(maxDurationCase) * 1.10) {
-            typeValue = 3; // Amarelinho
+            typeValue = 2; // Amarelinho
         }
 
         let processLabel = "\n Processo: " + durationToString(process.base.taskDurations[index].duration);
@@ -1022,16 +1022,49 @@ function renderConformanceGraph() {
     for (let i = 0; i < process.base.relations.length; i++) {
         for (let j = 0; j < process.base.relations[i].to.length; j++) {
             //determinar cor do nó
-            let typeValue = 0;
+            let typeValue = 1; //começa a verde
 
-            //let prevLabel = "\n Modelo: " + convertToHours(process.data.nodes.taskDurations[i].duration);
+            //search for max duration for this relation, if it occurs more then once
+            let maxDuration = {};
+            maxDuration.days = 0;
+            maxDuration.hours = 0;
+            maxDuration.minutes = 0;
+            maxDuration.seconds = 0;
+
+            for (let k = 0; k < process.case.relations.length; k++) {
+                if (process.case.relations[k].from === process.base.relations[i].from) {
+                    console.log(process.case.relations[i])
+                    for (let l = 0; l < process.case.relations[k].to.length; l++) {
+                        //console.log(process.case.relations[i])
+                        if (process.case.relations[k].to[l].node === process.base.relations[i].to[j].node) {
+                            if (convertToSeconds(process.case.relations[k].to[l].duration) > convertToSeconds(maxDuration)) {
+                                maxDuration = process.case.relations[k].to[l].duration
+
+                            }
+                        }
+                    }
+                }
+            }
+          
+
+            if (convertToSeconds(process.base.relations[i].to[j].duration) > convertToSeconds(maxDuration) * 1.10) {
+                typeValue = 3; // Vermelho             
+            } else if (convertToSeconds(process.base.relations[i].to[j].duration) >= convertToSeconds(maxDuration) * 0.9 && convertToSeconds(process.base.relations[i].to[j].duration) <= convertToSeconds(maxDuration) * 1.10) {
+                typeValue = 2; // Amarelinho              
+            }
+
+
+            let processLabel = "\n Processo: " + durationToString(process.base.relations[i].to[j].duration);
+
+            let modeloLabel = "Modelo: " + durationToString(maxDuration);
 
             cy.add({
                 data: {
                     id: 'edge' + process.base.relations[i].from + '-' + process.base.relations[i].to[j].node,
                     source: process.base.relations[i].from,
                     target: process.base.relations[i].to[j].node,
-                    //label: prevLabel + " / " + realLabel,                 
+                    type: typeValue,
+                    label: processLabel + " / " + modeloLabel
                 }
             });
         }
@@ -1060,18 +1093,23 @@ function renderConformanceGraph() {
 
     //starting nodes
     let startEvents = process.base.startEvents;
-    startEvents.forEach(function (node, i) {
+    if (startEvents.length > 0) {
         cy.add({
             data: {
-                id: 'start-' + i,
+                id: 'start',
                 type: 20
             },
         });
+    }
+   
+
+  
+    startEvents.forEach(function (node, i) {
 
         cy.add({
             data: {
                 id: 'edge_start-' + i,
-                source: 'start-' + i,
+                source: 'start',
                 target: process.base.startEvents[i].node,
                 type: 20
             }
@@ -1079,25 +1117,32 @@ function renderConformanceGraph() {
     });
 
 
-
-    //end nodes
-    for (let i = 0; i < process.base.endEvents.length; i++) {
+    if (process.base.endEvents.length > 0) {
         cy.add({
             data: {
-                id: 'end-' + i,
+                id: 'end',
                 type: 20
             },
         });
+    }
+
+    for (let i = 0; i < process.base.endEvents.length; i++) {
+
         cy.add({
             data: {
                 id: 'edge_end-' + i,
                 source: process.base.endEvents[i].node,
-                target: 'end-' + i,
+                target: 'end',
                 type: 20
             }
         });
     }
 
+    
+
+
+
+    
 
 
     let customBreadthfirst = {
@@ -1129,6 +1174,8 @@ function renderConformanceGraph() {
 
     cy.layout(customBreadthfirst).run();
 }
+
+
 
 
 
