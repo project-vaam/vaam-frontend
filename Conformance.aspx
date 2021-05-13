@@ -229,7 +229,7 @@
 
         var process = <%=processes%>
 
-        console.log("degubg here")
+        console.log("debug here")
         console.log(process)
 
          if (process) {

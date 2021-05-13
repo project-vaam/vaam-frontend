@@ -262,6 +262,7 @@ public partial class Conformance : System.Web.UI.Page
         endDate = null;
         startDate = null;
         moulds = null;
+        activities = null;
         string nodes = String.Empty;
 
         if (RadDatePicker3.SelectedDate.HasValue && RadDatePicker4.SelectedDate.HasValue)
@@ -299,6 +300,32 @@ public partial class Conformance : System.Web.UI.Page
             /* TOKEN */
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            /* ******************** PROCESS TO COMPARE ******************** */
+            if ((bool) RadCheckBoxProcessToCompare.Checked)
+            {
+                Debug.WriteLine("Process to Compare: " + Constants.URL_BACKEND_CONNECTION + "conformance/deviations/" + processID + "/with/" + RadComboBoxProcessToCompare.SelectedValue);
+                string comparation;
+                using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "conformance/deviations/" + processID + "/with/" + RadComboBoxProcessToCompare.SelectedValue).ConfigureAwait(false))
+                {
+                    var status = response.IsSuccessStatusCode;
+
+                    if (status == true)
+                    {
+                        comparation = await response.Content.ReadAsStringAsync();
+                        Debug.WriteLine(comparation);
+                        processes = "{ \"comparation\": " + comparation + "}";
+                        Debug.WriteLine(processes);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Something went bad with getting a process comparation.");
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        Debug.WriteLine(apiResponse);
+                    }
+                }
+                return;
+            }
 
             string threshold = "", workflowURL = "conformance/performance/alpha-miner/model/";
 
@@ -396,28 +423,6 @@ public partial class Conformance : System.Web.UI.Page
                 }
             }
 
-            /* ******************** PROCESS TO COMPARE ******************** */
-            if ((bool)RadCheckBoxProcessToCompare.Checked)
-            {
-                Debug.WriteLine("Process to Compare: " + Constants.URL_BACKEND_CONNECTION + "conformance/deviations/" + processID + "/with/" + RadComboBoxProcessToCompare.SelectedValue);
-                string comparation;
-                using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "conformance/deviations/" + processID + "/with/" + RadComboBoxProcessToCompare.SelectedValue).ConfigureAwait(false))
-                {
-                    var status = response.IsSuccessStatusCode;
-
-                    if (status == true)
-                    {
-                        comparation = await response.Content.ReadAsStringAsync();
-                        Debug.WriteLine(comparation);
-                    }
-                    else
-                    {
-                        Debug.WriteLine("Something went bad with getting a process comparation.");
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        Debug.WriteLine(apiResponse);
-                    }
-                }
-            }
         }
     }
 
