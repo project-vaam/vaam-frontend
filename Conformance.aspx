@@ -149,6 +149,20 @@
            
             <%---------------- MODELO A COMPARAR ----------------%>
             <h3 style="text-align:center;margin-bottom: 0px;">Modelo a comparar</h3>
+
+            <%-- Checkbox to compare process --%>
+            <telerik:RadCheckBox runat="server" ID="RadCheckBoxProcessToCompare" style="margin:16px 0px 0px 8px;text-align: center;width: 100%;" Checked="false" Text="Comparar com outro Processo" OnClick="RadCheckBoxProcessToCompare_Click">
+            </telerik:RadCheckBox>
+
+            <%-- Process to Compare --%>
+            <h4 style="margin-top: 16px !important">Selecione processo a comparar:</h4>
+             <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBoxProcessToCompare" AllowCustomText="true" runat="server" DataValueField="ID"
+                DataTextField="Text"
+                AutoPostBack="True"
+                Filter="Contains"
+                Width="400px">
+            </telerik:RadComboBox>
+
             <%-- Time Interval --%>
             <h4 style="margin-top: 16px !important">Intervalo de Tempo:</h4>
             <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker3" Width="80%" runat="server" DateInput-Label="Data Inicial: ">
@@ -215,7 +229,7 @@
 
         var process = <%=processes%>
 
-        console.log("degubg here")
+        console.log("debug here")
         console.log(process)
 
          if (process) {

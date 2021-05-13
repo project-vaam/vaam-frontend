@@ -11,6 +11,10 @@ var currentProcess = {
 function generateConformance(process) {
 
     console.log(process);
+    if (process.comparation != undefined) {
+        renderComparation();
+        return;
+    }
     renderConformanceGraph();
 }
 
@@ -87,7 +91,7 @@ function renderPerformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#fff0d9",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -103,7 +107,7 @@ function renderPerformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#ffce89",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -119,7 +123,7 @@ function renderPerformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#ff9457",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -135,7 +139,7 @@ function renderPerformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#f25831",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -151,7 +155,7 @@ function renderPerformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#be1300",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -185,7 +189,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=0]',
                     style: {
                         'width': 3,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(label)",
                         "line-color": "#787679",
                         'target-arrow-color': '#787679',
@@ -202,7 +206,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=1]',
                     style: {
                         'width': 5,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(label)",
                         "line-color": "#817073",
                         'target-arrow-color': '#817073',
@@ -219,7 +223,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=2]',
                     style: {
                         'width': 7,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(label)",
                         "line-color": "#817073",
                         'target-arrow-color': '#817073',
@@ -236,7 +240,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=3]',
                     style: {
                         'width': 9,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(label)",
                         "line-color": "#8f534d",
                         'target-arrow-color': '#8f534d',
@@ -253,7 +257,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=4]',
                     style: {
                         'width': 13,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(label)",
                         "line-color": "#b91200",
                         'target-arrow-color': '#b91200',
@@ -271,7 +275,7 @@ function renderPerformanceGraph() {
                     selector: 'edge[type=20]',
                     style: {
                         'width': 8,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         'line-color': "#232323",
                         'target-arrow-color': '#232323',
                         "font-size": "32px",
@@ -378,18 +382,20 @@ function renderPerformanceGraph() {
     }
 
     //add process start 
-    for (let i = 0; i < process.data.startEvents.length; i++) {
+    if (process.data.startEvents.length > 0) {
         cy.add({
             data: {
-                id: 'start-' + i,
+                id: 'start',
                 type: 20
             },
         });
-
+    }
+  
+    for (let i = 0; i < process.data.startEvents.length; i++) {
         cy.add({
             data: {
                 id: 'edge_start-' + i,
-                source: 'start-' + i,
+                source: 'start',
                 target: process.data.startEvents[i].node,
                 type: 20
             }
@@ -397,19 +403,21 @@ function renderPerformanceGraph() {
     }
 
     //add process end activities
-    for (let i = 0; i < process.data.endEvents.length; i++) {
+    if (process.data.endEvents.length > 0) {
         cy.add({
             data: {
-                id: 'end-' + i,
+                id: 'end',
                 type: 20
             },
         });
+    }
 
+    for (let i = 0; i < process.data.endEvents.length; i++) {
         cy.add({
             data: {
                 id: 'edge_end-' + i,
                 source: process.data.endEvents[i].node,
-                target: 'end-' + i,
+                target: 'end',
                 type: 20
             }
         });
@@ -466,7 +474,7 @@ function renderFrequencyGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#FFFFFF",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -484,7 +492,7 @@ function renderFrequencyGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#7f87ff",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -500,7 +508,7 @@ function renderFrequencyGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#404bff",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -516,7 +524,7 @@ function renderFrequencyGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#000eff",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -550,7 +558,7 @@ function renderFrequencyGraph() {
                     selector: 'edge[type=0]',
                     style: {
                         'width': 3,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#D1D1D1",
                         'target-arrow-color': '#D1D1D1',
@@ -567,7 +575,7 @@ function renderFrequencyGraph() {
                     selector: 'edge[type=1]',
                     style: {
                         'width': 5,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#7f87ff",
                         'target-arrow-color': '#7f87ff',
@@ -584,7 +592,7 @@ function renderFrequencyGraph() {
                     selector: 'edge[type=2]',
                     style: {
                         'width': 7,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#404bff",
                         'target-arrow-color': '#404bff',
@@ -601,7 +609,7 @@ function renderFrequencyGraph() {
                     selector: 'edge[type=3]',
                     style: {
                         'width': 9,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         "content": "data(name)",
                         "line-color": "#000eff",
                         'target-arrow-color': '#000eff',
@@ -619,7 +627,7 @@ function renderFrequencyGraph() {
                     selector: 'edge[type=20]',
                     style: {
                         'width': 8,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         'line-color': "#232323",
                         'target-arrow-color': '#232323',
                         "font-size": "32px",
@@ -674,50 +682,67 @@ function renderFrequencyGraph() {
     for (let i = 0; i < process.data.relations.length; i++) {
         for (let j = 0; j < process.data.relations[i].to.length; j++) {
             let typeValue = Math.round(process.data.statistics.relations[i].to[j].frequency * 3 / maxFrequency);
-            cy.add({
-                data: {
-                    id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
-                    source: process.data.relations[i].from,
-                    target: process.data.relations[i].to[j],
-                    name: process.data.statistics.relations[i].to[j].frequency,
-                    type: typeValue
-                }
-            });
+            if (process.data.statistics.relations[i].to[j].frequency > 0 ) {
+                cy.add({
+                    data: {
+                        id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
+                        source: process.data.relations[i].from,
+                        target: process.data.relations[i].to[j],
+                        name: process.data.statistics.relations[i].to[j].frequency,
+                        type: typeValue
+                    }
+                });
+            }
+           
         }
     }
 
+    
+
     //add process start and end nodes
-    for (let i = 0; i < process.data.startEvents.length; i++) {
+
+    if (process.data.startEvents.length > 0) {
         cy.add({
             data: {
-                id: 'start-' + i,
+                id: 'start',
                 type: 20
             },
         });
+    }
+   
+
+    for (let i = 0; i < process.data.startEvents.length; i++) {
+        
 
         cy.add({
             data: {
                 id: 'edge_start-' + i,
-                source: 'start-' + i,
+                source: 'start',
                 target: process.data.startEvents[i].node,
                 type: 20
             }
         });
     }
 
-    for (let i = 0; i < process.data.endEvents.length; i++) {
+
+
+    if (process.data.endEvents.length > 0) {
         cy.add({
             data: {
-                id: 'end-' + i,
+                id: 'end',
                 type: 20
             },
         });
+    }
+
+    for (let i = 0; i < process.data.endEvents.length; i++) {
+       
 
         cy.add({
             data: {
                 id: 'edge_end-' + i,
                 source: process.data.endEvents[i].node,
-                target: 'end-' + i,
+                target: 'end',
                 type: 20
             }
         });
@@ -775,7 +800,7 @@ function renderConformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#77E543",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -788,12 +813,12 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'node[type=1]', //red
+                    selector: 'node[type=1]', //grenn
                     style: {
                         "shape": 'round-rectangle',
                         "background-color": "#0c9200",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '250',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -804,12 +829,12 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'node[type=2]', //green
+                    selector: 'node[type=2]', //yellow
                     style: {
                         "shape": 'round-rectangle',
-                        "background-color": "#ba0000",
+                        "background-color": "#ffd436",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '360',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -820,12 +845,12 @@ function renderConformanceGraph() {
                     }
                 }, 
                 {
-                    selector: 'node[type=3]', //yellow
+                    selector: 'node[type=3]', //red
                     style: {
                         "shape": 'round-rectangle',
-                        "background-color": "#ffce00",
+                        "background-color": "#E11815",
                         "label": "data(label)",
-                        'width': '350',
+                        'width': '360',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -875,11 +900,11 @@ function renderConformanceGraph() {
                     selector: 'edge[type=0]',
                     style: {
                         'width': 3,
-                        'curve-style': 'bezier',
-                        "content": "data(name)",
+                        'curve-style': 'unbundled-bezier',
+                        "content": "data(label)",
                         "line-color": "#D1D1D1",
                         'target-arrow-color': '#D1D1D1',
-                        "font-size": "32px",
+                        "font-size": "20px",
                         "color": "#222222",
                         "loop-direction": "0deg",
                         'target-arrow-shape': 'triangle',
@@ -889,14 +914,14 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'edge[type=1]',
+                    selector: 'edge[type=1]', //green
                     style: {
                         'width': 5,
-                        'curve-style': 'bezier',
-                        "content": "data(name)",
-                        "line-color": "#acbcff",
-                        'target-arrow-color': '#acbcff',
-                        "font-size": "32px",
+                        'curve-style': "unbundled-bezier",
+                        "content": "data(label)",
+                        "line-color": "#43AC21",
+                        'target-arrow-color': '#43AC21',
+                        "font-size": "18px",
                         "color": "#222222",
                         "loop-direction": "0deg",
                         'target-arrow-shape': 'triangle',
@@ -906,14 +931,14 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'edge[type=2]',
+                    selector: 'edge[type=2]',//yellow
                     style: {
                         'width': 7,
-                        'curve-style': 'bezier',
-                        "content": "data(name)",
-                        "line-color": "#748fff",
-                        'target-arrow-color': '#748fff',
-                        "font-size": "32px",
+                        'curve-style': 'unbundled-bezier',
+                        "content": "data(label)",
+                        "line-color": "#ffd436",
+                        'target-arrow-color': '#ffd436',
+                        "font-size": "18px",
                         "color": "#222222",
                         "loop-direction": "0deg",
                         'target-arrow-shape': 'triangle',
@@ -923,14 +948,14 @@ function renderConformanceGraph() {
                     }
                 },
                 {
-                    selector: 'edge[type=3]',
+                    selector: 'edge[type=3]',//red
                     style: {
                         'width': 9,
-                        'curve-style': 'bezier',
-                        "content": "data(name)",
-                        "line-color": "#365eff",
-                        'target-arrow-color': '#365eff',
-                        "font-size": "32px",
+                        'curve-style': 'unbundled-bezier',
+                        "content": "data(label)",
+                        "line-color": "#E11815",
+                        'target-arrow-color': '#E11815',
+                        "font-size": "18px",
                         "color": "#222222",
                         "loop-direction": "0deg",
                         'target-arrow-shape': 'triangle',
@@ -944,7 +969,7 @@ function renderConformanceGraph() {
                     selector: 'edge[type=20]',
                     style: {
                         'width': 8,
-                        'curve-style': 'bezier',
+                        'curve-style': 'unbundled-bezier',
                         'line-color': "#232323",
                         'target-arrow-color': '#232323',
                         "font-size": "32px",
@@ -966,7 +991,7 @@ function renderConformanceGraph() {
     //Nodes
 
     let nodes = process.base.nodes;
-    nodes.forEach(function (node, index) {
+    nodes.forEach((node, index) => {
         let typeValue = 0
 
         for (let k = 0; k < process.case.nodes.length; k++) { // Verde
@@ -990,44 +1015,73 @@ function renderConformanceGraph() {
         }
 
         if (convertToSeconds(process.base.taskDurations[index].duration) > convertToSeconds(maxDurationCase) * 1.10) {
-            typeValue = 2; // Vermelho
+            typeValue = 3; // Vermelho
         } else if (convertToSeconds(process.base.taskDurations[index].duration) >= convertToSeconds(maxDurationCase) * 0.9 && convertToSeconds(process.base.taskDurations[index].duration) <= convertToSeconds(maxDurationCase) * 1.10) {
-            typeValue = 3; // Amarelinho
+            typeValue = 2; // Amarelinho
         }
-
-        let processLabel = "\n Processo: " + durationToString(process.base.taskDurations[index].duration);
-
-        let modeloLabel = "Modelo: " + durationToString(maxDurationCase);
 
         cy.add({
             data: {
                 id: index,
-                label: processLabel + " / " + modeloLabel,
+                label: node + " " + durationToString(process.base.taskDurations[index].duration) + "(" + durationToString(maxDurationCase) + ")",
                 type: typeValue
 
             },
-        }
-        );
+        });
     });
 
     //edges
     for (let i = 0; i < process.base.relations.length; i++) {
         for (let j = 0; j < process.base.relations[i].to.length; j++) {
             //determinar cor do nó
-            let typeValue = 0;
+            let typeValue = 1; //começa a verde
 
-            //let prevLabel = "\n Modelo: " + convertToHours(process.data.nodes.taskDurations[i].duration);
+            //search for max duration for this relation, if it occurs more then once
+            let maxDuration = {};
+            maxDuration.days = 0;
+            maxDuration.hours = 0;
+            maxDuration.minutes = 0;
+            maxDuration.seconds = 0;
+
+            for (let k = 0; k < process.case.relations.length; k++) {
+                if (process.case.relations[k].from === process.base.relations[i].from) {
+                    console.log(process.case.relations[i])
+                    for (let l = 0; l < process.case.relations[k].to.length; l++) {
+                        //console.log(process.case.relations[i])
+                        if (process.case.relations[k].to[l].node === process.base.relations[i].to[j].node) {
+                            if (convertToSeconds(process.case.relations[k].to[l].duration) > convertToSeconds(maxDuration)) {
+                                maxDuration = process.case.relations[k].to[l].duration
+
+                            }
+                        }
+                    }
+                }
+            }
+          
+
+            if (convertToSeconds(process.base.relations[i].to[j].duration) > convertToSeconds(maxDuration) * 1.10) {
+                typeValue = 3; // Vermelho             
+            } else if (convertToSeconds(process.base.relations[i].to[j].duration) >= convertToSeconds(maxDuration) * 0.9 && convertToSeconds(process.base.relations[i].to[j].duration) <= convertToSeconds(maxDuration) * 1.10) {
+                typeValue = 2; // Amarelinho              
+            }
+
+
+            let processLabel = "\n Processo: " + durationToString(process.base.relations[i].to[j].duration);
+
+            let modeloLabel = "Modelo: " + durationToString(maxDuration);
 
             cy.add({
                 data: {
                     id: 'edge' + process.base.relations[i].from + '-' + process.base.relations[i].to[j].node,
                     source: process.base.relations[i].from,
                     target: process.base.relations[i].to[j].node,
-                    //label: prevLabel + " / " + realLabel,                 
+                    type: typeValue,
+                    label: processLabel + " / " + modeloLabel
                 }
             });
         }
     }
+
 
     //n funciona :(
     //edges = process.data.nodes;
@@ -1052,18 +1106,23 @@ function renderConformanceGraph() {
 
     //starting nodes
     let startEvents = process.base.startEvents;
-    startEvents.forEach(function (node, i) {
+    if (startEvents.length > 0) {
         cy.add({
             data: {
-                id: 'start-' + i,
+                id: 'start',
                 type: 20
             },
         });
+    }
+   
+
+  
+    startEvents.forEach(function (node, i) {
 
         cy.add({
             data: {
                 id: 'edge_start-' + i,
-                source: 'start-' + i,
+                source: 'start',
                 target: process.base.startEvents[i].node,
                 type: 20
             }
@@ -1071,25 +1130,32 @@ function renderConformanceGraph() {
     });
 
 
-
-    //end nodes
-    for (let i = 0; i < process.base.endEvents.length; i++) {
+    if (process.base.endEvents.length > 0) {
         cy.add({
             data: {
-                id: 'end-' + i,
+                id: 'end',
                 type: 20
             },
         });
+    }
+
+    for (let i = 0; i < process.base.endEvents.length; i++) {
+
         cy.add({
             data: {
                 id: 'edge_end-' + i,
                 source: process.base.endEvents[i].node,
-                target: 'end-' + i,
+                target: 'end',
                 type: 20
             }
         });
     }
 
+    
+
+
+
+    
 
 
     let customBreadthfirst = {
@@ -1121,6 +1187,256 @@ function renderConformanceGraph() {
 
     cy.layout(customBreadthfirst).run();
 }
+
+/*----------------- Comparation Diagram -------------------*/
+
+function renderComparation() {
+
+    console.log("COMPARATION");
+    cy = cytoscape(
+        {
+            wheelSensitivity: 0.1,
+            minZoom: 0.1,
+            maxZoom: 1,
+            container: document.getElementById('cy'),
+            style: [
+                {
+                    //Nodes styles
+                    selector: 'node[type=0]',
+                    style: {
+                        "padding-relative-to": "width",
+                        "shape": 'round-rectangle',
+                        "background-color": "#C0C0C0",
+                        "label": "data(label)",
+                        'width': '250',
+                        "height": "40",
+                        "border-width": 3,
+                        "border-color": "#484848",
+                        "font-size": "18px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "text-wrap": "wrap",
+                        "text-max-width": "1000px",
+                        "color": "#222222"
+                    }
+                },
+                {
+                    selector: 'node[type=1]', //Desviation (?)
+                    style: {
+                        "padding-relative-to": "width",
+                        "shape": 'round-rectangle',
+                        "background-color": "#b30000",
+                        "label": "data(label)",
+                        'width': '250',
+                        "height": "40",
+                        "border-width": 3,
+                        "border-color": "#484848",
+                        "font-size": "18px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "color": "#222222"
+                    }
+                },
+                {
+                    // start and end nodes
+                    selector: 'node[type=20]',
+                    style: {
+                        "shape": 'ellipse',
+                        "background-color": "#3f3f3f",
+                        "border-width": 4,
+                        "border-color": "#131313",
+                        'width': '50',
+                        "height": "50",
+                        "font-size": "16px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "text-wrap": "wrap",
+                        "text-max-width": "1000px",
+                        "color": "#FF2222"
+                    }
+                },
+
+                //Edges styles
+                {
+                    selector: 'edge[type=0]', // Normal
+                    style: {
+                        'width': 3,
+                        'curve-style': 'unbundled-bezier',
+                        "content": "data(label)",
+                        "line-color": "#D1D1D1",
+                        'target-arrow-color': '#D1D1D1',
+                        "font-size": "20px",
+                        "color": "#222222",
+                        "loop-direction": "0deg",
+                        'target-arrow-shape': 'triangle',
+                        "loop-sweep": "45deg",
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px"
+                    }
+                },
+                {
+                    selector: 'edge[type=1]', // Desviation
+                    style: {
+                        'width': 5,
+                        'curve-style': 'unbundled-bezier',
+                        "content": "data(label)",
+                        "line-color": "#b30000",
+                        'line-style': 'dashed',
+                        'target-arrow-color': '#b30000',
+                        "font-size": "18px",
+                        "color": "#222222",
+                        "loop-direction": "0deg",
+                        'target-arrow-shape': 'triangle',
+                        "loop-sweep": "45deg",
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px"
+                    }
+                },
+                {
+                    //process start edge
+                    selector: 'edge[type=20]',
+                    style: {
+                        'width': 8,
+                        'curve-style': 'unbundled-bezier',
+                        'line-color': "#232323",
+                        'target-arrow-color': '#232323',
+                        "font-size": "32px",
+                        "color": "#222222",
+                        "loop-direction": "0deg",
+                        'target-arrow-shape': 'triangle',
+                        "loop-sweep": "45deg",
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px",
+                        "text-outline-color": "#222222",
+                        "text-outline-width": "0.3px"
+                    }
+                }
+            ],
+        });
+
+
+    process.comparation.nodes.forEach((node, index) => {
+        let typeValue = 0
+
+        cy.add({
+            data: {
+                id: index,
+                label: node,
+                type: typeValue
+
+            }
+        });
+    })
+
+
+    process.comparation.relations.forEach(relation => {
+        relation.to.forEach(target => {
+            let typeValue = 0
+            cy.add({
+                data: {
+                    id: 'edge' + relation.from + '-' + target.node,
+                    source: relation.from,
+                    target: target.node,
+                    type: typeValue,
+                    label: '' // Change to Frequencies (?)
+                }
+            });
+        })
+    })
+
+    //Desviations
+
+    if (process.comparation.deviations.length > 0) {
+        process.comparation.deviations.forEach(desviation => {
+            let typeValue = 1
+            cy.add({
+                data: {
+                    id: 'desviation' + desviation.from + '-' + desviation.to,
+                    source: desviation.from,
+                    target: desviation.to,
+                    type: typeValue,
+                    label: '' // Change to Frequencies (?)
+                }
+            });
+        })
+    }
+
+
+    //starting nodes
+    let startEvents = process.comparation.startEvents;
+    if (startEvents.length > 0) {
+        cy.add({
+            data: {
+                id: 'start',
+                type: 20
+            },
+        });
+    }
+
+
+
+    startEvents.forEach((event,index) => {
+        cy.add({
+            data: {
+                id: 'edge_start-' + index,
+                source: 'start',
+                target: event.node,
+                type: 20
+            }
+        });
+    });
+
+
+    if (process.comparation.endEvents.length > 0) {
+        cy.add({
+            data: {
+                id: 'end',
+                type: 20
+            },
+        });
+    }
+
+    process.comparation.endEvents.forEach((event, index) => {
+        cy.add({
+            data: {
+                id: 'edge_end-' + index,
+                source: event.node,
+                target: 'end',
+                type: 20
+            }
+        });
+    })
+
+    let customBreadthfirst = {
+        name: 'breadthfirst',
+
+        fit: true, // whether to fit the viewport to the graph
+        directed: true, // whether the tree is directed downwards (or edges can point in any direction if false)
+        padding: 10, // padding on fit
+        circle: false, // put depths in concentric circles if true, put depths top down if false
+        grid: false, // whether to create an even grid into which the DAG is placed (circle:false only)
+        spacingFactor: 0.90, // positive spacing factor, larger => more space between nodes (N.B. n/a if causes overlap)
+        boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+        avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+        nodeDimensionsIncludeLabels: false, // Excludes the label when calculating node bounding boxes for the layout algorithm
+        roots: undefined, // the roots of the trees
+        maximal: false, // whether to shift nodes down their natural BFS depths in order to avoid upwards edges (DAGS only)
+        animate: false, // whether to transition the node positions
+        animationDuration: 500, // duration of animation in ms if enabled
+        animationEasing: undefined, // easing of animation if enabled,
+        animateFilter: function (node, i) {
+            return true;
+        }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
+        ready: undefined, // callback on layoutready
+        stop: undefined, // callback on layoutstop
+        transform: function (node, position) {
+            return position;
+        } // transform a given node position. Useful for changing flow direction in discrete layouts
+    };
+
+    cy.layout(customBreadthfirst).run();
+}
+
 
 
 

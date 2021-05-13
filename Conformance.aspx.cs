@@ -17,7 +17,7 @@ using Telerik.Web.UI;
 
 public partial class Conformance : System.Web.UI.Page
 {
-    public string processes = "null";
+    public string processes = "null"; // "null" because of cytoscape diagrams
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Session["sessionToken"] == null)
@@ -30,10 +30,11 @@ public partial class Conformance : System.Web.UI.Page
         {
             thresholdField.Visible = false;
             displayProcess.Visible = false;
-            
+            RadComboBoxProcessToCompare.Enabled = false;
+
+
             callProcesses();
-            
-            Debug.WriteLine(RadComboBoxProcess.SelectedIndex);
+           
             System.Threading.Thread.Sleep(500);
             callFilterInformation(null,null);
         }
@@ -70,6 +71,14 @@ public partial class Conformance : System.Web.UI.Page
         RadDatePicker2.Calendar.FastNavigationSettings.HideAnimation.Type = animationType;
     }
 
+    protected void RadCheckBoxProcessToCompare_Click(object sender, EventArgs e)
+    {
+        RadComboBoxProcessToCompare.Enabled = (bool) RadCheckBoxProcessToCompare.Checked;
+
+        if ((bool)!RadCheckBoxProcessToCompare.Checked) { 
+            RadComboBoxProcessToCompare.SelectedValue = RadComboBoxProcess.SelectedValue;
+        }
+    }
 
     protected void ShowDiagram_Click(object sender, EventArgs e)
     {
@@ -102,6 +111,7 @@ public partial class Conformance : System.Web.UI.Page
                         string value = item["id"].ToString();
                         string text = item["id"].ToString() + " - " + item["name"].ToString();
                         RadComboBoxProcess.Items.Add(new RadComboBoxItem(text, value));
+                        RadComboBoxProcessToCompare.Items.Add(new RadComboBoxItem(text, value));
                     }
                 }
                 else
@@ -116,6 +126,11 @@ public partial class Conformance : System.Web.UI.Page
 
     public async void callFilterInformation(object o, RadComboBoxSelectedIndexChangedEventArgs e)
     {
+        /*  Add Value to Combobox to Compare */ 
+        if(RadCheckBoxProcessToCompare.Checked == false) {
+            RadComboBoxProcessToCompare.SelectedValue = RadComboBoxProcess.SelectedValue;
+        }
+
         Debug.WriteLine("getting all info");
         using (var httpClient = new HttpClient())
         {
@@ -137,19 +152,14 @@ public partial class Conformance : System.Web.UI.Page
                 if (status == true)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine(apiResponse);
 
 
                     JObject obj = JsonConvert.DeserializeObject<JObject>(apiResponse);
 
 
-
                     ArrayList moldesList = new ArrayList();
                     ArrayList activitiesList = new ArrayList();
                     ArrayList operatorsList = new ArrayList();
-
-                    Debug.WriteLine(obj["resources"]);
-
 
 
                     foreach (var item in obj["activities"])
@@ -243,7 +253,6 @@ public partial class Conformance : System.Web.UI.Page
         }
 
        
-
         var payload = new { isEstimatedEnd, moulds , resources, activities, startDate, endDate };
 
         Debug.WriteLine("Base Payload");
@@ -253,6 +262,7 @@ public partial class Conformance : System.Web.UI.Page
         endDate = null;
         startDate = null;
         moulds = null;
+        activities = null;
         string nodes = String.Empty;
 
         if (RadDatePicker3.SelectedDate.HasValue && RadDatePicker4.SelectedDate.HasValue)
@@ -284,14 +294,38 @@ public partial class Conformance : System.Web.UI.Page
         }
  
 
-
-        
+       
         using (var httpClient = new HttpClient())
         {
-            
             /* TOKEN */
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            /* ******************** PROCESS TO COMPARE ******************** */
+            if ((bool) RadCheckBoxProcessToCompare.Checked)
+            {
+                Debug.WriteLine("Process to Compare: " + Constants.URL_BACKEND_CONNECTION + "conformance/deviations/" + processID + "/with/" + RadComboBoxProcessToCompare.SelectedValue);
+                string comparation;
+                using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "conformance/deviations/" + processID + "/with/" + RadComboBoxProcessToCompare.SelectedValue).ConfigureAwait(false))
+                {
+                    var status = response.IsSuccessStatusCode;
+
+                    if (status == true)
+                    {
+                        comparation = await response.Content.ReadAsStringAsync();
+                        Debug.WriteLine(comparation);
+                        processes = "{ \"comparation\": " + comparation + "}";
+                        Debug.WriteLine(processes);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Something went bad with getting a process comparation.");
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+                        Debug.WriteLine(apiResponse);
+                    }
+                }
+                return;
+            }
 
             string threshold = "", workflowURL = "conformance/performance/alpha-miner/model/";
 
@@ -331,14 +365,13 @@ public partial class Conformance : System.Web.UI.Page
                         {
                             nodes = obj["nodes"].ToString().Replace("\r\n", "");
                         }
-                        Debug.WriteLine("NODES READ:");
-                        Debug.WriteLine(nodes);
+                        //Debug.WriteLine("NODES READ:");
+                        //Debug.WriteLine(nodes);
                     }
 
 
 
-                    
-                   
+                                  
                 }
                 else
                 {
@@ -350,14 +383,14 @@ public partial class Conformance : System.Web.UI.Page
                 }
             }
 
-            Debug.WriteLine("RETRIEVING CASE MODEL...");
+            //Debug.WriteLine("RETRIEVING CASE MODEL...");
             /* CONFIG FETCH - PREPARE URL & CONTENT */
             completeURL = "conformance/performance/process/" + processID;
-            Debug.WriteLine(completeURL);
+            //Debug.WriteLine(completeURL);
 
-            Debug.WriteLine("Case Payload");
+            //Debug.WriteLine("Case Payload");
             var payloadCase = new { isEstimatedEnd, moulds, resources, nodes, startDate, endDate };
-            Debug.WriteLine(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"));
+            //Debug.WriteLine(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"));
             content = new StringContent(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"), Encoding.UTF8, "application/json");
 
             /* RETRIEVE CASE DIAGRAM */
