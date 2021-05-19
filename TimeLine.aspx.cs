@@ -37,24 +37,25 @@ public partial class TimeLine : Page
             callMoulds();
         }
     }
-    public async void GetMouldLifetimeEvents(object sender, DropDownListEventArgs molde)
+    public async void GetMouldLifetimeEvents(object sender, RadComboBoxSelectedIndexChangedEventArgs molde)
     {
         var events = new List<LifetimeEvent>();
-        displayMould.Visible = true;
+        displayMould.Visible = true;    
         currentMould.InnerText = "Timeline do " + molde.Text;
-        
+        Debug.WriteLine("molde:" + molde.Text);
 
         using (var httpClient = new HttpClient())
         {
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds/" + molde.Text + "/eventsUsersWorkstations").ConfigureAwait(false))  //http://project-vaam.pt/api/login/token
+            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds/" + molde.Text + "/eventsUsersWorkstations").ConfigureAwait(false)) 
             {
                 var status = response.IsSuccessStatusCode;
                 if (status == true)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("response:");
                     Debug.WriteLine(apiResponse);
 
                     try
@@ -76,10 +77,12 @@ public partial class TimeLine : Page
 
                         RadTimeline1.Visible = true;
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         RadTimeline1.Visible = false;
-                        DisplayError.InnerText = "Timeline do " + molde.Text + " não se encontra disponível para visualização.";
+                        //DisplayError.InnerText = "Timeline do " + molde.Text + " não se encontra disponível para visualização.";
+                        DisplayError.InnerText = ex.Message;
+                       
                     }
                 }
                 else
@@ -116,9 +119,10 @@ public partial class TimeLine : Page
                     {
                         string code = item.GetValue("code").ToString();
                         itemsList.Add(code);
-                        Debug.WriteLine(code);
-                        RadDropDownList1.DataSource = itemsList;
-                        RadDropDownList1.DataBind();
+                        RadComboBoxMoldes.Items.Add(new RadComboBoxItem(code, code));
+                        
+
+                      
                     }
                 }
                 else
@@ -142,7 +146,7 @@ public partial class TimeLine : Page
         public ActivityLifeEvent Activity { get; set; }
         [DataMember]
         [JsonConverter(typeof(CustomDateTimeConverter))]
-        public DateTime StartDate{ get; set; }
+        public DateTime? StartDate{ get; set; }
         [DataMember]
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime? EndDate { get; set; }
@@ -164,7 +168,7 @@ public partial class TimeLine : Page
         public string Description { get; set; }
         [DataMember]
         [JsonConverter(typeof(CustomDateTimeConverter))]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         [DataMember]
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime? EndDate { get; set; }
@@ -202,14 +206,14 @@ public partial class TimeLine : Page
         public User User { get; set; }
         [DataMember]
         [JsonConverter(typeof(CustomDateTimeConverter))]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         [DataMember]
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime? EndDate { get; set; }
         [DataMember]
         public Workstation Workstation { get; set; }
         [DataMember]
-        public int TimeSpentMillis { get; set; }
+        public long TimeSpentMillis { get; set; }
     }
 
     [DataContract]

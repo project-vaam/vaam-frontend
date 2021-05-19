@@ -800,7 +800,7 @@ function renderConformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#77E543",
                         "label": "data(label)",
-                        'width': '250',
+                        'width': '460',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -818,7 +818,7 @@ function renderConformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#0c9200",
                         "label": "data(label)",
-                        'width': '250',
+                        'width': '460',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -834,7 +834,7 @@ function renderConformanceGraph() {
                         "shape": 'round-rectangle',
                         "background-color": "#ffd436",
                         "label": "data(label)",
-                        'width': '360',
+                        'width': '460',
                         "height": "40",
                         "border-width": 3,
                         "border-color": "#484848",
@@ -1003,7 +1003,7 @@ function renderConformanceGraph() {
         //Verificar se tempo execução é não conforme -> texto vermelho
         //Procurar a ocorrência do nó em questão com maior duração (pior caso)
         let maxDurationCase = {}
-        maxDurationCase.days = 
+        maxDurationCase.days = 0
         maxDurationCase.hours = 0
         maxDurationCase.minutes = 0
         maxDurationCase.seconds = 0
@@ -1328,38 +1328,39 @@ function renderComparation() {
         });
     })
 
-
+    let hasDesviation = false
     process.comparation.relations.forEach(relation => {
         relation.to.forEach(target => {
-            let typeValue = 0
-            cy.add({
-                data: {
-                    id: 'edge' + relation.from + '-' + target.node,
-                    source: relation.from,
-                    target: target.node,
-                    type: typeValue,
-                    label: '' // Change to Frequencies (?)
+            process.comparation.deviations.forEach(desviation => {
+
+                if (desviation.from == relation.from && desviation.to == target.node) {
+                    hasDesviation = true
+                    cy.add({
+                        data: {
+                            id: 'desviation' + desviation.from + '-' + desviation.to,
+                            source: desviation.from,
+                            target: desviation.to,
+                            type: 1,
+                            label: '' // Change to Frequencies (?)
+                        }
+                    });
                 }
-            });
+            })
+
+            if (!hasDesviation) {
+                cy.add({
+                    data: {
+                        id: 'edge' + relation.from + '-' + target.node,
+                        source: relation.from,
+                        target: target.node,
+                        type: 0,
+                        label: relation.totalFrequency
+                    }
+                });
+            }
+            hasDesviation = false
         })
     })
-
-    //Desviations
-
-    if (process.comparation.deviations.length > 0) {
-        process.comparation.deviations.forEach(desviation => {
-            let typeValue = 1
-            cy.add({
-                data: {
-                    id: 'desviation' + desviation.from + '-' + desviation.to,
-                    source: desviation.from,
-                    target: desviation.to,
-                    type: typeValue,
-                    label: '' // Change to Frequencies (?)
-                }
-            });
-        })
-    }
 
 
     //starting nodes

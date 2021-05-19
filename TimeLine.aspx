@@ -10,13 +10,17 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-    <div>
+     <div>
              
         <h5>Selecione o Molde</h5>
        
-        <telerik:RadDropDownList RenderMode="Lightweight" ID="RadDropDownList1" DefaultMessage="Escolha um Molde" AutoPostBack="true"
-            OnSelectedIndexChanged="GetMouldLifetimeEvents" runat="server">
-        </telerik:RadDropDownList>
+        <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBoxMoldes" AllowCustomText="true" runat="server" DataValueField="ID"               
+                DataTextField="Text"
+                AutoPostBack="True"
+                Filter="Contains"
+                OnSelectedIndexChanged="GetMouldLifetimeEvents"
+                Width="250px">
+        </telerik:RadComboBox>
      </div>
 
     <div id="displayMould" runat="server" style="text-align:center">
