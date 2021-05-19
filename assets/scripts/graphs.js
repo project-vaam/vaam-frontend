@@ -1315,42 +1315,6 @@ function renderComparation() {
         });
     })
 
-
-    //process.comparation.relations.forEach(relation => {
-    //    relation.to.forEach(target => {
-    //        let typeValue = 0
-
-    //        cy.add({
-    //            data: {
-    //                id: 'edge' + relation.from + '-' + target.node,
-    //                source: relation.from,
-    //                target: target.node,
-    //                type: typeValue,
-    //                label: relation.totalFrequency 
-    //            }
-    //        });
-    //    })
-    //})
-
-
-
-    ////Desviations
-
-    //if (process.comparation.deviations.length > 0) {
-    //    process.comparation.deviations.forEach(desviation => {
-    //        let typeValue = 1
-    //        cy.add({
-    //            data: {
-    //                id: 'desviation' + desviation.from + '-' + desviation.to,
-    //                source: desviation.from,
-    //                target: desviation.to,
-    //                type: typeValue,
-    //                label: '' // Change to Frequencies (?)
-    //            }
-    //        });
-    //    })
-    //}
-
     let hasDesviation = false
     process.comparation.relations.forEach(relation => {
         relation.to.forEach(target => {
