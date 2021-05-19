@@ -990,7 +990,7 @@ function renderConformanceGraph() {
         //Verificar se tempo execução é não conforme -> texto vermelho
         //Procurar a ocorrência do nó em questão com maior duração (pior caso)
         let maxDurationCase = {}
-        maxDurationCase.days = 
+        maxDurationCase.days = 0
         maxDurationCase.hours = 0
         maxDurationCase.minutes = 0
         maxDurationCase.seconds = 0
@@ -1325,7 +1325,7 @@ function renderComparation() {
                     source: relation.from,
                     target: target.node,
                     type: typeValue,
-                    label: '' // Change to Frequencies (?)
+                    label: relation.totalFrequency 
                 }
             });
         })

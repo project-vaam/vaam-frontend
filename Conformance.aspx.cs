@@ -165,20 +165,19 @@ public partial class Conformance : System.Web.UI.Page
                     foreach (var item in obj["activities"])
                     {
                         
-                        activitiesList.Add(item);
-                        Debug.WriteLine(item);
+                        activitiesList.Add(item);                       
                         RadComboBoxActivities.DataSource = activitiesList;
                         RadComboBoxActivities.DataBind();
 
                         RadComboBoxActivities2.DataSource = activitiesList;
                         RadComboBoxActivities2.DataBind();
+
                     }
 
                     foreach (var item in obj["moulds"])
                     {
 
-                        moldesList.Add(item);
-                        Debug.WriteLine(item);
+                        moldesList.Add(item);                      
                         RadComboBoxMoulds.DataSource = moldesList;
                         RadComboBoxMoulds.DataBind();
 
@@ -190,7 +189,6 @@ public partial class Conformance : System.Web.UI.Page
                     {
 
                         operatorsList.Add(item);
-                        Debug.WriteLine(item);
                         RadComboBoxOperadores.DataSource = operatorsList;
                         RadComboBoxOperadores.DataBind();
 
@@ -219,11 +217,15 @@ public partial class Conformance : System.Web.UI.Page
         /* Modelo BASE Payload */
         var isEstimatedEnd = EstimatedCheckbox.Checked.ToString().ToLower();
 
+        var mouldsCollectionBase = RadComboBoxMoulds.CheckedItems;
+        var activitiesCollectionBase = RadComboBoxActivities.CheckedItems;       
+        var resourcesCollectionBase = RadComboBoxOperadores.CheckedItems;
+
         string endDate = null;
         string startDate = null;
-        string[] moulds = null;
-        string[] activities = null;
-        string[] resources = null;
+        string[] moulds = new string[mouldsCollectionBase.Count];
+        string[] activities = new string[activitiesCollectionBase.Count];
+        string[] resources = new string[resourcesCollectionBase.Count];
 
         if (RadDatePicker1.SelectedDate.HasValue && RadDatePicker2.SelectedDate.HasValue)
         {            
@@ -232,25 +234,32 @@ public partial class Conformance : System.Web.UI.Page
             endDate = RadDatePicker2.SelectedDate.Value.ToString("d-M-yyyy");
         }
 
-        string mouldsString = RadComboBoxMoulds.Text.ToString();
+        if (mouldsCollectionBase.Count != 0)
+        {
+            foreach (var item in mouldsCollectionBase)
+            {
+                moulds[mouldsCollectionBase.IndexOf(item)] = item.Text;
+            }
+        }
+      
+        if (activitiesCollectionBase.Count != 0)
+        {
+            foreach (var item in activitiesCollectionBase)
+            {                               
+                activities[activitiesCollectionBase.IndexOf(item)] = item.Text;
+            }
+        }
 
-        if (mouldsString != "")
-        {
-            moulds = mouldsString.Split(',').Select(p => p.Trim()).ToArray();
-        }
-     
-        string activitiesString = RadComboBoxActivities.Text.ToString();
-        if (activitiesString != "")
-        {
-            activities = activitiesString.Split(',').Select(p => p.Trim()).ToArray();
-        }
-       
-        string resourcesString = RadComboBoxOperadores.Text.ToString();
 
-        if (resourcesString != "")
+        if (resourcesCollectionBase.Count != 0)
         {
-            resources = resourcesString.Split(',').Select(p => p.Trim()).ToArray();
+            foreach (var item in resourcesCollectionBase)
+            {
+                resources[resourcesCollectionBase.IndexOf(item)] = item.Text;
+            }
         }
+
+        
 
        
         var payload = new { isEstimatedEnd, moulds , resources, activities, startDate, endDate };
@@ -259,10 +268,16 @@ public partial class Conformance : System.Web.UI.Page
         Debug.WriteLine(JsonConvert.SerializeObject(payload).ToString());
 
         /* Modelo CASE Payload */
+
+        var mouldsCollectionCase = RadComboBoxMoulds2.CheckedItems;
+        var activitiesCollectionCase = RadComboBoxActivities2.CheckedItems;
+        var resourcesCollectionCase = RadComboBoxOperadores2.CheckedItems;
+
         endDate = null;
         startDate = null;
-        moulds = null;
-        activities = null;
+        moulds = new string[mouldsCollectionBase.Count];
+        activities = new string[activitiesCollectionCase.Count];
+        resources = new string[resourcesCollectionCase.Count];
         string nodes = String.Empty;
 
         if (RadDatePicker3.SelectedDate.HasValue && RadDatePicker4.SelectedDate.HasValue)
@@ -272,29 +287,35 @@ public partial class Conformance : System.Web.UI.Page
             endDate = RadDatePicker4.SelectedDate.Value.ToString("d-M-yyyy");
         }
 
-        string mouldsString2 = RadComboBoxMoulds2.Text.ToString();
-
-        if (mouldsString2 != "")
+        if (mouldsCollectionCase.Count != 0)
         {
-            moulds = mouldsString2.Split(',').Select(p => p.Trim()).ToArray();
+            foreach (var item in mouldsCollectionCase)
+            {
+                moulds[mouldsCollectionCase.IndexOf(item)] = item.Text;
+            }
         }
 
-        string activitiesString2 = RadComboBoxActivities2.Text.ToString();
-       
-        if (activitiesString2 != "")
-        {
-            activities = activitiesString2.Split(',').Select(p => p.Trim()).ToArray();
-        }
-
-        string resourcesString2 = RadComboBoxOperadores2.Text.ToString();
-
-        if (resourcesString2 != "")
-        {
-            resources = resourcesString2.Split(',').Select(p => p.Trim()).ToArray();
-        }
- 
 
        
+        if (activitiesCollectionCase.Count != 0)
+        {
+            foreach (var item in activitiesCollectionCase)
+            {
+                activities[activitiesCollectionCase.IndexOf(item)] = item.Text;
+            }
+        }
+
+        
+        if (resourcesCollectionCase.Count != 0)
+        {
+            foreach (var item in resourcesCollectionCase)
+            {
+                resources[resourcesCollectionCase.IndexOf(item)] = item.Text;
+            }
+        }
+
+       
+
         using (var httpClient = new HttpClient())
         {
             /* TOKEN */
@@ -367,11 +388,7 @@ public partial class Conformance : System.Web.UI.Page
                         }
                         //Debug.WriteLine("NODES READ:");
                         //Debug.WriteLine(nodes);
-                    }
-
-
-
-                                  
+                    }                                  
                 }
                 else
                 {
@@ -390,7 +407,8 @@ public partial class Conformance : System.Web.UI.Page
 
             //Debug.WriteLine("Case Payload");
             var payloadCase = new { isEstimatedEnd, moulds, resources, nodes, startDate, endDate };
-            //Debug.WriteLine(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"));
+            Debug.WriteLine("Case Payload");
+            Debug.WriteLine(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"));
             content = new StringContent(JsonConvert.SerializeObject(payloadCase).ToString().Replace("\\", "").Replace("  ", "").Replace("\"[", "[").Replace("]\"", "]"), Encoding.UTF8, "application/json");
 
             /* RETRIEVE CASE DIAGRAM */
@@ -407,8 +425,7 @@ public partial class Conformance : System.Web.UI.Page
                         errorMessage.InnerText = "Os filtros escolhidos não tem dados.";
                         showError.Visible = true;
                     }
-
-                    Debug.WriteLine(response.ReasonPhrase.ToString());
+                 
                     Debug.WriteLine(apiResponse);
 
                     processes = "{\"case\": " + apiResponse + ", \"base\": " + processes + "}"; // Add Bases to total processes, so the diagram can be generated
