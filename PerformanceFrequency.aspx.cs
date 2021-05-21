@@ -125,22 +125,34 @@ public partial class Performance : System.Web.UI.Page
         }
 
         
-
         using (var httpClient = new HttpClient())
         {
             string token = (string)Session["sessionToken"];
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             string threshold = "", workflowURL = "workflow-network/alpha-miner/processes/";
+            string paths = "?paths=0.616&";
+            string activities = "activities=0.698&";
+            string showDesviations = "showDeviations=true";
+            string completeURL = "";
 
             if (!AlphaRadioBtn.Checked)
             {
                 threshold = "?threshold=" + ThresholdSlider.Value.ToString().Replace(",",".");
                 workflowURL = HeuristicRadioBtn.Checked ? "workflow-network/heuristic-miner/processes/" : "workflow-network/inductive-miner/processes/";                
             }
- 
-            string completeURL = workflowURL + processID + threshold;
-            Debug.WriteLine(completeURL);
+
+            if (InductiveRadioBtn.Checked)
+            {
+                 completeURL = workflowURL + processID + paths + activities + showDesviations;
+                Debug.WriteLine(completeURL);
+            }
+            else
+            {
+                 completeURL = workflowURL + processID + threshold;
+                Debug.WriteLine(completeURL);
+            }
+            
 
             using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + completeURL).ConfigureAwait(false))
             {

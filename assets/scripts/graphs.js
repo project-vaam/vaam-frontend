@@ -18,14 +18,11 @@ function generateConformance(process) {
     renderConformanceGraph();
 }
 
-
 function generateGraph(process) {
 
     if (process.data.info == "Inductive Mining") {
 
-        if (process.isPerformance === "True") {
-            renderPerformanceGraph();
-        }
+        renderFrequencyGraph();
     }
     else {
         if (process.isPerformance === "True") {
@@ -292,7 +289,7 @@ function renderPerformanceGraph() {
         }
     );
 
-    if (process.data.info != "Inductive Mining") {
+    
 
         //nodes max time
         let nodesMaxTime = 0;
@@ -349,37 +346,8 @@ function renderPerformanceGraph() {
                     }
                 });
             }
-        }
-    } else {
-        //INDUCTIVE 
-        //add nodes to graph       
-        for (var i = 0; i < process.data.nodes.length; i++) {
-            cy.add({
-                data: {
-                    id: i,
-                    label: process.data.nodes[i],
-                    type: 1
-                }
-            }
-            );
-        }
-
-        //add relations to graph
-        console.log(process.data.relations.length)
-        for (var i = 0; i < process.data.relations.length; i++) {
-            for (var j = 0; j < process.data.relations[i].to.length; j++) {
-                console.log(process.data.relations[i])
-                cy.add({
-                    data: {
-                        id: 'relation' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
-                        source: process.data.relations[i].from,
-                        target: process.data.relations[i].to[j],
-                        type: 1
-                    }
-                });
-            }
-        }
-    }
+        }    
+    
 
     //add process start 
     if (process.data.startEvents.length > 0) {
@@ -515,14 +483,14 @@ function renderFrequencyGraph() {
                         "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
-                        "color": "#222222"
+                        "color": "#FFFFFF"
                     }
                 },
                 {
                     selector: 'node[type=3]',
                     style: {
                         "shape": 'round-rectangle',
-                        "background-color": "#000eff",
+                        "background-color": "#1926ff",
                         "label": "data(label)",
                         'width': '250',
                         "height": "40",
@@ -531,7 +499,23 @@ function renderFrequencyGraph() {
                         "font-size": "18px",
                         "text-valign": "center",
                         "text-halign": "center",
-                        "color": "#222222"
+                        "color": "#FFFFFF"
+                    }
+                },
+                {
+                    selector: 'node[type=4]', //empty node
+                    style: {
+                        "shape": 'ellipse',
+                        //"background-color": "#1926ff",
+                        //"label": "empty",
+                        'width': '20',
+                        "height": "20",
+                        "border-width": 1,
+                        "border-color": "#484848",
+                        "font-size": "18px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "color": "#FFFFFF"
                     }
                 },
                 {
@@ -539,7 +523,25 @@ function renderFrequencyGraph() {
                     selector: 'node[type=20]',
                     style: {
                         "shape": 'ellipse',
-                        "background-color": "#3f3f3f",
+                        "background-color": "#4BB741",
+                        "border-width": 4,
+                        "border-color": "#131313",
+                        'width': '50',
+                        "height": "50",
+                        "font-size": "16px",
+                        "text-valign": "center",
+                        "text-halign": "center",
+                        "text-wrap": "wrap",
+                        "text-max-width": "1000px",
+                        "color": "#FF2222"
+                    }
+                },
+                {
+                    //process end node
+                    selector: 'node[type=21]',
+                    style: {
+                        "shape": 'ellipse',
+                        "background-color": "#F21E08",
                         "border-width": 4,
                         "border-color": "#131313",
                         'width': '50',
@@ -623,11 +625,32 @@ function renderFrequencyGraph() {
                     }
                 },
                 {
-                    //process start edge
+                    selector: 'edge[type=4]', // Desviation
+                    style: {
+                        'width': 8,
+                        'curve-style': 'unbundled-bezier',
+                        "content": "data(name)",
+                        "line-color": "#F21E08",
+                        'line-style': 'dashed',
+                        'target-arrow-color': '#F21E08',
+                        "font-size": "20px",
+                        "color": "#F21E08",
+                        "loop-direction": "0deg",
+                        'target-arrow-shape': 'triangle',
+                        "loop-sweep": "45deg",
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px"
+                    }
+                },
+                {
+                    //process start and end edge
                     selector: 'edge[type=20]',
                     style: {
                         'width': 8,
                         'curve-style': 'unbundled-bezier',
+                        "text-margin-y": "-15px",
+                        "source-text-offset": "50px",
+                        "content": "data(name)",
                         'line-color': "#232323",
                         'target-arrow-color': '#232323',
                         "font-size": "32px",
@@ -640,62 +663,145 @@ function renderFrequencyGraph() {
                         "text-outline-color": "#222222",
                         "text-outline-width": "0.3px"
                     }
-                },
+                },               
             ],
         });
 
 
-    //find max frequency value
-    //nodes max frequency
-    var maxFrequency = 0;
-    for (let i = 0; i < process.data.nodes.length; i++) {
-        if (process.data.statistics.nodes[i].frequency > maxFrequency) {
-            maxFrequency = process.data.statistics.nodes[i].frequency;
-        }
-    }
+    if (process.data.info == "Inductive Mining") {
 
-    //edges max frequency
-    for (let i = 0; i < process.data.statistics.relations.length; i++) {
-        for (let j = 0; j < process.data.statistics.relations[i].to.length; j++) {
-            if (process.data.statistics.relations[i].to[j].frequency > maxFrequency) {
-                maxFrequency = process.data.statistics.relations[i].to[j].frequency;
+        console.log("INDUCTIVE")
+
+        //find max frequency value
+        //nodes max frequency
+        var maxFrequency = 0
+        console.log(maxFrequency)
+        for (let i = 0; i < process.data.nodes.length; i++) {
+            if (process.data.statistics.nodes[i].frequency > maxFrequency) {
+                maxFrequency = process.data.statistics.nodes[i].frequency;
             }
         }
-    }
 
-    //Nodes\\
-    for (let i = 0; i < process.data.nodes.length; i++) {
-        let typeValue = Math.round(process.data.statistics.nodes[i].frequency * 3 / maxFrequency);
-        //asd[typeValue] = process.data.data.statistics.nodes[i].frequency;
-        cy.add({
-            data: {
-                id: i,
-                label: process.data.nodes[i] + ' (' + process.data.statistics.nodes[i].frequency + ')',
-                type: typeValue
-            },
+        ////edges max frequency
+        //for (let i = 0; i < process.data.statistics.relations.length; i++) {
+        //    for (let j = 0; j < process.data.statistics.relations[i].to.length; j++) {
+        //        if (process.data.statistics.relations[i].to[j].frequency > maxFrequency) {
+        //            maxFrequency = process.data.statistics.relations[i].to[j].frequency;
+        //        }
+        //    }
+        //}
+
+        //Nodes\\
+        for (let i = 0; i < process.data.nodes.length; i++) {
+            let typeValue = Math.round(process.data.statistics.nodes[i].frequency * 3 / maxFrequency);
+            if (process.data.nodes[i].includes("empty-node")) {
+                console.log(process.data.nodes[i])
+                typeValue = 4
+            }
+            cy.add({
+                data: {
+                    id: i,
+                    label: process.data.nodes[i] + ' (' + process.data.statistics.nodes[i].frequency + ')',
+                    type: typeValue
+                },
+            }
+            );
         }
-        );
-    }
-    process.data.maxFrequency = maxFrequency;
+        process.data.maxFrequency = maxFrequency;
 
-    //Edges\\
-    for (let i = 0; i < process.data.relations.length; i++) {
-        for (let j = 0; j < process.data.relations[i].to.length; j++) {
-            let typeValue = Math.round(process.data.statistics.relations[i].to[j].frequency * 3 / maxFrequency);
-            if (process.data.statistics.relations[i].to[j].frequency > 0 ) {
+        //Edges\\
+        for (let i = 0; i < process.data.relations.length; i++) {
+            for (let j = 0; j < process.data.relations[i].to.length; j++) {
+                let typeValue = Math.round(process.data.statistics.relations[i].to[j].frequency * 3 / maxFrequency);
+                if (process.data.statistics.relations[i].to[j].frequency > 0) {
+                    cy.add({
+                        data: {
+                            id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
+                            source: process.data.relations[i].from,
+                            target: process.data.relations[i].to[j],
+                            name: process.data.statistics.relations[i].to[j].frequency,
+                            type: typeValue
+                        }
+                    });
+                }
+
+            }
+        }
+
+        //Desviations
+        for (let i = 0; i < process.data.relationDeviation.length; i++) {
+            for (let j = 0; j < process.data.relationDeviation[i].to.length; j++) {
+
+
                 cy.add({
                     data: {
-                        id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
-                        source: process.data.relations[i].from,
-                        target: process.data.relations[i].to[j],
-                        name: process.data.statistics.relations[i].to[j].frequency,
-                        type: typeValue
+                        id: 'desviation' + process.data.relationDeviation[i].from + '-' + process.data.relationDeviation[i].to[j].node,
+                        source: process.data.relationDeviation[i].from,
+                        target: process.data.relationDeviation[i].to[j].node,
+                        name: process.data.relationDeviation[i].to[j].frequency,
+                        type: 4
                     }
                 });
-            }
-           
+            }          
         }
+
+
+
+    } else {
+        console.log("Generatinf nodes and relations FREQUENCY");
+        //find max frequency value
+        //nodes max frequency
+        var maxFrequency = 0;
+        for (let i = 0; i < process.data.nodes.length; i++) {
+            if (process.data.statistics.nodes[i].frequency > maxFrequency) {
+                maxFrequency = process.data.statistics.nodes[i].frequency;
+            }
+        }
+
+        //edges max frequency
+        for (let i = 0; i < process.data.statistics.relations.length; i++) {
+            for (let j = 0; j < process.data.statistics.relations[i].to.length; j++) {
+                if (process.data.statistics.relations[i].to[j].frequency > maxFrequency) {
+                    maxFrequency = process.data.statistics.relations[i].to[j].frequency;
+                }
+            }
+        }
+
+        //Nodes\\
+        for (let i = 0; i < process.data.nodes.length; i++) {
+            let typeValue = Math.round(process.data.statistics.nodes[i].frequency * 3 / maxFrequency);
+            cy.add({
+                data: {
+                    id: i,
+                    label: process.data.nodes[i] + ' (' + process.data.statistics.nodes[i].frequency + ')',
+                    type: typeValue
+                },
+            }
+            );
+        }
+        process.data.maxFrequency = maxFrequency;
+
+        //Edges\\
+        for (let i = 0; i < process.data.relations.length; i++) {
+            for (let j = 0; j < process.data.relations[i].to.length; j++) {
+                let typeValue = Math.round(process.data.statistics.relations[i].to[j].frequency * 3 / maxFrequency);
+                if (process.data.statistics.relations[i].to[j].frequency > 0) {
+                    cy.add({
+                        data: {
+                            id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
+                            source: process.data.relations[i].from,
+                            target: process.data.relations[i].to[j],
+                            name: process.data.statistics.relations[i].to[j].frequency,
+                            type: typeValue
+                        }
+                    });
+                }
+
+            }
+        }
+
     }
+    
 
     
 
@@ -719,30 +825,29 @@ function renderFrequencyGraph() {
                 id: 'edge_start-' + i,
                 source: 'start',
                 target: process.data.startEvents[i].node,
+                name: process.data.startEvents[i].frequency,
                 type: 20
             }
         });
     }
 
-
-
     if (process.data.endEvents.length > 0) {
         cy.add({
             data: {
                 id: 'end',
-                type: 20
+                type: 21
             },
         });
     }
 
     for (let i = 0; i < process.data.endEvents.length; i++) {
        
-
         cy.add({
             data: {
                 id: 'edge_end-' + i,
                 source: process.data.endEvents[i].node,
                 target: 'end',
+                name: process.data.startEvents[i].frequency,
                 type: 20
             }
         });
