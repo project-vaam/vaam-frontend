@@ -66,14 +66,14 @@
             <telerik:RadButton RenderMode="Lightweight" ID="HeuristicRadioBtn" runat="server" Text="Heuristic Miner" ToggleType="Radio" OnClick="HeuristicRadioBtn_Click"
                 ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton>
 
-            <telerik:RadButton RenderMode="Lightweight" ID="InductiveRadioBtn" runat="server" Text="Inductive Miner (??)" ToggleType="Radio" OnClick="InductiveRadioBtn_Click"
+            <telerik:RadButton RenderMode="Lightweight" ID="InductiveRadioBtn" runat="server" Text="Inductive Miner" ToggleType="Radio" OnClick="InductiveRadioBtn_Click"
                 ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton> 
             </div>
 
             <%-- Frequency Slider --%>
             <div id="thresholdField" runat="server">
                 <h4 style="margin-top: 16px !important">Threshold</h4>
-                <span>Simplistic to Complex</span>
+                <span>Complex to Simplistic</span>
                 <telerik:RadSlider RenderMode="Lightweight" ID="ThresholdSlider" runat="server" MinimumValue="0" MaximumValue="1" Value="0.5"
                     SmallChange="0.1" LargeChange="0.5" ItemType="tick" Height="70px" Width="400px" 
                     AnimationDuration="400" CssClass="TicksSlider" ThumbsInteractionMode="Free" Skin="Metro">
@@ -92,135 +92,166 @@
                 Width="400px">
             </telerik:RadComboBox>
 
-            <%-- Time Interval --%>
-            <h4 style="margin-top: 16px !important">Intervalo de Tempo:</h4>
-            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker1" Width="80%" runat="server" DateInput-Label="Data Inicial: ">
-            </telerik:RadDatePicker>
-            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker2" Width="80%" style="margin-top:6px;" runat="server" DateInput-Label="Data Final:&nbsp;&nbsp;">
-            </telerik:RadDatePicker>
-            <br />
-            <%--<asp:CompareValidator ID="dateCompareValidator" runat="server" ControlToValidate="Raddatepicker2"
-                            ControlToCompare="RadDatePicker1" Operator="GreaterThan" Type="Date" ErrorMessage="A Data Final tem que ser posterior à Inicial">
-            </asp:CompareValidator>--%>
+            <div id="processDetailsContainer" runat="server">
 
-            <%-- Moulds --%>
-            <h4 style="margin-top: 0px !important">Molde:</h4>
-            <%--<telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBoxMoulds" runat="server" CheckBoxes="true" EnableCheckAllItemsCheckBox="true" Width="400" Skin="Bootstrap">
-            </telerik:RadComboBox>--%>
-            <telerik:RadComboBox 
-                RenderMode="Lightweight"
-                ID="RadComboBoxMoulds" 
-                AllowCustomText="true" 
-                Filter="Contains"
-                AutoCompleteSeparator=","
-                runat="server" 
-                CheckBoxes="true"
-                EnableCheckAllItemsCheckBox="true"
-                Width="400px">
-            </telerik:RadComboBox>
+                <%-- Time Interval --%>
+                <h4 style="margin-top: 16px !important">Intervalo de Tempo:</h4>
+                <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker1" Width="80%" runat="server" DateInput-Label="Data Inicial: ">
+                </telerik:RadDatePicker>
+                <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker2" Width="80%" style="margin-top:6px;" runat="server" DateInput-Label="Data Final:&nbsp;&nbsp;">
+                </telerik:RadDatePicker>
+                <br />
 
-            <%-- Activities --%>
-            <h4 style="margin-top: 16px !important">Atividades:</h4>
-            <telerik:RadComboBox 
-                RenderMode="Lightweight"
-                ID="RadComboBoxActivities"
-                runat="server"
-                CheckBoxes="true" 
-                EnableCheckAllItemsCheckBox="true" 
-                AllowCustomText="true" 
-                Filter="Contains"
-                AutoCompleteSeparator=","
-                Width="400">
-            </telerik:RadComboBox>
 
-            <%-- Operadores --%>
-            <h4 style="margin-top: 16px !important">Operadores:</h4>
-            <telerik:RadComboBox
-                RenderMode="Lightweight" 
-                ID="RadComboBoxOperadores"
-                runat="server"
-                CheckBoxes="true" 
-                EnableCheckAllItemsCheckBox="true" 
-                AllowCustomText="true" 
-                Filter="Contains"
-                AutoCompleteSeparator=","
-                Width="400">
-            </telerik:RadComboBox>
+                <%-- Moulds --%>
+                <h4 style="margin-top: 0px !important">Molde:</h4>
+                <telerik:RadComboBox 
+                    RenderMode="Lightweight"
+                    ID="RadComboBoxMoulds" 
+                    AllowCustomText="true" 
+                    Filter="Contains"
+                    AutoCompleteSeparator=","
+                    runat="server" 
+                    CheckBoxes="true"
+                    EnableCheckAllItemsCheckBox="true"
+                    Width="400px">
+                </telerik:RadComboBox>
+
+                <%-- Activities --%>
+                <h4 style="margin-top: 16px !important">Atividades:</h4>
+                <telerik:RadComboBox 
+                    RenderMode="Lightweight"
+                    ID="RadComboBoxActivities"
+                    runat="server"
+                    CheckBoxes="true" 
+                    EnableCheckAllItemsCheckBox="true" 
+                    AllowCustomText="true" 
+                    Filter="Contains"
+                    AutoCompleteSeparator=","
+                    Width="400">
+                </telerik:RadComboBox>
+
+                <%-- Operadores --%>
+                <h4 style="margin-top: 16px !important">Operadores:</h4>
+                <telerik:RadComboBox
+                    RenderMode="Lightweight" 
+                    ID="RadComboBoxOperadores"
+                    runat="server"
+                    CheckBoxes="true" 
+                    EnableCheckAllItemsCheckBox="true" 
+                    AllowCustomText="true" 
+                    Filter="Contains"
+                    AutoCompleteSeparator=","
+                    Width="400">
+                </telerik:RadComboBox>
+
+            </div>
            
-            <%---------------- MODELO A COMPARAR ----------------%>
-            <h3 style="text-align:center;margin-bottom: 0px;">Modelo a comparar</h3>
+            <div id="modelContainer" runat="server">
+                <%---------------- MODELO A COMPARAR ----------------%>
+                <h3 style="text-align:center;margin-bottom: 0px;">Modelo a comparar</h3>
 
-            <%-- Checkbox to compare process --%>
-            <telerik:RadCheckBox runat="server" ID="RadCheckBoxProcessToCompare" style="margin:16px 0px 0px 8px;text-align: center;width: 100%;" Checked="false" Text="Comparar com outro Processo" OnClick="RadCheckBoxProcessToCompare_Click">
-            </telerik:RadCheckBox>
+                <%-- Checkbox to compare process --%>
+                <telerik:RadCheckBox runat="server" ID="RadCheckBoxProcessToCompare" style="margin:16px 0px 0px 8px;text-align: center;width: 100%;" Checked="false" Text="Comparar com outro Processo" OnClick="RadCheckBoxProcessToCompare_Click">
+                </telerik:RadCheckBox>
 
-            <%-- Process to Compare --%>
-            <h4 style="margin-top: 16px !important">Selecione processo a comparar:</h4>
-             <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBoxProcessToCompare" AllowCustomText="true" runat="server" DataValueField="ID"
-                DataTextField="Text"
-                AutoPostBack="True"
-                Filter="Contains"
-                Width="400px">
-            </telerik:RadComboBox>
+                <%-- Process to Compare --%>
+                <h4 style="margin-top: 16px !important">Selecione processo a comparar:</h4>
+                 <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBoxProcessToCompare" AllowCustomText="true" runat="server" DataValueField="ID"
+                    DataTextField="Text"
+                    AutoPostBack="True"
+                    Filter="Contains"
+                    Width="400px">
+                </telerik:RadComboBox>
 
-            <%-- Time Interval --%>
-            <h4 style="margin-top: 16px !important">Intervalo de Tempo:</h4>
-            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker3" Width="80%" runat="server" DateInput-Label="Data Inicial: ">
-            </telerik:RadDatePicker>
-            <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker4" Width="80%" style="margin-top:6px;" runat="server" DateInput-Label="Data Final:&nbsp;&nbsp;">
-            </telerik:RadDatePicker>
-            <br />
-
-
-            <%-- Moulds --%>
-            <h4 style="margin-top: 0px !important">Molde:</h4>
-            <telerik:RadComboBox 
-                RenderMode="Lightweight"
-                ID="RadComboBoxMoulds2"
-                runat="server" 
-                CheckBoxes="true"
-                EnableCheckAllItemsCheckBox="true"
-                AllowCustomText="true" 
-                Filter="Contains"
-                AutoCompleteSeparator=","
-                Width="400">
-            </telerik:RadComboBox>
-
-            <%-- Activities --%>
-            <h4 style="margin-top: 16px !important">Atividades:</h4>
-            <telerik:RadComboBox
-                RenderMode="Lightweight"
-                ID="RadComboBoxActivities2" 
-                runat="server" 
-                CheckBoxes="true" 
-                EnableCheckAllItemsCheckBox="true" 
-                AllowCustomText="true" 
-                Filter="Contains"
-                AutoCompleteSeparator=","
-                Width="400">
-            </telerik:RadComboBox>
-
-            <%-- Operadores --%>
-            <h4 style="margin-top: 16px !important">Operadores:</h4>
-            <telerik:RadComboBox 
-                RenderMode="Lightweight" 
-                ID="RadComboBoxOperadores2" 
-                runat="server"
-                CheckBoxes="true"
-                EnableCheckAllItemsCheckBox="true"
-                AllowCustomText="true" 
-                Filter="Contains"
-                AutoCompleteSeparator=","
-                Width="400">
-            </telerik:RadComboBox>
+                <%-- Time Interval --%>
+                <h4 style="margin-top: 16px !important">Intervalo de Tempo:</h4>
+                <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker3" Width="80%" runat="server" DateInput-Label="Data Inicial: ">
+                </telerik:RadDatePicker>
+                <telerik:RadDatePicker RenderMode="Lightweight" ID="RadDatePicker4" Width="80%" style="margin-top:6px;" runat="server" DateInput-Label="Data Final:&nbsp;&nbsp;">
+                </telerik:RadDatePicker>
+                <br />
 
 
-            <telerik:RadCheckBox runat="server" ID="EstimatedCheckbox" style="margin-top:16px;text-align: center;width: 100%;" Checked="true" Text="Incluir Ativididades com Fim Estimado" AutoPostBack="false">
-            </telerik:RadCheckBox>
+                <%-- Moulds --%>
+                <h4 style="margin-top: 0px !important">Molde:</h4>
+                <telerik:RadComboBox 
+                    RenderMode="Lightweight"
+                    ID="RadComboBoxMoulds2"
+                    runat="server" 
+                    CheckBoxes="true"
+                    EnableCheckAllItemsCheckBox="true"
+                    AllowCustomText="true" 
+                    Filter="Contains"
+                    AutoCompleteSeparator=","
+                    Width="400">
+                </telerik:RadComboBox>
 
-            <div id="showDiagram" style="display: flex; width: 100%; align-items: center; justify-content: center; margin-top: 4px; margin-bottom:32px;">
+                <%-- Activities --%>
+                <h4 style="margin-top: 16px !important">Atividades:</h4>
+                <telerik:RadComboBox
+                    RenderMode="Lightweight"
+                    ID="RadComboBoxActivities2" 
+                    runat="server" 
+                    CheckBoxes="true" 
+                    EnableCheckAllItemsCheckBox="true" 
+                    AllowCustomText="true" 
+                    Filter="Contains"
+                    AutoCompleteSeparator=","
+                    Width="400">
+                </telerik:RadComboBox>
+
+                <%-- Operadores --%>
+                <h4 style="margin-top: 16px !important">Operadores:</h4>
+                <telerik:RadComboBox 
+                    RenderMode="Lightweight" 
+                    ID="RadComboBoxOperadores2" 
+                    runat="server"
+                    CheckBoxes="true"
+                    EnableCheckAllItemsCheckBox="true"
+                    AllowCustomText="true" 
+                    Filter="Contains"
+                    AutoCompleteSeparator=","
+                    Width="400">
+                </telerik:RadComboBox>
+
+
+                <telerik:RadCheckBox runat="server" ID="EstimatedCheckbox" style="margin-top:16px;text-align: center;width: 100%;" Checked="true" Text="Incluir Ativididades com Fim Estimado" AutoPostBack="false">
+                </telerik:RadCheckBox>
+            </div>
+    
+            <div id="inductiveContainer" runat="server">
+                <div style="width: 100%; display: flex; justify-content: space-around; margin-top: 16px;">
+                    <h4>Ativities</h4>
+                    <h4>Paths</h4>
+                </div>
+                <div style="width: 100%; display: flex; justify-content: space-around; margin-top: 16px;">
+                    <%-- Activities --%>
+
+                    <div style="display:flex; flex-direction: column; align-items: center;">
+                        <telerik:RadSlider RenderMode="Lightweight" ID="RadSliderActivities" runat="server" MinimumValue="0" MaximumValue="1000" Value="500"
+                            Height="300px" Orientation="Vertical" OnValueChanged="RadSliderActivities_ValueChanged" AutoPostBack="true"
+                            AnimationDuration="200" ThumbsInteractionMode="Free" Skin="Metro">
+                        </telerik:RadSlider>
+                        <b><asp:Label ID="labelSliderActivities" runat="server" Text="0.500" /></b>
+                    </div>
+                    <%-- Paths --%>
+                    <div style="display:flex; flex-direction: column; align-items: center;">
+                        <telerik:RadSlider RenderMode="Lightweight" ID="RadSliderPaths" runat="server" MinimumValue="0" MaximumValue="1000" Value="500"
+                            Height="300px" Orientation="Vertical" OnValueChanged="RadSliderPaths_ValueChanged" AutoPostBack="true"
+                            AnimationDuration="200" ThumbsInteractionMode="Free" Skin="Metro">
+                        </telerik:RadSlider>
+                        <b><asp:Label ID="labelSliderPathsValue" runat="server" Text="0.500" /></b>
+                    </div>
+                </div>
+
+                <telerik:RadCheckBox runat="server" ID="RadCheckBoxShowDesviations" style="margin-top:16px;text-align: center;width: 100%;" Checked="true" Text="Incluir Desvios" AutoPostBack="false">
+                </telerik:RadCheckBox>
+            </div>
+
+            <div id="showDiagram" style="display: flex; width: 100%; align-items: center; justify-content: center; margin-top: 16px; margin-bottom:32px;">
                  <%-- Button CREATE DropDown --%>
-            <telerik:RadButton RenderMode="Lightweight" runat="server" Text="Gerar Diagrama"   OnClick="ShowDiagram_Click" Height="60px" />
+                <telerik:RadButton RenderMode="Lightweight" runat="server" Text="Gerar Diagrama"   OnClick="ShowDiagram_Click" Height="60px" />
             </div>
         </div>
     </div>
