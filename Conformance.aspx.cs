@@ -26,7 +26,6 @@ public partial class Conformance : System.Web.UI.Page
             thresholdField.Visible = false;
             displayProcess.Visible = false;
             RadComboBoxProcessToCompare.Enabled = false;
-            inductiveContainer.Visible = false;
 
             callProcesses();
            
@@ -77,12 +76,6 @@ public partial class Conformance : System.Web.UI.Page
 
     protected void ShowDiagram_Click(object sender, EventArgs e)
     {
-        if (InductiveRadioBtn.Checked)
-        {
-            FetchInductiveDiagram();
-            return;
-        }
-
         GetWorkFlows(RadComboBoxProcess.SelectedValue);
     }
 
@@ -444,81 +437,18 @@ public partial class Conformance : System.Web.UI.Page
         }
     }
 
-    protected async void FetchInductiveDiagram()
-    {
-        using (var httpClient = new HttpClient())
-        {
-            /* TOKEN */
-            string token = (string)Session["sessionToken"];
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            string activities = "activities=" + labelSliderActivities.Text.Replace(",", ".");
-            string paths = "paths=" + labelSliderPathsValue.Text.Replace(",", ".");
-            string hasDesviations = "showDeviations=" + RadCheckBoxShowDesviations.Checked.ToString().ToLower();
-            string completeURL = "workflow-network/inductive-miner/processes/" + RadComboBoxProcess.SelectedValue + "?" + paths + "&" + activities + "&" + hasDesviations;
-            Debug.WriteLine(completeURL);
-            using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + completeURL).ConfigureAwait(false))
-            {
-                var status = response.IsSuccessStatusCode;
-
-                if (status == true)
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-
-                    if (response.ReasonPhrase.ToString() == "No Content")
-                    {
-                        errorMessage.InnerText = "Os filtros escolhidos não tem dados.";
-                        showError.Visible = true;
-                    }
-                    else
-                    {
-                        processes = apiResponse;
-                        Debug.WriteLine(processes);
-                    }
-                }
-                else
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine("Something went bad");
-                    Debug.WriteLine(apiResponse);
-                    errorMessage.InnerText = apiResponse;
-                    showError.Visible = true;
-                }
-            }
-        }
-    }
-
     public void AlphaRadioBtn_Click(object sender, EventArgs e)
     {
         thresholdField.Visible = false;
         processDetailsContainer.Visible = true;
         modelContainer.Visible = true;
-        inductiveContainer.Visible = false;
     }
     public void HeuristicRadioBtn_Click(object sender, EventArgs e)
     {
         thresholdField.Visible = true;
         processDetailsContainer.Visible = true;
         modelContainer.Visible = false;
-        inductiveContainer.Visible = false;
     }
-    public void InductiveRadioBtn_Click(object sender, EventArgs e)
-    {
-        thresholdField.Visible = false;
-        processDetailsContainer.Visible = false;
-        modelContainer.Visible = false;
-        inductiveContainer.Visible = true;
-    }
-
-    /* Inductive Sliders */
-
-    protected void RadSliderActivities_ValueChanged(object sender, EventArgs e)
-    {
-        labelSliderActivities.Text = (RadSliderActivities.Value/1000).ToString("N3");
-    }
-    protected void RadSliderPaths_ValueChanged(object sender, EventArgs e)
-    {
-        labelSliderPathsValue.Text = (RadSliderPaths.Value / 1000).ToString("N3");
-    }
+    
 }
 
