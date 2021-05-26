@@ -847,7 +847,7 @@ function renderFrequencyGraph() {
                 id: 'edge_end-' + i,
                 source: process.data.endEvents[i].node,
                 target: 'end',
-                name: process.data.startEvents[i].frequency,
+                name: process.data.endEvents[i].frequency,
                 type: 20
             }
         });
