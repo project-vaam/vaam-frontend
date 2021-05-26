@@ -2,17 +2,11 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
 public partial class Conformance : System.Web.UI.Page
@@ -28,10 +22,10 @@ public partial class Conformance : System.Web.UI.Page
 
         if (!IsPostBack)
         {
+            AlphaRadioBtn.Checked = true;
             thresholdField.Visible = false;
             displayProcess.Visible = false;
             RadComboBoxProcessToCompare.Enabled = false;
-
 
             callProcesses();
            
@@ -446,14 +440,15 @@ public partial class Conformance : System.Web.UI.Page
     public void AlphaRadioBtn_Click(object sender, EventArgs e)
     {
         thresholdField.Visible = false;
+        processDetailsContainer.Visible = true;
+        modelContainer.Visible = true;
     }
     public void HeuristicRadioBtn_Click(object sender, EventArgs e)
     {
         thresholdField.Visible = true;
+        processDetailsContainer.Visible = true;
+        modelContainer.Visible = false;
     }
-    public void InductiveRadioBtn_Click(object sender, EventArgs e)
-    {
-        thresholdField.Visible = true;
-    }
+    
 }
 

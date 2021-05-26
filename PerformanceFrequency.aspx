@@ -107,7 +107,7 @@
             </div>
 
             <%-- Radio Type Diagram Buttons --%>
-            <div style="display: flex; align-items: center; justify-content: center; width: 100%;margin-top: 16px;" id="tipoGrafico"  runat="server">
+            <div id="tipoGrafico" style="display: flex; align-items: center; justify-content: center; width: 100%;margin-top: 16px;" runat="server">
                 <telerik:RadButton
                     CssClass="performance-btn"
                     Checked="true"
@@ -142,6 +142,35 @@
                 Filter="Contains"
                 Width="400px">
             </telerik:RadComboBox>
+
+            <div id="inductiveContainer" runat="server">
+                <div style="width: 100%; display: flex; justify-content: space-around; margin-top: 16px;">
+                    <h4>Ativities</h4>
+                    <h4>Paths</h4>
+                </div>
+                <div style="width: 100%; display: flex; justify-content: space-around; margin-top: 16px;">
+                    <%-- Activities --%>
+
+                    <div style="display:flex; flex-direction: column; align-items: center;">
+                        <telerik:RadSlider RenderMode="Lightweight" ID="RadSliderActivities" runat="server" MinimumValue="0" MaximumValue="1000" Value="500"
+                            Height="300px" Orientation="Vertical" OnValueChanged="RadSliderActivities_ValueChanged" AutoPostBack="true"
+                            AnimationDuration="200" ThumbsInteractionMode="Free" Skin="Metro">
+                        </telerik:RadSlider>
+                        <b><asp:Label ID="labelSliderActivities" runat="server" Text="0.500" /></b>
+                    </div>
+                    <%-- Paths --%>
+                    <div style="display:flex; flex-direction: column; align-items: center;">
+                        <telerik:RadSlider RenderMode="Lightweight" ID="RadSliderPaths" runat="server" MinimumValue="0" MaximumValue="1000" Value="500"
+                            Height="300px" Orientation="Vertical" OnValueChanged="RadSliderPaths_ValueChanged" AutoPostBack="true"
+                            AnimationDuration="200" ThumbsInteractionMode="Free" Skin="Metro">
+                        </telerik:RadSlider>
+                        <b><asp:Label ID="labelSliderPathsValue" runat="server" Text="0.500" /></b>
+                    </div>
+                </div>
+
+                <telerik:RadCheckBox runat="server" ID="RadCheckBoxShowDesviations" style="margin-top:16px;text-align: center;width: 100%;" Checked="true" Text="Incluir Desvios" AutoPostBack="false">
+                </telerik:RadCheckBox>
+            </div>
 
             <div id="showDiagram" style="display: flex; width: 100%; align-items: center; justify-content: center; margin-top: 16px;">
                  <%-- Button CREATE DropDown --%>
