@@ -1,4 +1,5 @@
 ﻿var cy = null
+var maxFrequency = 0;
 
 var currentProcess = {
     nodeTimes: [],
@@ -746,12 +747,11 @@ function renderFrequencyGraph() {
         }
 
 
-
     } else {
-        console.log("Generatinf nodes and relations FREQUENCY");
+        console.log("Generating nodes and relations FREQUENCY");
         //find max frequency value
         //nodes max frequency
-        var maxFrequency = 0;
+        
         for (let i = 0; i < process.data.nodes.length; i++) {
             if (process.data.statistics.nodes[i].frequency > maxFrequency) {
                 maxFrequency = process.data.statistics.nodes[i].frequency;
@@ -815,7 +815,30 @@ function renderFrequencyGraph() {
             },
         });
     }
-   
+
+    if (process.data.endEvents.length > 0) {
+        cy.add({
+            data: {
+                id: 'end',
+                type: 21
+            },
+        });
+    }
+
+    console.log('max freq')
+    console.log(process.data.maxFrequency)
+
+    if (process.data.fromStartToEnd != undefined) {
+        cy.add({
+            data: {
+                id: 'desviationStartToEnd',
+                source: 'start',
+                target: 'end',
+                name: process.data.fromStartToEnd,
+                type: 20
+            }
+        });
+    }
 
     for (let i = 0; i < process.data.startEvents.length; i++) {
         
@@ -831,14 +854,7 @@ function renderFrequencyGraph() {
         });
     }
 
-    if (process.data.endEvents.length > 0) {
-        cy.add({
-            data: {
-                id: 'end',
-                type: 21
-            },
-        });
-    }
+    
 
     for (let i = 0; i < process.data.endEvents.length; i++) {
        
