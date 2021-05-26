@@ -33,39 +33,7 @@ public partial class Performance : System.Web.UI.Page
             tipoGrafico.Visible = true;
             inductiveContainer.Visible = false;
             callProcesses();
-        }
-
-        ////var TheBrowserWidth = width.Value;
-        ////var TheBrowserHeight = height.Value;
-
-        //// General diagram settings
-
-        ////RadDiagram1.Width = 700;
-        ////RadDiagram1.Height = 800;
-
-        //RadDiagram1.ShapeDefaultsSettings.Width = 310;
-        //RadDiagram1.ShapeDefaultsSettings.Height = 30;
-
-        //// User Permition Settings
-
-        ////RadDiagram1.Selectable = false;
-        ////RadDiagram1.Pannable = false;
-        ////RadDiagram1.Editable = false;
-
-        //// Layout settings
-        //RadDiagram1.LayoutSettings.Enabled = true;
-        //RadDiagram1.LayoutSettings.Type = Telerik.Web.UI.Diagram.LayoutType.Layered;
-        //RadDiagram1.LayoutSettings.Subtype = Telerik.Web.UI.Diagram.LayoutSubtype.Down;
-        //RadDiagram1.LayoutSettings.VerticalSeparation = 30;
-        //RadDiagram1.LayoutSettings.HorizontalSeparation = 30;
-
-        ////Arrows
-        //RadDiagram1.ConnectionDefaultsSettings.EndCap = Telerik.Web.UI.Diagram.ConnectionEndCap.ArrowEnd;
-      
-        //RadDiagram1.ConnectionDefaultsSettings.Editable = true;
-        ////RadDiagram1.ConnectionDefaultsSettings.EndCapSettings.StrokeSettings.Width = 100;
-        ////RadDiagram1.ConnectionDefaultsSettings.EndCapSettings.FillSettings.Color = "#152BEC"
-        ////RadDiagram1.ConnectionDefaultsSettings.EndCapSettings.FillSettings.Opacity = 5;         
+        } 
     }
 
 
@@ -100,6 +68,9 @@ public partial class Performance : System.Web.UI.Page
                         string value = item["id"].ToString();
                         string text = item["id"].ToString() + " - " + item["name"].ToString();
                         RadComboBoxProcess.Items.Add(new RadComboBoxItem(text, value));
+
+                        RadComboBoxProcess.SelectedIndex = 0;
+
                     }
                 }
                 else
