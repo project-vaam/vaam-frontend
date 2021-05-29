@@ -151,7 +151,7 @@ public partial class TimeLine : Page
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime? EndDate { get; set; }
         [DataMember]
-        public int? Duration { get; set; }
+        public long? Duration { get; set; }
         [DataMember]
         public float? AverageEventDurationForActivityMillis { get; set; }
         [DataMember]
