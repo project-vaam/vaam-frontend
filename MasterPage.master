@@ -10,8 +10,13 @@
     <link href="assets/styles/pages/masterpage.css" rel="stylesheet" />
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
+    <style type="text/css">
+     .rmLast{
+         float: right;
+     }
+    </style>
 </head>
-
+    
 <body>
     <form id="form1" runat="server">
         <telerik:RadScriptManager runat="server"></telerik:RadScriptManager>
@@ -19,79 +24,32 @@
         <telerik:RadPageLayout runat="server" ID="MasterLayout" GridType="Fluid">
             <Rows>
                 <%--Header--%>
-                <telerik:LayoutRow CssClass="header">
-                    <Columns>
-                        <%--Logo--%>
-                        <telerik:LayoutColumn Span="0">
-                            <a href="#" class="logo">
-                                <img src="assets/images/VAAM_LOGO.png" alt="site logo"/>
-                            </a>
-                        </telerik:LayoutColumn>
-
-                        <%--Main Nav--%>
-                        <telerik:LayoutColumn Span="0">
-                            <telerik:RadMenu ID="RadMenu1" runat="server" RenderMode="Auto" Skin="Bootstrap">
-                                <Items>
-                                    <telerik:RadMenuItem Text="Home" NavigateUrl="Default.aspx" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Grid Page" NavigateUrl="Grid.aspx" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="ListView Page" NavigateUrl="ListView.aspx" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Timeline" NavigateUrl="Timeline.aspx" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Diagramas">
-                                        <GroupSettings Width="250px" Height="75px" />
-                                        <Items>
-                                            <telerik:RadMenuItem Text="Performance e Frequência" NavigateUrl="PerformanceFrequency.aspx" /> 
-                                            <telerik:RadMenuItem Text="Conformance" NavigateUrl="Conformance.aspx" />
-                                        </Items>    
-                                    </telerik:RadMenuItem>
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Cytoscape_POC" NavigateUrl="Cytoscape_POC.aspx" /> 
-                                </Items>
-                            </telerik:RadMenu>
-                        </telerik:LayoutColumn>
-
-                         <%--Buttons--%>
-                        <telerik:LayoutColumn style="margin-left: auto;" Span="0">
-                          <div class="pull-right">
-                            <telerik:RadLinkButton runat="server" CssClass="loginButton" ID="loginButton" Primary="true" Text="Login" NavigateUrl="Login.aspx"></telerik:RadLinkButton>
-                           <telerik:RadButton runat="server" CssClass="logoutButton"  ID="logoutButton" Primary="true" Text="Logout" RenderMode="Lightweight" onclick="Logout"></telerik:RadButton>   
-                          </div>
-                           
-                        </telerik:LayoutColumn>
-
-                    </Columns>
+                <telerik:LayoutRow>
+                     <Content> 
+                         <telerik:RadMenu RenderMode="Lightweight" ID="RadMenu1" CssClass="mainMenu" runat="server" ShowToggleHandle="true" Skin="Bootstrap" OnItemClick="RadMenu1_ItemClick">
+                             <Items>
+                                 <telerik:RadMenuItem Text="Dashboard" NavigateUrl="Default.aspx" />
+                                 <telerik:RadMenuItem IsSeparator="true" />
+                                 <telerik:RadMenuItem Text="Timeline" NavigateUrl="Timeline.aspx" />
+                                 <telerik:RadMenuItem IsSeparator="true" />
+                                 <telerik:RadMenuItem Text="Diagramas">
+                                     <GroupSettings Width="250px" Height="75px" />
+                                     <Items>
+                                         <telerik:RadMenuItem Text="Performance e Frequência" NavigateUrl="PerformanceFrequency.aspx" />
+                                         <telerik:RadMenuItem Text="Conformance" NavigateUrl="Conformance.aspx" />
+                                     </Items>
+                                 </telerik:RadMenuItem>
+                                 <telerik:RadMenuItem IsSeparator="true" />
+                                 <telerik:RadMenuItem id="loginButton" runat="server" Text="Login" NavigateUrl="Login.aspx" style="float: right;"/>
+                                 <telerik:RadMenuItem id="logoutButton" runat="server" Text="Logout" />
+                             </Items>
+                         </telerik:RadMenu>
+                     </Content>
                 </telerik:LayoutRow>
 
                 <%--Main--%>
                 <telerik:LayoutRow>
                     <Columns>
-                        <%--Sidebar
-                        <telerik:LayoutColumn Span="2" HiddenMd="true" HiddenSm="true" HiddenXs="true">
-                            <telerik:RadMenu ID="RadMenu2" CssClass="sidebar" Flow="Vertical" runat="server" >
-                                <Items>
-                                    <telerik:RadMenuItem Text="Menu item 1" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Menu item 2" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Menu item 3" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Menu item 4" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Menu item 5" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Menu item 6" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Menu item 7" />
-                                    <telerik:RadMenuItem IsSeparator="true" />
-                                    <telerik:RadMenuItem Text="Menu item 8" />
-                                </Items>
-                            </telerik:RadMenu>
-                        </telerik:LayoutColumn>--%> 
-
-                        <%--Content--%>
                         <telerik:CompositeLayoutColumn Span="12" SpanMd="12" SpanSm="12" SpanXs="12">
                             <Content>
                                 <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
@@ -103,8 +61,6 @@
                     </Columns>
                 </telerik:LayoutRow>
 
-               
-                
 
                 <%--Footer--%>
                 <telerik:LayoutRow>
@@ -119,95 +75,6 @@
         </telerik:RadPageLayout>
 
        </div>
-
-        
     </form>
-    
-     
-  <%--  <div id="cy"></div>
-    <script>
-        var cy = cytoscape({
-
-            wheelSensitivity: 0.5,
-            minZoom: 0.1,
-            maxZoom: 1,
-            container: document.getElementById('cy'), // container to render in
-
-            elements: [ // list of graph elements to start with
-                { // node a
-                    data: { id: 'a', name: 'teste' }
-                },
-                { // node b
-                    data: { id: 'b', name: 'teste' }
-                },
-                { // node c
-                    data: { id: 'c', name: 'teste' }
-                },
-                { // edge ab
-                    data: { id: 'ab', source: 'a', target: 'b', name: 'teste' },
-                },
-                {
-                    data: { id: 'bc', source: 'b', target: 'c', name: 'teste' },
-
-                },
-                {
-                    data: { id: 'ca', source: 'c', target: 'a', name: 'teste' }
-                },
-                {
-                    data: { id: 'ca2', source: 'c', target: 'a', name: 'teste' }
-                },
-                {
-                    data: { id: 'aa', source: 'a', target: 'a', name: 'teste' }
-                },
-
-            ],
-
-            style: [ // the stylesheet for the graph
-                {
-                    selector: 'node',
-                    style: {
-                        "shape": 'rectangle',
-                        "background-color": "#FFB7B7",
-                        "label": "data(name)",
-                        'width': '350',
-                        "height": "40",
-                        "border-width": 2,
-                        "border-color": "#484848",
-                        "font-size": "16px",
-                        "text-valign": "center",
-                        "text-halign": "center",
-                        "color": "#222222"
-                    }
-                },
-
-                {
-
-                    selector: 'edge',
-                    style: {
-                        'width': 7,
-                        'curve-style': 'bezier',
-                        "content": "data(name)",
-                        "line-color": "#FF8A8A",
-                        'target-arrow-color': '#FF8A8A',
-                        "font-size": "32px",
-                        "color": "#222222",
-                        "loop-direction": "0deg",
-                        'target-arrow-shape': 'triangle',
-                        "loop-sweep": "45deg",
-                        "text-margin-y": "-15px",
-                        "source-text-offset": "50px"
-                    }
-                }
-            ],
-
-
-            layout: {
-                name: 'breadthfirst',
-                rows: 1
-            }
-
-        });
-
-    </script>--%>
 </body>
 </html>

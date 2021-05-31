@@ -1565,8 +1565,10 @@ function renderComparation() {
 
 
 function convertToSeconds(duration) {
-    console.log(duration)
-    return duration.days * 86400 + duration.hours * 3600 + duration.minutes * 60 + duration.seconds;
+    return (duration.days != undefined ? duration.days * 86400 : 0) +
+        (duration.hours != undefined ? duration.hours * 3600 : 0) +
+        (duration.minutes != undefined ? duration.minutes * 60 : 0) +
+        (duration.seconds != undefined ? duration.seconds : 0)
 }
 
 
@@ -1596,11 +1598,14 @@ function timeConvertMinutes(minAux) {
 
 
 function durationToString(duration) {
-    if (duration.days == 0 && duration.hours == 0 && duration.minutes == 0 && duration.seconds == 0) {
-        return "0S";
+    if (duration.days == undefined && duration.hours == undefined && duration.minutes == undefined && duration.seconds == undefined) {
+        return "0 Secs";
     }
-    return ((duration.days !== 0) ? duration.days + "D " : "") +
-        ((duration.hours !== 0) ? duration.hours + "H " : "") +
-        ((duration.minutes !== 0) ? duration.minutes + "M " : "") +
-        ((duration.seconds !== 0) ? duration.seconds + "S" : "");
+
+
+
+    return ((duration.days !== undefined) ? duration.days + "D " : "") +
+        ((duration.hours !== undefined) ? duration.hours + "H " : "") +
+        ((duration.minutes !== undefined) ? duration.minutes + "M " : "") +
+        ((duration.seconds !== undefined) ? duration.seconds + "S" : "");
 }

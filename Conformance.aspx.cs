@@ -269,7 +269,7 @@ public partial class Conformance : System.Web.UI.Page
 
         endDate = null;
         startDate = null;
-        moulds = new string[mouldsCollectionBase.Count];
+        moulds = new string[mouldsCollectionCase.Count];
         activities = new string[activitiesCollectionCase.Count];
         resources = new string[resourcesCollectionCase.Count];
         string nodes = String.Empty;
@@ -290,7 +290,7 @@ public partial class Conformance : System.Web.UI.Page
         }
 
 
-       
+
         if (activitiesCollectionCase.Count != 0)
         {
             foreach (var item in activitiesCollectionCase)

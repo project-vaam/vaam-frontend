@@ -1,4 +1,5 @@
 ﻿using System;
+using Telerik.Web.UI;
 
 public partial class MasterPage : System.Web.UI.MasterPage
 {
@@ -7,9 +8,8 @@ public partial class MasterPage : System.Web.UI.MasterPage
     {
 
         if (Session["sessionToken"] != null)
-        {         
+        {
             loginButton.Visible = false;
-            // loginButton.Visible = true;
         }
         else
         {
@@ -17,12 +17,21 @@ public partial class MasterPage : System.Web.UI.MasterPage
         }
     }
 
-    protected void Logout(object sender, EventArgs e)
+    protected void RadMenu1_ItemClick(object sender, RadMenuEventArgs e)
+    {
+        Telerik.Web.UI.RadMenuItem ItemClicked = e.Item;
+        if(ItemClicked.Text == "Logout")
+        {
+            Logout();
+        }
+    }
+
+    protected void Logout()
     {   
         
         System.Diagnostics.Debug.WriteLine(Session["sessionToken"] + "logged off");
         Session.Clear();
-        Page.Response.Redirect(Page.Request.Url.ToString(), true);
+        Page.Response.Redirect("/Default.aspx", true);
     }
 
 }
