@@ -11,8 +11,15 @@
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
     <style type="text/css">
-     .rmLast{
+     .rmLast, .rmItem:nth-last-child(2){
          float: right;
+     }
+     #wrapper .footer{
+         padding-bottom: 0px !important;
+     }
+     #wrapper .header{
+         margin-bottom: 0px !important;
+         padding: 0 !important;
      }
     </style>
 </head>
@@ -23,11 +30,22 @@
         <div id="wrapper">
         <telerik:RadPageLayout runat="server" ID="MasterLayout" GridType="Fluid">
             <Rows>
+                <telerik:LayoutRow CssClass="header">
+                    <Columns>
+                        <%--Logo--%>
+                        <telerik:LayoutColumn Span="0">
+                            <a href="#" class="logo">
+                                <img src="assets/images/VAAM_LOGO.png" alt="site logo"/>
+                            </a>
+                        </telerik:LayoutColumn>
+                            </Columns>
+                    </telerik:LayoutRow>
                 <%--Header--%>
                 <telerik:LayoutRow>
                      <Content> 
                          <telerik:RadMenu RenderMode="Lightweight" ID="RadMenu1" CssClass="mainMenu" runat="server" ShowToggleHandle="true" Skin="Bootstrap" OnItemClick="RadMenu1_ItemClick">
                              <Items>
+                                 <%--<telerik:RadMenuItem Text='<img src="assets/images/VAAM_LOGO.png" alt="site logo"/>' NavigateUrl="Default.aspx" />--%>
                                  <telerik:RadMenuItem Text="Dashboard" NavigateUrl="Default.aspx" />
                                  <telerik:RadMenuItem IsSeparator="true" />
                                  <telerik:RadMenuItem Text="Timeline" NavigateUrl="Timeline.aspx" />
@@ -40,7 +58,7 @@
                                      </Items>
                                  </telerik:RadMenuItem>
                                  <telerik:RadMenuItem IsSeparator="true" />
-                                 <telerik:RadMenuItem id="loginButton" runat="server" Text="Login" NavigateUrl="Login.aspx" style="float: right;"/>
+                                 <telerik:RadMenuItem id="loginButton" runat="server" Text="Login" NavigateUrl="Login.aspx"/>
                                  <telerik:RadMenuItem id="logoutButton" runat="server" Text="Logout" />
                              </Items>
                          </telerik:RadMenu>
@@ -48,7 +66,7 @@
                 </telerik:LayoutRow>
 
                 <%--Main--%>
-                <telerik:LayoutRow>
+                <telerik:LayoutRow style="margin-top: 24px;">
                     <Columns>
                         <telerik:CompositeLayoutColumn Span="12" SpanMd="12" SpanSm="12" SpanXs="12">
                             <Content>
