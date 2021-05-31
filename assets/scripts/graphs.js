@@ -1,5 +1,4 @@
 ﻿var cy = null
-var maxFrequency = 0;
 
 var currentProcess = {
     nodeTimes: [],
@@ -429,6 +428,7 @@ function renderPerformanceGraph() {
 function renderFrequencyGraph() {
 
     console.log("DOING FREQUENCY");
+    let maxFrequency = 0
     cy = cytoscape(
         {
             wheelSensitivity: 0.5,
@@ -675,7 +675,6 @@ function renderFrequencyGraph() {
 
         //find max frequency value
         //nodes max frequency
-        var maxFrequency = 0
         console.log(maxFrequency)
         for (let i = 0; i < process.data.nodes.length; i++) {
             if (process.data.statistics.nodes[i].frequency > maxFrequency) {
@@ -751,7 +750,8 @@ function renderFrequencyGraph() {
         console.log("Generating nodes and relations FREQUENCY");
         //find max frequency value
         //nodes max frequency
-        
+        console.log(process.data.statistics.nodes[0].frequency)
+        console.log(maxFrequency)
         for (let i = 0; i < process.data.nodes.length; i++) {
             if (process.data.statistics.nodes[i].frequency > maxFrequency) {
                 maxFrequency = process.data.statistics.nodes[i].frequency;
@@ -767,6 +767,8 @@ function renderFrequencyGraph() {
             }
         }
 
+        process.data.maxFrequency = maxFrequency;
+
         //Nodes\\
         for (let i = 0; i < process.data.nodes.length; i++) {
             let typeValue = Math.round(process.data.statistics.nodes[i].frequency * 3 / maxFrequency);
@@ -779,7 +781,7 @@ function renderFrequencyGraph() {
             }
             );
         }
-        process.data.maxFrequency = maxFrequency;
+        
 
         //Edges\\
         for (let i = 0; i < process.data.relations.length; i++) {
@@ -827,6 +829,7 @@ function renderFrequencyGraph() {
 
     console.log('max freq')
     console.log(process.data.maxFrequency)
+    console.log(maxFrequency)
 
     if (process.data.fromStartToEnd != undefined) {
         cy.add({
@@ -871,7 +874,6 @@ function renderFrequencyGraph() {
 
     let customBreadthfirst = {
         name: 'breadthfirst',
-
         fit: true, // whether to fit the viewport to the graph
         directed: true, // whether the tree is directed downwards (or edges can point in any direction if false)
         padding: 10, // padding on fit
