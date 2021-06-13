@@ -2,9 +2,12 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -16,16 +19,58 @@ namespace TelerikWebAppResponsive
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            
-            if (Session["sessionToken"] != null)
+            if (Session["sessionToken"] == null)
             {
-                Label1.Text = "Welcome back " + Session["username"];
+                Page.Response.Redirect("Login.aspx", true);
             }
-            else
+
+            if (!IsPostBack)
             {
-                Label1.Text = "De momento nao se encontra logado";
+                mouldsQuantity.Visible = false;
+                mouldsSpinner.Visible = true;
+
+                desviosQty.Visible = false;
+                desviosSpinner.Visible = true;
+
+                graphSpinner.Visible = false;
+                fetchMouldCount();
+                //fetchDesviation();
             }
         }
+
+        protected async void fetchMouldCount()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                string token = (string)Session["sessionToken"];
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                Debug.WriteLine(Constants.URL_BACKEND_CONNECTION + "moulds");
+                using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds").ConfigureAwait(false))
+                {
+
+                    var status = response.IsSuccessStatusCode;
+
+                    if (status == true)
+                    {
+                        string apiResponse = await response.Content.ReadAsStringAsync();
+
+                        JArray mouldsArray = JsonConvert.DeserializeObject<JArray>(apiResponse);
+                        mouldsQuantity.InnerText = mouldsArray.Count.ToString();
+                        mouldsQuantity.Visible = true;
+                        mouldsSpinner.Visible = false;
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Something went bad.");
+                    }
+                }
+            }
+        }
+
+        //protected async void fetchDesviation() { 
+
+        //}
+
 
         protected void Logout(object sender, EventArgs e)
         {

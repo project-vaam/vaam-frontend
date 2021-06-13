@@ -34,7 +34,7 @@
                     <Columns>
                         <%--Logo--%>
                         <telerik:LayoutColumn Span="0">
-                            <a href="#" class="logo">
+                            <a href="/Default.aspx" class="logo">
                                 <img src="assets/images/VAAM_LOGO.png" alt="site logo"/>
                             </a>
                         </telerik:LayoutColumn>

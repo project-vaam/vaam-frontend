@@ -1,28 +1,19 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="TelerikWebAppResponsive.Default" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Async="true" Inherits="TelerikWebAppResponsive.Default" %>
 <%@ Register TagPrefix="telerik" Namespace="Telerik.Web.UI" Assembly="Telerik.Web.UI" %>
 
 <asp:Content ID="Content0" ContentPlaceHolderID="head" Runat="Server">
     <link href="assets/styles/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-
-      <asp:Label ID="Label1" Text="" runat="server" />
-
     <telerik:RadPageLayout runat="server" ID="RadPageLayout1">
         <Rows>
             <telerik:LayoutRow>
                 <Columns>
-                    <telerik:LayoutColumn CssClass="jumbotron">
-                        <h1>VAAM Frontend DashBoard</h1>
-                    </telerik:LayoutColumn>
-                </Columns>
-            </telerik:LayoutRow>
-            <telerik:LayoutRow>
-                <Columns>
-                    <telerik:LayoutColumn HiddenMd="true" HiddenSm="true" HiddenXs="true">
-                        <h3 id="teste">H3 text, font size 24 px </h3>
-                        Ut aliquam elit eget quam tincidunt, et aliquam libero congue. Phasellus aliquet sed quam vitae dictum. Aliquam erat volutpat. Morbi accumsan a mi quis pretium. 
+                    <telerik:LayoutColumn>
+                        <h3 class="title-align">Dashboard</h3>
                     </telerik:LayoutColumn>
                 </Columns>
             </telerik:LayoutRow>
@@ -36,28 +27,61 @@
         <Rows>
             <telerik:LayoutRow>
                 <Columns>
-                    <telerik:LayoutColumn Span="4" SpanMd="12" SpanSm="12" HiddenXs="true">
-                        <h4>H4 text font size 18 px.</h4>
-                        <p><strong>Main content text font size 16px</strong>, aliquam turpis sed nisl mattis sagittis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut vitae sapien metus. In hac habitasse platea dictumst. Aenean velit mauris, lobortis eu lacinia sed</p>
-                        <p>Nullam facilisis neque ut aliquet imperdiet. Mauris ut odio augue. Curabitur in mi ac odio vestibulum lobortis. </p>
-                        <telerik:RadButton runat="server" ID="RadButton1" Text="Button" ButtonType="SkinnedButton"></telerik:RadButton>
+                    <telerik:LayoutColumn Span="4" SpanMd="12" SpanSm="12">
+                        <a class="link-card" href="/TimeLine.aspx">
+                            <div class="card-wrapper">
+                                <div class="card">
+                                    <h4>Moldes</h4>
+                                    <p>Quantidade</p>
+                                    <div class="quantity">
+                                        <h1 id="mouldsQuantity" runat="server">17</h1>
+                                        <i id="mouldsSpinner" runat="server" class="fa fa-spinner fa-spin" style="font-size:30px"></i>
+                                    </div>
+                                    <small class="see-more">Clique para mais detalhes</small>
+                                </div>
+                            </div>
+                        </a>
                     </telerik:LayoutColumn>
 
-                    <telerik:LayoutColumn Span="4" SpanMd="12" SpanSm="12" HiddenXs="true">
-                        <h4>H4 text font size 18 px.</h4>
-                        <p><strong>Main content text font size 16px</strong>, aliquam turpis sed nisl mattis sagittis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut vitae sapien metus. In hac habitasse platea dictumst. Aenean velit mauris, lobortis eu lacinia sed</p>
-
-                        <p>Nullam facilisis neque ut aliquet imperdiet. Mauris ut odio augue. Curabitur in mi ac odio vestibulum lobortis. </p>
-                        <telerik:RadButton runat="server" ID="RadButton2" Text="Button" ButtonType="SkinnedButton"></telerik:RadButton>
+                    <telerik:LayoutColumn Span="4" SpanMd="12" SpanSm="12">
+                        <a class="link-card" href="/PerformanceFrequency.aspx">
+                            <div class="card-wrapper">
+                                <div class="card">
+                                    <h4>Desvios Detetados</h4>
+                                    <p>Inductive Miner</p>
+                                    <div class="quantity">
+                                        <h1 id="desviosQty" runat="server">17</h1>
+                                        <i id="desviosSpinner" runat="server" class="fa fa-spinner fa-spin" style="font-size:30px"></i>
+                                    </div>
+                                    <small class="see-more">Clique para mais detalhes</small>
+                                </div>
+                            </div>
+                        </a>
                     </telerik:LayoutColumn>
 
-                    <telerik:LayoutColumn Span="4" SpanMd="12" SpanSm="12" HiddenXs="true">
+                    <telerik:LayoutColumn Span="4" SpanMd="12" SpanSm="12" >
+                        <%--<a class="link-card" href="/PerformanceFrequency.aspx">--%>
+                            <div class="card-wrapper">
+                                <div class="card">
+                                    <h4>Média de Duração por processos</h4>
+                                    <%--<p>Inductive Miner</p>--%>
+                                    <div class="quantity">
+                                        <h1>TODO</h1>
+                                        <i id="graphSpinner" runat="server" class="fa fa-spinner fa-spin" style="font-size:30px"></i>
+                                    </div>
+                                    <%--<small class="see-more">Clique para mais detalhes</small>--%>
+                                </div>
+                            </div>
+                        <%--</a>--%>
+                    </telerik:LayoutColumn>
+
+                    <%--<telerik:LayoutColumn Span="4" SpanMd="12" SpanSm="12" >
                         <h4>H4 text font size 18 px.</h4>
                         <p><strong>Main content text font size 16px</strong>, aliquam turpis sed nisl mattis sagittis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut vitae sapien metus. In hac habitasse platea dictumst. Aenean velit mauris, lobortis eu lacinia sed</p>
 
                         <p>Nullam facilisis neque ut aliquet imperdiet. Mauris ut odio augue. Curabitur in mi ac odio vestibulum lobortis. </p>
                         <telerik:RadButton runat="server" ID="RadButton3" Text="Button" ButtonType="SkinnedButton"></telerik:RadButton>
-                    </telerik:LayoutColumn>
+                    </telerik:LayoutColumn>--%>
                 </Columns>
             </telerik:LayoutRow>
         </Rows>

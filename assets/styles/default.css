@@ -40,3 +40,57 @@
 div.demo-container {
     padding-top: 0;
 }
+
+.title-align {
+    text-align: center;
+    font-weight: inherit;
+}
+
+.card-wrapper {
+    height: 300px;
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: relative;
+}
+
+.card{
+    margin: 16px;
+    
+}
+
+.card h4{
+    text-align: center;
+}
+.card p {
+    margin: 0;
+    text-align: center;
+}
+
+.card .quantity{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.card .quantity h1 {
+    margin: 0;
+}
+
+.card .see-more {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 0;
+    top: 90%;
+}
+
+.link-card {
+    color: inherit;
+    text-decoration: inherit;
+}

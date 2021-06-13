@@ -676,7 +676,7 @@ function renderFrequencyGraph() {
         //find max frequency value
         //nodes max frequency
 
-        var maxFrequency = 0
+        //var maxFrequency = 0
         console.log("Max Frequency")
 
 
@@ -758,7 +758,7 @@ function renderFrequencyGraph() {
         console.log(process.data.statistics.nodes[0].frequency)
         console.log(maxFrequency)
 
-        var maxFrequency = 0
+        //var maxFrequency = 0
         
         for (let i = 0; i < process.data.nodes.length; i++) {
             if (process.data.statistics.nodes[i].frequency > maxFrequency) {
