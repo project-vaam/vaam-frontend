@@ -57,6 +57,11 @@ div.demo-container {
     position: relative;
 }
 
+.card-wrapper.graph {
+    margin-top: 32px;
+    height: 500px;
+}
+
 .card{
     margin: 16px;
     
@@ -93,4 +98,6 @@ div.demo-container {
 .link-card {
     color: inherit;
     text-decoration: inherit;
+
+    margin-top: 32px;
 }

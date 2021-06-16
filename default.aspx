@@ -27,6 +27,7 @@
         <Rows>
             <telerik:LayoutRow>
                 <Columns>
+                    <telerik:LayoutColumn Span="2" SpanMd="12" SpanSm="12"></telerik:LayoutColumn>
                     <telerik:LayoutColumn Span="4" SpanMd="12" SpanSm="12">
                         <a class="link-card" href="/TimeLine.aspx">
                             <div class="card-wrapper">
@@ -58,22 +59,9 @@
                             </div>
                         </a>
                     </telerik:LayoutColumn>
+                    <telerik:LayoutColumn Span="2" SpanMd="12" SpanSm="12"></telerik:LayoutColumn>
 
-                    <telerik:LayoutColumn Span="4" SpanMd="12" SpanSm="12" >
-                        <%--<a class="link-card" href="/PerformanceFrequency.aspx">--%>
-                            <div class="card-wrapper">
-                                <div class="card">
-                                    <h4>Média de Duração por processos</h4>
-                                    <%--<p>Inductive Miner</p>--%>
-                                    <div class="quantity">
-                                        <h1>TODO</h1>
-                                        <i id="graphSpinner" runat="server" class="fa fa-spinner fa-spin" style="font-size:30px"></i>
-                                    </div>
-                                    <%--<small class="see-more">Clique para mais detalhes</small>--%>
-                                </div>
-                            </div>
-                        <%--</a>--%>
-                    </telerik:LayoutColumn>
+                    
 
                     <%--<telerik:LayoutColumn Span="4" SpanMd="12" SpanSm="12" >
                         <h4>H4 text font size 18 px.</h4>
@@ -82,6 +70,36 @@
                         <p>Nullam facilisis neque ut aliquet imperdiet. Mauris ut odio augue. Curabitur in mi ac odio vestibulum lobortis. </p>
                         <telerik:RadButton runat="server" ID="RadButton3" Text="Button" ButtonType="SkinnedButton"></telerik:RadButton>
                     </telerik:LayoutColumn>--%>
+                </Columns>
+            </telerik:LayoutRow>
+            <telerik:LayoutRow>
+                <Columns>
+                <telerik:LayoutColumn Span="12" SpanMd="12" SpanSm="12" >
+                        <%--<a class="link-card" href="/PerformanceFrequency.aspx">--%>
+                            <div class="card-wrapper graph">
+                                <div class="card">
+                                    <h4>Média de Duração por processos</h4>
+                                    <%--<p>Inductive Miner</p>--%>
+                                    <telerik:RadHtmlChart runat="server" ID="RadHtmlChart1" Width="800px" Height="400px">
+                                        <PlotArea>
+                                            <Series>
+                                                <%--<telerik:ColumnSeries></telerik:ColumnSeries>--%>
+                                            </Series>  
+                                        </PlotArea>
+                                        <Legend>
+                                            <Appearance Position="Bottom">
+                                            </Appearance>
+                                        </Legend>
+                                        <ChartTitle Text="Tempo de Processos">
+                                            <Appearance Position="Top">
+                                            </Appearance>
+                                        </ChartTitle>
+                                    </telerik:RadHtmlChart> 
+                                    <%--<i id="graphSpinner" runat="server" class="fa fa-spinner fa-spin" style="font-size:30px"></i>--%>
+                                </div>
+                            </div>
+                        <%--</a>--%>
+                    </telerik:LayoutColumn>
                 </Columns>
             </telerik:LayoutRow>
         </Rows>
