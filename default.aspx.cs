@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace TelerikWebAppResponsive
 {
     public partial class Default : System.Web.UI.Page
     {
+        JArray processesData;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["sessionToken"] == null)
@@ -27,25 +29,15 @@ namespace TelerikWebAppResponsive
             if (!IsPostBack)
             {
                 mouldsQuantity.Visible = false;
+                RadGridDesvios.Visible = false;
+                RadHtmlChart1.Visible = false;
+
                 mouldsSpinner.Visible = true;
-
-                desviosQty.Visible = false;
                 desviosSpinner.Visible = true;
+                graphSpinner.Visible = true;
 
-                //graphSpinner.Visible = false;
-                fetchMouldCount();
-                fetchDesviation();
+                fetchProcessData();
 
-                //Graph RAW
-                RadHtmlChart1.PlotArea.XAxis.Items.Add("DummyProcess1");
-                RadHtmlChart1.PlotArea.XAxis.Items.Add("DummyProcess2");
-                RadHtmlChart1.PlotArea.XAxis.Items.Add("DummyProcess3");
-
-                ColumnSeries firstColumnSeries = new ColumnSeries();
-                firstColumnSeries.SeriesItems.Add(40);
-                firstColumnSeries.SeriesItems.Add(20, System.Drawing.Color.Green);
-                firstColumnSeries.SeriesItems.Add(320);
-                RadHtmlChart1.PlotArea.Series.Add(firstColumnSeries);
             }
         }
 
@@ -78,28 +70,30 @@ namespace TelerikWebAppResponsive
             }
         }
 
-        protected async void fetchDesviation()
+        protected async void fetchProcessData()
         {
             using (var httpClient = new HttpClient())
             {
                 string token = (string)Session["sessionToken"];
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                Debug.WriteLine(Constants.URL_BACKEND_CONNECTION + "/workflow-network/inductive-miner/processes/2?paths=0.5&activities=0.5&showDeviations=true");
+                Debug.WriteLine(Constants.URL_BACKEND_CONNECTION + "dashboard");
 
-                using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "/workflow-network/inductive-miner/processes/2?paths=0.5&activities=0.5&showDeviations=true").ConfigureAwait(false))
+                using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "dashboard").ConfigureAwait(false))
                 {
-
                     var status = response.IsSuccessStatusCode;
 
                     if (status == true)
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
+                        processesData = JsonConvert.DeserializeObject<JArray>(apiResponse);
 
-                        JObject mined = JsonConvert.DeserializeObject<JObject>(apiResponse);
-                        desviosQty.InnerText = mined["numDeviations"].ToString();
-                        Debug.WriteLine(mined["numDeviations"].ToString());
-                        desviosQty.Visible = true;
-                        desviosSpinner.Visible = false;
+                        SetMoulds();
+                        FillTable();
+                        FillChart();
+
+                        int index = processesData.Last()["date"].ToString().LastIndexOf(".");
+                        string date = processesData.Last()["date"].ToString().Substring(0, index);
+                        dadosAtualizados.InnerText = "Dados Atualizados a: " + date;
                     }
                     else
                     {
@@ -109,6 +103,66 @@ namespace TelerikWebAppResponsive
             }
         }
 
+        private void SetMoulds()
+        {
+
+            var mouldsData = processesData.Last();
+            if (mouldsData["description"].ToString() != "Número Moulds") return;
+
+            mouldsQuantity.InnerText = mouldsData["value"].ToString();
+            mouldsQuantity.Visible = true;
+            mouldsSpinner.Visible = false;
+        }
+
+        private void FillTable()
+        {
+
+            DataTable table = new DataTable();
+
+            DataColumn idColumn = table.Columns.Add("Processo");
+            table.Columns.Add("Nº Desvios");
+
+            table.PrimaryKey = new DataColumn[] { idColumn };
+
+            foreach (var process in processesData)
+            {
+
+
+                if (process["process"] != null && process["description"].ToString() == "Desvios")
+                {
+                    table.Rows.Add(new object[] { process["process"]["name"], process["value"] });
+                }
+
+            }
+            table.AcceptChanges();
+
+            RadGridDesvios.DataSource = table;
+            RadGridDesvios.Visible = true;
+            desviosSpinner.Visible = false;
+        }
+        private void FillChart()
+        {
+            ColumnSeries firstColumnSeries = new ColumnSeries();
+
+            foreach (var process in processesData)
+            {
+                if (process["process"] != null && process["description"].ToString() == "Duração média para a criação de um molde em milissegundos")
+                {
+                    Debug.WriteLine(process["process"]["name"]);
+                    
+
+                    decimal horas = Convert.ToDecimal(process["value"].ToString()) / 3600000;
+
+                    Debug.WriteLine(horas);
+                    RadHtmlChart1.PlotArea.XAxis.Items.Add(process["process"]["name"].ToString());
+                    firstColumnSeries.SeriesItems.Add(decimal.Round(horas, 2, MidpointRounding.AwayFromZero));
+                }
+            }
+            RadHtmlChart1.PlotArea.Series.Add(firstColumnSeries);
+
+            graphSpinner.Visible = false;
+            RadHtmlChart1.Visible = true;
+        }
 
         protected void Logout(object sender, EventArgs e)
         {
