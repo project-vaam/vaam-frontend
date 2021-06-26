@@ -79,21 +79,23 @@
                                 <div class="card">
                                     <h4>Média da Duração de Criação de Moldes por Processos</h4>
                                     <%--<p>Inductive Miner</p>--%>
-                                    <telerik:RadHtmlChart runat="server" ID="RadHtmlChart1" Height="400px">
-                                        <PlotArea>
-                                            <Series>
-                                                <%--<telerik:ColumnSeries></telerik:ColumnSeries>--%>
-                                            </Series>  
-                                        </PlotArea>
-                                        <Legend>
-                                            <Appearance Position="Bottom">
-                                            </Appearance>
-                                        </Legend>
-                                        <ChartTitle Text="Duração média para a criação de um molde em Horas">
-                                            <Appearance Position="Top">
-                                            </Appearance>
-                                        </ChartTitle>
-                                    </telerik:RadHtmlChart> 
+                                    <div class="quantity">
+                                        <telerik:RadHtmlChart runat="server" ID="RadHtmlChart1" Height="400px">
+                                            <PlotArea>
+                                                <Series>
+                                                    <%--<telerik:ColumnSeries></telerik:ColumnSeries>--%>
+                                                </Series>  
+                                            </PlotArea>
+                                            <Legend>
+                                                <Appearance Position="Bottom">
+                                                </Appearance>
+                                            </Legend>
+                                            <ChartTitle Text="Duração média para a criação de um molde em Horas">
+                                                <Appearance Position="Top">
+                                                </Appearance>
+                                            </ChartTitle>
+                                        </telerik:RadHtmlChart>
+                                    </div>
                                     <div class="quantity" id="graphSpinner" runat="server">
                                         <i class="fa fa-spinner fa-spin" style="font-size:30px"></i>
                                     </div>
