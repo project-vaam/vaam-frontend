@@ -38,6 +38,9 @@
                                 <img src="assets/images/VAAM_LOGO.png" alt="site logo"/>
                             </a>
                         </telerik:LayoutColumn>
+                        <telerik:LayoutColumn Span="0" style="float:right; height: 77.25px; display:flex; align-items:center;">
+                            <p id="userNameNav" runat="server" style="color:white;"></p>
+                        </telerik:LayoutColumn>
                             </Columns>
                     </telerik:LayoutRow>
                 <%--Header--%>

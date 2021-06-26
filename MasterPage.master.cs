@@ -10,10 +10,12 @@ public partial class MasterPage : System.Web.UI.MasterPage
         if (Session["sessionToken"] != null)
         {
             loginButton.Visible = false;
+            userNameNav.InnerText = "Bem vindo, " + Session["username"];
         }
         else
         {
             logoutButton.Visible = false;
+            userNameNav.InnerText = String.Empty;
         }
     }
 

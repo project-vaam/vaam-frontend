@@ -41,35 +41,6 @@ namespace TelerikWebAppResponsive
             }
         }
 
-        protected async void fetchMouldCount()
-        {
-            using (var httpClient = new HttpClient())
-            {
-                string token = (string)Session["sessionToken"];
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                Debug.WriteLine(Constants.URL_BACKEND_CONNECTION + "moulds");
-                using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + "moulds").ConfigureAwait(false))
-                {
-
-                    var status = response.IsSuccessStatusCode;
-
-                    if (status == true)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-
-                        JArray mouldsArray = JsonConvert.DeserializeObject<JArray>(apiResponse);
-                        mouldsQuantity.InnerText = mouldsArray.Count.ToString();
-                        mouldsQuantity.Visible = true;
-                        mouldsSpinner.Visible = false;
-                    }
-                    else
-                    {
-                        Debug.WriteLine("Something went bad.");
-                    }
-                }
-            }
-        }
-
         protected async void fetchProcessData()
         {
             using (var httpClient = new HttpClient())

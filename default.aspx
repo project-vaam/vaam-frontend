@@ -63,7 +63,7 @@
                         <div class="card-wrapper next-row">
                             <div class="card">
                                 <h4>Desvios Detetados nos primeiros 10 Processos</h4>
-                                <p style="margin-bottom: 12px;">Inductive Miner</p>
+                                <p style="margin-bottom: 12px;">Inductive Miner - Com 50% de Caminhos e Atividades</p>
                                 <div class="quantity">
                                     <telerik:RadGrid RenderMode="Lightweight" runat="server" ID="RadGridDesvios"></telerik:RadGrid>
                                     <i id="desviosSpinner" runat="server" class="fa fa-spinner fa-spin" style="font-size:30px"></i>
