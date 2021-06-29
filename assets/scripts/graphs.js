@@ -25,15 +25,22 @@ function generateGraph(process) {
         renderFrequencyGraph();
     }
     else {
+        console.log("isPerformance" + process.isPerformance)
         if (process.isPerformance === "True") {
-
+            
             //nodes timers
             let nodeTimes = [];
             for (let i = 0; i < process.data.statistics.nodes.length; i++) {
-                let meanDuration = process.data.statistics.nodes[i].meanDuration.days + '.' + process.data.statistics.nodes[i].meanDuration.hours + ':' +
-                    process.data.statistics.nodes[i].meanDuration.minutes + ':' + process.data.statistics.nodes[i].meanDuration.seconds + '.' + process.data.statistics.nodes[i].meanDuration.millis;
+                let meanDuration = (process.data.statistics.nodes[i].meanDuration.days ? process.data.statistics.nodes[i].meanDuration.days : 0) + '.'
+                    + (process.data.statistics.nodes[i].meanDuration.hours ? process.data.statistics.nodes[i].meanDuration.hours :  '00') + ':' +
+                    (process.data.statistics.nodes[i].meanDuration.minutes ? process.data.statistics.nodes[i].meanDuration.minutes : '00') + ':' +
+                   (process.data.statistics.nodes[i].meanDuration.seconds ? process.data.statistics.nodes[i].meanDuration.seconds : '00') + '.' +
+                   (process.data.statistics.nodes[i].meanDuration.millis ? process.data.statistics.nodes[i].meanDuration.millis :  '000');
 
+                console.log("mean " + meanDuration)
                 nodeTimes[i] = moment.duration(meanDuration).asMinutes();
+                console.log("nodeTime " + nodeTimes[i])
+               
 
             }
             currentProcess.nodeTimes = nodeTimes;
@@ -44,8 +51,12 @@ function generateGraph(process) {
             for (let i = 0; i < process.data.statistics.relations.length; i++) {
                 let relationTimesTemp = [];
                 for (let j = 0; j < process.data.statistics.relations[i].to.length; j++) {
-                    let meanDuration = process.data.statistics.relations[i].to[j].meanDuration.days + '.' + process.data.statistics.relations[i].to[j].meanDuration.hours + ':' +
-                        process.data.statistics.relations[i].to[j].meanDuration.minutes + ':' + process.data.statistics.relations[i].to[j].meanDuration.seconds + '.' + process.data.statistics.relations[i].to[j].meanDuration.millis;
+                    let meanDuration = (process.data.statistics.relations[i].to[j].meanDuration.days ? process.data.statistics.relations[i].to[j].meanDuration.days : 0) + '.'
+                        + (process.data.statistics.relations[i].to[j].meanDuration.hours ? process.data.statistics.relations[i].to[j].meanDuration.hours : '00')  + ':' +
+                        (process.data.statistics.relations[i].to[j].meanDuration.minutes ? process.data.statistics.relations[i].to[j].meanDuration.minutes : '00') + ':' +
+                        (process.data.statistics.relations[i].to[j].meanDuration.seconds ? process.data.statistics.relations[i].to[j].meanDuration.seconds : '00') + '.' +
+                        (process.data.statistics.relations[i].to[j].meanDuration.millis ? process.data.statistics.relations[i].to[j].meanDuration.millis : '000');
+
                     relationTimesTemp[j] = moment.duration(meanDuration).asMinutes();
                 }
                 relationTimes[i] = relationTimesTemp;
@@ -1585,6 +1596,9 @@ function convertToHours(duration) {
     let rminutes = Math.round(min);
 
     if (rhours == 0) {
+        if (rminutes == 0) {
+            return '< 1 min '
+        }
         return rminutes + " min";
     }
     return rhours + "h " + rminutes + " min";
