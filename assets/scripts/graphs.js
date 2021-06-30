@@ -333,6 +333,7 @@ function renderPerformanceGraph() {
         console.log(process.data.nodes)
         for (var i = 0; i < process.data.nodes.length; i++) {
             let styleType = Math.floor(currentProcess.nodeTimes[i] * 4 / nodesMaxTime);
+
             cy.add({
                 data: {
                     id: i,
@@ -347,6 +348,7 @@ function renderPerformanceGraph() {
         for (var i = 0; i < process.data.relations.length; i++) {
             for (var j = 0; j < process.data.relations[i].to.length; j++) {
                 let styleType = Math.round(currentProcess.relationTimes[i][j] * 4 / edgesMaxTime);
+                if (isNaN(styleType)) styleType = 1
                 cy.add({
                     data: {
                         id: 'relation' + process.data.relations[i].from + '-' + process.data.relations[i].to[j],
