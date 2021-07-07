@@ -19,14 +19,6 @@
      <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
-    <script type="text/javascript">
-      //$(document).ready(function () {
-
-      //    $("#width").val("Hello");
-      //    $("#height").val('$(window).height()');
-
-      // });
-    </script>
 
     <style lang="css">
         .content-wrapper{
@@ -88,6 +80,9 @@
             <div style="display:flex;flex-direction: column;align-items:flex-start;">
             <telerik:RadButton RenderMode="Lightweight" ID="AlphaRadioBtn" runat="server" Text="Alpha Miner" ToggleType="Radio" Checked="true" OnClick="AlphaRadioBtn_Click"
                 ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton>
+
+            <telerik:RadButton RenderMode="Lightweight" ID="AlphaProMRadioBtn" runat="server" Text="Alpha Miner ProM" ToggleType="Radio" Checked="false" OnClick="AlphaProMRadioBtn_Click"
+                            ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton>
 
             <telerik:RadButton RenderMode="Lightweight" ID="HeuristicRadioBtn" runat="server" Text="Heuristic Miner" ToggleType="Radio" OnClick="HeuristicRadioBtn_Click"
                 ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton>

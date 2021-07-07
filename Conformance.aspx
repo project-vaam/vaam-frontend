@@ -227,6 +227,7 @@
         </div>
     </div>
 
+    </div>
      <script>
 
         var process = <%=processes%>

@@ -87,7 +87,7 @@ public partial class Performance : System.Web.UI.Page
         errorMessage.InnerText = "";
         showError.Visible = false;
 
-        if (PerformanceBtn.Checked && !InductiveRadioBtn.Checked)
+        if (PerformanceBtn.Checked && !InductiveRadioBtn.Checked && !AlphaProMRadioBtn.Checked)
         {
             escalaCores.Visible = true;
         }
@@ -106,7 +106,11 @@ public partial class Performance : System.Web.UI.Page
             
             string completeURL = "";
 
-            if (!AlphaRadioBtn.Checked)
+
+            if (AlphaProMRadioBtn.Checked)
+            {
+                workflowURL = "workflow-network/alpha-miner-prom/processes/";
+            } else if (!AlphaRadioBtn.Checked)
             {
                 threshold = "?threshold=" + ThresholdSlider.Value.ToString().Replace(",",".");
                 workflowURL = HeuristicRadioBtn.Checked ? "workflow-network/heuristic-miner/processes/" : "workflow-network/inductive-miner/processes/";                
@@ -138,7 +142,8 @@ public partial class Performance : System.Web.UI.Page
 
                     JObject jsonResponse = JObject.Parse(apiResponse);
                     
-                    processes = "{isPerformance: '"+PerformanceBtn.Checked+"', data: "+apiResponse + "}";
+
+                    processes = AlphaProMRadioBtn.Checked ? apiResponse :"{isPerformance: '" +PerformanceBtn.Checked+"', data: "+apiResponse + "}";
                     Debug.WriteLine(processes);
                 }
                 else
@@ -157,6 +162,14 @@ public partial class Performance : System.Web.UI.Page
         thresholdField.Visible = false;
         tipoGrafico.Visible = true;
         escalaCores.Visible = true;
+        inductiveContainer.Visible = false;
+    }
+
+    public void AlphaProMRadioBtn_Click(object sender, EventArgs e)
+    {
+        thresholdField.Visible = false;
+        tipoGrafico.Visible = false;
+        escalaCores.Visible = false;
         inductiveContainer.Visible = false;
     }
     public void HeuristicRadioBtn_Click(object sender, EventArgs e)

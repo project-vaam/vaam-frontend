@@ -20,7 +20,11 @@ function generateConformance(process) {
 
 function generateGraph(process) {
 
-    if (process.data.info == "Inductive Mining") {
+    if (process.data === undefined && process.info === "Alpha Miner ProM") {
+        /*console.log("Oi")*/
+        renderAlphaProM();
+    }
+    else if (process.data.info == "Inductive Mining") {
 
         renderFrequencyGraph();
     }
@@ -432,8 +436,6 @@ function renderPerformanceGraph() {
     }).run();
 
 }
-
-
 
 
 /*-----------------Frequency Diagram-------------------*/
@@ -917,7 +919,212 @@ function renderFrequencyGraph() {
     cy.layout(customBreadthfirst).run();
 }
 
+/* Alpha ProM - Does not has Performance or Frequency*/
+function renderAlphaProM() {
+    cy = cytoscape({
+        wheelSensitivity: 0.1,
+        minZoom: 0.1,
+        maxZoom: 1,
+        container: document.getElementById('cy'),
+        style: [
+            {
+                //Nodes styles
+                selector: 'node[type=0]',
+                style: {
+                    "padding-relative-to": "width",
+                    "shape": 'round-rectangle',
+                    "background-color": "#fff",
+                    "label": "data(label)",
+                    'width': '460',
+                    "height": "40",
+                    "border-width": 3,
+                    "border-color": "#484848",
+                    "font-size": "18px",
+                    "text-valign": "center",
+                    "text-halign": "center",
+                    "text-wrap": "wrap",
+                    "text-max-width": "1000px",
+                    "color": "#222222"
+                }
+            },
+            {
+                //process start node
+                selector: 'node[type=20]',
+                style: {
+                    "shape": 'ellipse',
+                    "background-color": "#3f3f3f",
+                    "border-width": 4,
+                    "border-color": "#131313",
+                    'width': '50',
+                    "height": "50",
+                    "font-size": "16px",
+                    "text-valign": "center",
+                    "text-halign": "center",
+                    "text-wrap": "wrap",
+                    "text-max-width": "1000px",
+                    "color": "#FF2222"
+                }
+            },
 
+            //Edges styles
+            {
+                selector: 'edge[type=0]',
+                style: {
+                    'width': 3,
+                    'curve-style': 'unbundled-bezier',
+                    "content": "data(label)",
+                    "line-color": "#D1D1D1",
+                    'target-arrow-color': '#D1D1D1',
+                    "font-size": "20px",
+                    "color": "#222222",
+                    "loop-direction": "0deg",
+                    'target-arrow-shape': 'triangle',
+                    "loop-sweep": "45deg",
+                    "text-margin-y": "-15px",
+                    "source-text-offset": "50px"
+                }
+            },
+            {
+                //process start edge
+                selector: 'edge[type=20]',
+                style: {
+                    'width': 8,
+                    'curve-style': 'unbundled-bezier',
+                    'line-color': "#232323",
+                    'target-arrow-color': '#232323',
+                    "font-size": "32px",
+                    "color": "#222222",
+                    "loop-direction": "0deg",
+                    'target-arrow-shape': 'triangle',
+                    "loop-sweep": "45deg",
+                    "text-margin-y": "-15px",
+                    "source-text-offset": "50px",
+                    "text-outline-color": "#222222",
+                    "text-outline-width": "0.3px"
+                }
+            },
+        ],
+    });
+
+        //Nodes
+        for (let i = 0; i < process.nodes.length; i++) {
+            cy.add({
+                data: {
+                    id: i,
+                    label: process.nodes[i],
+                    type: 0
+                },
+            }
+            );
+        }
+
+
+        //Edges
+        for (let i = 0; i < process.relations.length; i++) {
+            for (let j = 0; j < process.relations[i].to.length; j++) {
+                    cy.add({
+                        data: {
+                            id: 'edge' + process.relations[i].from + '-' + process.relations[i].to[j],
+                            source: process.relations[i].from,
+                            target: process.relations[i].to[j],
+                            name: '',
+                            type: 0
+                        }
+                    });
+            }
+        }
+
+    //add  start and end nodes
+
+    if (process.startEvents.length > 0) {
+        cy.add({
+            data: {
+                id: 'start',
+                type: 20
+            },
+        });
+    }
+
+    if (process.endEvents.length > 0) {
+        cy.add({
+            data: {
+                id: 'end',
+                type: 20
+            },
+        });
+    }
+
+    //adds start to end relation
+
+    if (process.fromStartToEnd != undefined) {
+        cy.add({
+            data: {
+                id: 'desviationStartToEnd',
+                source: 'start',
+                target: 'end',
+                name: process.fromStartToEnd,
+                type: 20
+            }
+        });
+    }
+
+
+    //adds start and end relations
+    for (let i = 0; i < process.startEvents.length; i++) {
+
+
+        cy.add({
+            data: {
+                id: 'edge_start-' + i,
+                source: 'start',
+                target: process.startEvents[i].node,
+                name: '',
+                type: 20
+            }
+        });
+    }
+
+    for (let i = 0; i < process.endEvents.length; i++) {
+
+        cy.add({
+            data: {
+                id: 'edge_end-' + i,
+                source: process.endEvents[i].node,
+                target: 'end',
+                name: '',
+                type: 20
+            }
+        });
+    }
+
+    let customBreadthfirst = {
+        name: 'breadthfirst',
+        fit: true, // whether to fit the viewport to the graph
+        directed: true, // whether the tree is directed downwards (or edges can point in any direction if false)
+        padding: 10, // padding on fit
+        circle: false, // put depths in concentric circles if true, put depths top down if false
+        grid: false, // whether to create an even grid into which the DAG is placed (circle:false only)
+        spacingFactor: 0.80, // positive spacing factor, larger => more space between nodes (N.B. n/a if causes overlap)
+        boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+        avoidOverlap: true, // prevents node overlap, may overflow boundingBox if not enough space
+        nodeDimensionsIncludeLabels: false, // Excludes the label when calculating node bounding boxes for the layout algorithm
+        roots: undefined, // the roots of the trees
+        maximal: false, // whether to shift nodes down their natural BFS depths in order to avoid upwards edges (DAGS only)
+        animate: false, // whether to transition the node positions
+        animationDuration: 500, // duration of animation in ms if enabled
+        animationEasing: undefined, // easing of animation if enabled,
+        animateFilter: function (node, i) {
+            return true;
+        }, // a function that determines whether the node should be animated.  All nodes animated by default on animate enabled.  Non-animated nodes are positioned immediately when the layout starts
+        ready: undefined, // callback on layoutready
+        stop: undefined, // callback on layoutstop
+        transform: function (node, position) {
+            return position;
+        } // transform a given node position. Useful for changing flow direction in discrete layouts
+    };
+
+    cy.layout(customBreadthfirst).run();
+}
 
 /*-----------------Conformance Diagram-------------------*/
 
@@ -1220,28 +1427,6 @@ function renderConformanceGraph() {
             });
         }
     }
-
-
-    //n funciona :(
-    //edges = process.data.nodes;
-    //edges.forEach(function (node, i) {
-    //    console.log(process.data.relations[i].to)
-    //    process.data.relations[i].to.forEach(function (node, j) {
-
-    //        let typeValue = 0;
-
-    //        cy.add({
-    //            data: {
-    //                id: 'edge' + process.data.relations[i].from + '-' + process.data.relations[i].to[j].node,
-    //                source: process.data.relations[i].from,
-    //                target: process.data.relations[i].to[j].node,
-    //                label: prevLabel + " / " + realLabel,                 
-    //            }
-    //        });
-
-    //    });
-    //});
-
 
     //starting nodes
     let startEvents = process.base.startEvents;

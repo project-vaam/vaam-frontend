@@ -74,18 +74,10 @@
                     </a>
                 </telerik:LayoutColumn>
                 <telerik:LayoutColumn Span="6" SpanMd="12" SpanSm="12" >
-                        <%--<a class="link-card" href="/PerformanceFrequency.aspx">--%>
                             <div class="card-wrapper next-row">
                                 <div class="card">
                                     <h4>Média da Duração de Criação de Moldes por Processos</h4>
-                                    <%--<p>Inductive Miner</p>--%>
-                                    <div class="quantity">
-                                        <telerik:RadHtmlChart runat="server" ID="RadHtmlChart1" Height="400px">
-                                            <PlotArea>
-                                                <Series>
-                                                    <%--<telerik:ColumnSeries></telerik:ColumnSeries>--%>
-                                                </Series>  
-                                            </PlotArea>
+                                        <telerik:RadHtmlChart runat="server" ID="RadHtmlChart1">
                                             <Legend>
                                                 <Appearance Position="Bottom">
                                                 </Appearance>
@@ -95,13 +87,11 @@
                                                 </Appearance>
                                             </ChartTitle>
                                         </telerik:RadHtmlChart>
-                                    </div>
                                     <div class="quantity" id="graphSpinner" runat="server">
                                         <i class="fa fa-spinner fa-spin" style="font-size:30px"></i>
                                     </div>
                                 </div>
                             </div>
-                        <%--</a>--%>
                     </telerik:LayoutColumn>
                 </Columns>
             </telerik:LayoutRow>
