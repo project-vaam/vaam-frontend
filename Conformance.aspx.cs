@@ -68,7 +68,7 @@ public partial class Conformance : System.Web.UI.Page
     protected void RadCheckBoxProcessToCompare_Click(object sender, EventArgs e)
     {
         RadComboBoxProcessToCompare.Enabled = (bool) RadCheckBoxProcessToCompare.Checked;
-
+        tipoAlgoritmo.Visible = !tipoAlgoritmo.Visible;
         if ((bool)!RadCheckBoxProcessToCompare.Checked) { 
             RadComboBoxProcessToCompare.SelectedValue = RadComboBoxProcess.SelectedValue;
         }

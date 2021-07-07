@@ -57,22 +57,20 @@
         <%------- MENU ------%>
         <div class="menu-wrapper">
 
-            <%-- Workflow Type --%>
-            <h4>Tipo de Algoritmo</h4>
             <div style="display:flex;flex-direction: column;align-items:flex-start;">
-            <telerik:RadButton RenderMode="Lightweight" ID="AlphaRadioBtn" runat="server" Text="Alpha Miner" ToggleType="Radio" Checked="true" OnClick="AlphaRadioBtn_Click"
-                ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton>
+                 <%-- Workflow Type --%>
+                 <div id="tipoAlgoritmo" runat="server" style="display: flex; flex-direction:column; align-items: flex-start;margin-bottom: 16px !important">
+                    <h4>Tipo de Algoritmo</h4>
+                    <telerik:RadButton RenderMode="Lightweight" ID="AlphaRadioBtn" runat="server" Text="Alpha Miner" ToggleType="Radio" Checked="true" OnClick="AlphaRadioBtn_Click"
+                        ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton>
 
-            <telerik:RadButton RenderMode="Lightweight" ID="HeuristicRadioBtn" runat="server" Text="Heuristic Miner" ToggleType="Radio" OnClick="HeuristicRadioBtn_Click"
-                ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton>
-
-            <%--<telerik:RadButton RenderMode="Lightweight" ID="InductiveRadioBtn" runat="server" Text="Inductive Miner" ToggleType="Radio" OnClick="InductiveRadioBtn_Click"
-                ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton> 
-            </div>--%>
+                    <telerik:RadButton RenderMode="Lightweight" ID="HeuristicRadioBtn" runat="server" Text="Heuristic Miner" ToggleType="Radio" OnClick="HeuristicRadioBtn_Click"
+                        ButtonType="ToggleButton" GroupName="WorkflowType"></telerik:RadButton>
+                </div>
 
             <%-- Frequency Slider --%>
             <div id="thresholdField" runat="server">
-                <h4 style="margin-top: 16px !important">Threshold</h4>
+                <h4>Threshold</h4>
                 <span>Complex to Simplistic</span>
                 <telerik:RadSlider RenderMode="Lightweight" ID="ThresholdSlider" runat="server" MinimumValue="0" MaximumValue="1" Value="0.5"
                     SmallChange="0.1" LargeChange="0.5" ItemType="tick" Height="70px" Width="400px" 
@@ -81,7 +79,7 @@
             </div>
           
 
-            <h3 style="text-align:center;margin-bottom: 0px;">Detalhes do Processo</h3>
+            <h3 style="text-align:center;margin-bottom: 0px; margin-top: 0;">Detalhes do Processo</h3>
             <%-- RadComboBox - Process --%>
             <h4 style="margin-top: 16px !important">Selecione o processo:</h4>
             <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBoxProcess" AllowCustomText="true" runat="server" DataValueField="ID"
