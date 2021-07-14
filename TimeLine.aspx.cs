@@ -113,16 +113,18 @@ public partial class TimeLine : Page
 
                     JArray obj = JsonConvert.DeserializeObject<JArray>(apiResponse);
 
-                    ArrayList itemsList = new ArrayList();
+                    List<int> molds = new List<int>();
 
                     foreach (JObject item in obj)
                     {
-                        string code = item.GetValue("code").ToString();
-                        itemsList.Add(code);
-                        RadComboBoxMoldes.Items.Add(new RadComboBoxItem(code, code));
-                        
+                        molds.Add(Int32.Parse(item.GetValue("code").ToString()));      
+                    }
 
-                      
+                    molds.Sort();
+
+                    foreach(int code in molds)
+                    {
+                        RadComboBoxMoldes.Items.Add(new RadComboBoxItem(code.ToString(), code.ToString()));
                     }
                 }
                 else
