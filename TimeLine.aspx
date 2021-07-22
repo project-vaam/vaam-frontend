@@ -80,12 +80,12 @@
                             #if(data.ActivityUserEntry.length > 0) {#   
                             <table>
                                 <tr>
-	                            <th>Worker Name</th>
-	                            <th>Worker Role</th>
-	                            <th>Workstation Name</th>
-	                            <th>Start Date</th>
-	                            <th>End Date</th>
-	                            <th>Duration</th>
+	                            <th>Operário</th>
+	                            <th>Cargo</th>
+	                            <th>Posto de Trabalho</th>
+	                            <th>Data de Início</th>
+	                            <th>Data de Término</th>
+	                            <th>Duração</th>
                                 </tr>
 
 	                                # for (var i = 0; i < data.ActivityUserEntry.length; i++) { # 
@@ -107,7 +107,7 @@
  
                     <div class="k-card-actions" style="display: flex; flex-direction: column">
                         <p>Começo: <strong>#= kendo.toString(data.startDate, "dd/MM/yyyy HH:mm:ss") #</strong></p>
-                        <p>Termino: <strong>#= kendo.toString(data.endDate, "dd/MM/yyyy HH:mm:ss") || "Ainda por terminar"#</strong></p>
+                        <p>Término: <strong>#= kendo.toString(data.endDate, "dd/MM/yyyy HH:mm:ss") || "Ainda por terminar"#</strong></p>
                         <p>Duração: 
                             # if(data.duration) {#
                             <strong><span class="#:classColor#">#= timeConvert(data.duration)#</span>\t(Média: #=timeConvert(data.AverageEventDurationForActivityMillis )#)</strong>

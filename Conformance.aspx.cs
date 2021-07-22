@@ -31,6 +31,10 @@ public partial class Conformance : System.Web.UI.Page
            
             System.Threading.Thread.Sleep(500);
             callFilterInformation(null,null);
+            if (RadCheckBoxProcessToCompare.Checked == false)
+            {
+                RadComboBoxProcessToCompare.SelectedValue = RadComboBoxProcess.SelectedValue;
+            }
         }
     }
 
@@ -106,7 +110,9 @@ public partial class Conformance : System.Web.UI.Page
                         string text = item["id"].ToString() + " - " + item["name"].ToString();
                         RadComboBoxProcess.Items.Add(new RadComboBoxItem(text, value));
                         RadComboBoxProcessToCompare.Items.Add(new RadComboBoxItem(text, value));
+                        
                     }
+                    
                 }
                 else
                 {

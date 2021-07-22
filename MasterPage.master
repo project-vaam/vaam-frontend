@@ -24,7 +24,7 @@
      }
     </style>
 </head>
-    
+
 <body>
     <form id="form1" runat="server">
         <telerik:RadScriptManager runat="server"></telerik:RadScriptManager>
@@ -47,14 +47,14 @@
                 <%--Header--%>
                 <telerik:LayoutRow>
                      <Content> 
-                         <telerik:RadMenu RenderMode="Lightweight" ID="RadMenu1" CssClass="mainMenu" runat="server" ShowToggleHandle="true" Skin="Bootstrap" OnItemClick="RadMenu1_ItemClick">
+                         <telerik:RadMenu RenderMode="Lightweight" ID="RadMenu1" CssClass="mainMenu" runat="server" ShowToggleHandle="true" Skin="Bootstrap" OnItemClick="RadMenu1_ItemClick"  OnClientItemClicking="OnClientItemClicking">
                              <Items>
                                  <%--<telerik:RadMenuItem Text='<img src="assets/images/VAAM_LOGO.png" alt="site logo"/>' NavigateUrl="Default.aspx" />--%>
                                  <telerik:RadMenuItem Text="Dashboard" NavigateUrl="Default.aspx" />
                                  <telerik:RadMenuItem IsSeparator="true" />
                                  <telerik:RadMenuItem Text="Timeline" NavigateUrl="Timeline.aspx" />
                                  <telerik:RadMenuItem IsSeparator="true" />
-                                 <telerik:RadMenuItem Text="Diagramas">
+                                 <telerik:RadMenuItem Text="Grafos" CssClass="disableClick">
                                      <GroupSettings Width="250px" Height="75px" />
                                      <Items>
                                          <telerik:RadMenuItem Text="Performance e Frequência" NavigateUrl="PerformanceFrequency.aspx" />
@@ -89,7 +89,7 @@
                     <Columns>
                         <telerik:LayoutColumn CssClass="footer">
                             <hr />
-                                © 2021 Instituto Politecnico de Leiria, VAAM
+                                © 2021 Instituto Politécnico de Leiria, VAAM
                         </telerik:LayoutColumn>
                     </Columns>
                 </telerik:LayoutRow>
@@ -99,4 +99,11 @@
        </div>
     </form>
 </body>
+<script type="text/javascript">
+    function OnClientItemClicking(sender, args) {
+        if (args.get_item().get_items().get_count() != 0 && args.get_item().get_level() == 0) {
+            args.set_cancel(true); // Cancel the event
+        }
+    }
+</script>
 </html>

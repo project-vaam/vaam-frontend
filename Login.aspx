@@ -3,7 +3,9 @@
 <!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head runat="server">
-    <title>Telerik ASP.NET Example</title>
+    <title>VAAM</title>
+    <meta name="viewport" content="initial-scale=1.0, minimum-scale=1, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" href="assets/images/Thumbnails/increase.png"/>
      <link href="assets/styles/loginStyles.css" rel="stylesheet" />
     <script src="assets/scripts/scripts.js"></script>
 </head>

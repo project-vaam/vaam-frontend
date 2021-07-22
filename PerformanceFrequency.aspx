@@ -94,7 +94,7 @@
             <%-- Frequency Slider --%>
             <div id="thresholdField" runat="server">
                 <h4 style="margin-top: 16px !important">Threshold</h4>
-                <span>Simplistic to Complex</span>
+                <span>Complex to Simplistic</span>
                 <telerik:RadSlider RenderMode="Lightweight" ID="ThresholdSlider" runat="server" MinimumValue="0" MaximumValue="1" Value="0.5"
                     SmallChange="0.1" LargeChange="0.5" ItemType="tick" Height="70px" Width="400px" 
                     AnimationDuration="400" CssClass="TicksSlider" ThumbsInteractionMode="Free" Skin="Metro">
@@ -205,11 +205,14 @@
         </div>
     </div>
 
-     <script>
-                var process = <%=processes%>
-                console.log("CALLING ....");
-                console.log(process)
-                generateGraph(process);   
-     </script>
+    <script>
+        var process = <%=processes%>
+        if (process) {
+            console.log("CALLING ....");
+            console.log(process)
+            generateGraph(process);  
+        }
+        
+    </script>
 
 </asp:Content>
