@@ -456,7 +456,7 @@ function renderFrequencyGraph() {
                     selector: 'node[type=0]',
                     style: {
                         "shape": 'round-rectangle',
-                        "background-color": "#FFFFFF",
+                        "background-color": "#D1D1D1",
                         "label": "data(label)",
                         'width': '250',
                         "height": "40",
@@ -890,9 +890,10 @@ function renderFrequencyGraph() {
         });
     }
 
+
     /* Add time to color scales */
     for (let i = 1; i < 5; i++) {
-        document.getElementById(`${i}-freq-state`).textContent = Math.floor((maxFrequency / 5) * (i+1))
+        document.getElementById(`${i}-freq-state`).textContent = Math.floor((maxFrequency / 5) * (i + 1))
     }
 
     let customBreadthfirst = {

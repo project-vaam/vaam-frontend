@@ -220,7 +220,7 @@
 
             <div id="showDiagram" style="display: flex; width: 100%; align-items: center; justify-content: center; margin-top: 16px; margin-bottom:32px;">
                  <%-- Button CREATE DropDown --%>
-                <telerik:RadButton RenderMode="Lightweight" runat="server" Text="Gerar Diagrama"   OnClick="ShowDiagram_Click" Height="60px" />
+                <telerik:RadButton RenderMode="Lightweight" runat="server" Text="Gerar Grafo"   OnClick="ShowDiagram_Click" Height="60px" />
             </div>
         </div>
     </div>

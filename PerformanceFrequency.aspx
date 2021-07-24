@@ -41,6 +41,18 @@
             border-radius: 0px 20px 20px 0px;
             padding: 16px;
         }
+
+        #ContentPlaceHolder1_RadAjaxLoadingPanel1{
+            display: initial !important;
+        }
+
+        #ContentPlaceHolder1_RadAjaxLoadingPanel1 .raDiv{
+            position: absolute;
+        }
+
+        #cy > div{
+            width: 100% !important;
+        }
     </style>
 </asp:Content>
 
@@ -54,12 +66,7 @@
         <%------- DIAGRAM WINDOW ------%>
         <div class="diagram-wrapper">
             
-            <%-- Title of Process --%>
-            <div id="displayProcess" runat="server" style="text-align: center">
-                <h1><span id="currentProcess" runat="server"></span></h1>
-            </div>
-
-           
+         <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server"/>
 
             <%-- Diagram --%>
             <div id="cy" style="flex-grow:1; border: 1px solid dimgrey; border-radius: 20px 0px 0px 20px; ">              
@@ -107,7 +114,7 @@
                     ID="PerformanceBtn"
                     GroupName="DiagramMode"
                     runat="server"
-                    Text="Performance"
+                    Text="Desempenho"
                     AutoPostBack="false"
                     ToggleType="Radio"/>
                 <telerik:RadButton
@@ -166,7 +173,7 @@
 
             <div id="showDiagram" style="display: flex; width: 100%; align-items: center; justify-content: center; margin-top: 16px;">
                  <%-- Button CREATE DropDown --%>
-            <telerik:RadButton RenderMode="Lightweight" runat="server" Text="Gerar Diagrama"   OnClick="ShowDiagram_Click" Height="60px" />
+            <telerik:RadButton RenderMode="Lightweight" runat="server" Text="Gerar Grafo"   OnClick="ShowDiagram_Click" Height="60px" />
             </div>
 
             <%-- Frequency Scale --%>

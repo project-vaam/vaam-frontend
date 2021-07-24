@@ -97,5 +97,5 @@
             </telerik:LayoutRow>
         </Rows>
     </telerik:RadPageLayout>
-    <p style="text-align:end;margin-bottom:-20px;" id="dadosAtualizados" runat="server" ></p>
+    <p style="text-align:end;margin-bottom:-20px;padding-right: 15px;" id="dadosAtualizados" runat="server" ></p>
 </asp:Content>

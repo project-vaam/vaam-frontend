@@ -25,16 +25,22 @@ public partial class Performance : Page
             Page.Response.Redirect("Login.aspx", true);
         }
 
+       
+
         if (!IsPostBack)
         {
             thresholdField.Visible = false;
-            displayProcess.Visible = false;
             escalaCores.Visible = false;
             escalaCoresFreq.Visible = false;
             tipoGrafico.Visible = true;
             inductiveContainer.Visible = false;
+            RadAjaxLoadingPanel1.Visible = false;
             callProcesses();
-        } 
+        }
+
+
+       
+
     }
 
 
@@ -85,6 +91,9 @@ public partial class Performance : Page
    
     protected async void GetWorkFlows(string processID) //chamar no load Page
     {
+        //Loading Icon
+        RadAjaxLoadingPanel1.Visible = true;
+
         errorMessage.InnerText = "";
         showError.Visible = false;
 
@@ -93,7 +102,7 @@ public partial class Performance : Page
             escalaCores.Visible = true;
             escalaCoresFreq.Visible = false;
         }
-        else if(FrequencyBtn.Checked && !InductiveRadioBtn.Checked && !AlphaProMRadioBtn.Checked)
+        else if((FrequencyBtn.Checked ||  InductiveRadioBtn.Checked) && !AlphaProMRadioBtn.Checked)
         {
             escalaCores.Visible = false;
             escalaCoresFreq.Visible = true;
@@ -142,6 +151,9 @@ public partial class Performance : Page
             using (var response = await httpClient.GetAsync(Constants.URL_BACKEND_CONNECTION + completeURL).ConfigureAwait(false))
             {
                 //Debug.WriteLine(response);
+
+                //Loading Icon
+                RadAjaxLoadingPanel1.Visible = false;
 
                 var status = response.IsSuccessStatusCode;
                 if (status == true)
