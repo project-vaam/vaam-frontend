@@ -35,13 +35,13 @@
                                         <table>
                                             <tr>
                                                 <td>
-                                                    <asp:Label ID="UserNameLabel" runat="server" AssociatedControlID="UserName">User Name:</asp:Label>
+                                                    <asp:Label ID="UserNameLabel" runat="server" AssociatedControlID="UserName">Username:</asp:Label>
                                                 </td>
                                                 <td>
                                                     <div style="text-align:center">
                                                         <asp:TextBox ID="UserName" runat="server"></asp:TextBox>
                                                         <asp:RequiredFieldValidator ID="UserNameRequired" runat="server" ControlToValidate="UserName"
-                                                            ErrorMessage="User Name is required." ToolTip="User Name is required." ValidationGroup="Login1"></asp:RequiredFieldValidator>
+                                                            ErrorMessage="Username is required." ToolTip="Username is required." ValidationGroup="Login1"></asp:RequiredFieldValidator>
                                                     </div>
                                                 </td>
                                             </tr>
