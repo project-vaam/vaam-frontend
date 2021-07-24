@@ -890,6 +890,11 @@ function renderFrequencyGraph() {
         });
     }
 
+    /* Add time to color scales */
+    for (let i = 1; i < 5; i++) {
+        document.getElementById(`${i}-freq-state`).textContent = Math.floor((maxFrequency / 5) * (i+1))
+    }
+
     let customBreadthfirst = {
         name: 'breadthfirst',
         fit: true, // whether to fit the viewport to the graph

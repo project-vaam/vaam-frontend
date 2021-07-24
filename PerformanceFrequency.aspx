@@ -21,26 +21,23 @@
 
 
     <style lang="css">
-        .content-wrapper{
+        .content-wrapper {
             height: 100%;
             min-height: 80vh;
             width: 100%;
-
             display: flex;
         }
 
-        .diagram-wrapper{ 
+        .diagram-wrapper {
             width: 100%;
             flex-grow: 2;
             display: flex;
         }
 
-        .menu-wrapper{
+        .menu-wrapper {
             width: 400px;
-
             flex-shrink: 0;
             border: 1px solid dimgrey;
-
             border-radius: 0px 20px 20px 0px;
             padding: 16px;
         }
@@ -171,6 +168,20 @@
                  <%-- Button CREATE DropDown --%>
             <telerik:RadButton RenderMode="Lightweight" runat="server" Text="Gerar Diagrama"   OnClick="ShowDiagram_Click" Height="60px" />
             </div>
+
+            <%-- Frequency Scale --%>
+            <div id="escalaCoresFreq" runat="server">
+                <h3 style="text-align:center;margin-bottom: -15px;">Escala de Cores</h3>
+                <div class="frequency-scale-container">
+                    <div class="freq-scale-numbers">
+                    <span class="scale-text" id="4-freq-state"></span>
+                    <span class="scale-text" id="3-freq-state"></span>
+                    <span class="scale-text" id="2-freq-state"></span>
+                    <span class="scale-text" id="1-freq-state"></span>  
+                    </div>
+                    <div class="freq-scale"/>
+                </div>
+            </div>
            
             <div id="escalaCores" runat="server">
                  <h3 style="text-align:center;margin-bottom: 0px;">Escala de Cores</h3>
@@ -200,8 +211,7 @@
                          <div class="scale-text"></div>
                      </div>
                  </div>
-            </div>   
-            
+            </div>  
         </div>
     </div>
 
@@ -210,9 +220,9 @@
         if (process) {
             console.log("CALLING ....");
             console.log(process)
-            generateGraph(process);  
+            generateGraph(process);
         }
-        
+
     </script>
 
 </asp:Content>

@@ -83,3 +83,36 @@
     color: black;
 
 }
+
+
+/*frequency scale*/
+
+.frequency-scale-container {
+    margin-top: 40px;
+    height: 200px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.freq-scale-numbers {
+    height: 200px;
+    margin-right: 0.5rem;
+    margin-top: -40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.freq-scale {
+    height: 200px;
+    width: 55px;
+    background: linear-gradient(to bottom, #000eff 25%, #404bff 25% 50%, #7f87ff 50% 75%, #D1D1D1 75%);
+    text-align: end;
+}
+
+.scale-text {
+    color: black;
+}

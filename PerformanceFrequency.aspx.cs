@@ -14,7 +14,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Telerik.Web.UI;
 
-public partial class Performance : System.Web.UI.Page
+public partial class Performance : Page
 {
     public string processes = "null";
     protected void Page_Load(object sender, EventArgs e)
@@ -30,6 +30,7 @@ public partial class Performance : System.Web.UI.Page
             thresholdField.Visible = false;
             displayProcess.Visible = false;
             escalaCores.Visible = false;
+            escalaCoresFreq.Visible = false;
             tipoGrafico.Visible = true;
             inductiveContainer.Visible = false;
             callProcesses();
@@ -90,9 +91,16 @@ public partial class Performance : System.Web.UI.Page
         if (PerformanceBtn.Checked && !InductiveRadioBtn.Checked && !AlphaProMRadioBtn.Checked)
         {
             escalaCores.Visible = true;
+            escalaCoresFreq.Visible = false;
+        }
+        else if(FrequencyBtn.Checked && !InductiveRadioBtn.Checked && !AlphaProMRadioBtn.Checked)
+        {
+            escalaCores.Visible = false;
+            escalaCoresFreq.Visible = true;
         }
         else
         {
+            escalaCoresFreq.Visible = false;
             escalaCores.Visible = false;
         }
 
@@ -161,30 +169,38 @@ public partial class Performance : System.Web.UI.Page
     {
         thresholdField.Visible = false;
         tipoGrafico.Visible = true;
-        escalaCores.Visible = true;
         inductiveContainer.Visible = false;
+
+        escalaCores.Visible = false;
+        escalaCoresFreq.Visible = false;
     }
 
     public void AlphaProMRadioBtn_Click(object sender, EventArgs e)
     {
         thresholdField.Visible = false;
         tipoGrafico.Visible = false;
-        escalaCores.Visible = false;
         inductiveContainer.Visible = false;
+
+        escalaCores.Visible = false;
+        escalaCoresFreq.Visible = false;
     }
     public void HeuristicRadioBtn_Click(object sender, EventArgs e)
     {
         thresholdField.Visible = true;
         tipoGrafico.Visible = true;
-        escalaCores.Visible = true;
         inductiveContainer.Visible = false;
+
+        escalaCores.Visible = false;
+        escalaCoresFreq.Visible = false;
     }
     public void InductiveRadioBtn_Click(object sender, EventArgs e)
     {
         thresholdField.Visible = false;
         tipoGrafico.Visible = false;
-        escalaCores.Visible = false;
         inductiveContainer.Visible = true;
+
+        escalaCores.Visible = false;
+        escalaCoresFreq.Visible = false;
     }
 
     /* Inductive Sliders */
