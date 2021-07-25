@@ -17,6 +17,7 @@ using Telerik.Web.UI;
 public partial class Performance : Page
 {
     public string processes = "null";
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (Session["sessionToken"] == null)
@@ -25,7 +26,6 @@ public partial class Performance : Page
             Page.Response.Redirect("Login.aspx", true);
         }
 
-       
 
         if (!IsPostBack)
         {
@@ -34,13 +34,9 @@ public partial class Performance : Page
             escalaCoresFreq.Visible = false;
             tipoGrafico.Visible = true;
             inductiveContainer.Visible = false;
-            RadAjaxLoadingPanel1.Visible = false;
+            //RadAjaxLoadingPanel1.Visible = false;
             callProcesses();
-        }
-
-
-       
-
+        }   
     }
 
 
@@ -92,7 +88,7 @@ public partial class Performance : Page
     protected async void GetWorkFlows(string processID) //chamar no load Page
     {
         //Loading Icon
-        RadAjaxLoadingPanel1.Visible = true;
+        //RadAjaxLoadingPanel1.Visible = true;
 
         errorMessage.InnerText = "";
         showError.Visible = false;
@@ -153,8 +149,7 @@ public partial class Performance : Page
                 //Debug.WriteLine(response);
 
                 //Loading Icon
-                RadAjaxLoadingPanel1.Visible = false;
-
+                //RadAjaxLoadingPanel1.Visible = false;
                 var status = response.IsSuccessStatusCode;
                 if (status == true)
                 {

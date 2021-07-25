@@ -62,7 +62,7 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="5" style="text-align: right;">
-                                                    <asp:Button ID="LoginButton" runat="server" CommandName="Login" Text="Log In" ValidationGroup="Login1"></asp:Button>
+                                                    <asp:Button ID="LoginButton" runat="server" CommandName="Login" Text="Sign In" ValidationGroup="Login1"></asp:Button>
                                                 </td>
                                             </tr>
                                         </table>

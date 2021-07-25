@@ -11,7 +11,9 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
      <div>
-             
+        <div style="text-align:center;">
+            <h1>Timeline</h1>
+        </div> 
         <h5>Selecione o Molde</h5>
        
         <telerik:RadComboBox RenderMode="Lightweight" ID="RadComboBoxMoldes" AllowCustomText="true" runat="server" DataValueField="ID"               
@@ -23,8 +25,8 @@
         </telerik:RadComboBox>
      </div>
 
-    <div id="displayMould" runat="server" style="text-align:center">
-        <h1><span id="currentMould" runat="server"></span></h1>
+    <div id="displayMould" runat="server" style="text-align:center;">
+        <h3 style="margin-top:0;"><span id="currentMould" runat="server"></span></h3>
         <hr />
     </div>
     
@@ -67,7 +69,7 @@
                         <div class="k-card-description" style="display:flex; flex-direction: column">
                             <span>Descrição do Processo: <b>#= data.Process.Description#</b></span>
                             <span>Começo do Processo: <b>#= kendo.toString(kendo.parseDate(data.Process.StartDate), "dd/MM/yyyy HH:mm:ss") #</b></span>
-                            <span>Termino do Processo: <b>#= kendo.toString(kendo.parseDate(data.Process.EndDate), "dd/MM/yyyy HH:mm:ss") || "Ainda por terminar"#</b></span>
+                            <span>Término do Processo: <b>#= kendo.toString(kendo.parseDate(data.Process.EndDate), "dd/MM/yyyy HH:mm:ss") || "Ainda por terminar"#</b></span>
 
                             #if(data.Part) {#
                             <h5 class="top-flex-space">Parte do Molde</h5>

@@ -41,7 +41,7 @@ public partial class TimeLine : Page
     {
         var events = new List<LifetimeEvent>();
         displayMould.Visible = true;    
-        currentMould.InnerText = "Timeline do Molde " + molde.Text;
+        currentMould.InnerText = "Molde " + molde.Text;
         Debug.WriteLine("molde:" + molde.Text);
 
         using (var httpClient = new HttpClient())

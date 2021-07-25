@@ -129,8 +129,8 @@
                     Width="400">
                 </telerik:RadComboBox>
 
-                <%-- Operadores --%>
-                <h4 style="margin-top: 16px !important">Operadores:</h4>
+                <%-- Operários --%>
+                <h4 style="margin-top: 16px !important">Operários:</h4>
                 <telerik:RadComboBox
                     RenderMode="Lightweight" 
                     ID="RadComboBoxOperadores"
@@ -200,7 +200,7 @@
                 </telerik:RadComboBox>
 
                 <%-- Operadores --%>
-                <h4 style="margin-top: 16px !important">Operadores:</h4>
+                <h4 style="margin-top: 16px !important">Operários:</h4>
                 <telerik:RadComboBox 
                     RenderMode="Lightweight" 
                     ID="RadComboBoxOperadores2" 

@@ -66,7 +66,7 @@
         <%------- DIAGRAM WINDOW ------%>
         <div class="diagram-wrapper">
             
-         <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server"/>
+         <%--<telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" />--%>
 
             <%-- Diagram --%>
             <div id="cy" style="flex-grow:1; border: 1px solid dimgrey; border-radius: 20px 0px 0px 20px; ">              
@@ -144,8 +144,8 @@
 
             <div id="inductiveContainer" runat="server">
                 <div style="width: 100%; display: flex; justify-content: space-around; margin-top: 16px;">
-                    <h4>Ativities</h4>
-                    <h4>Paths</h4>
+                    <h4>Atividades</h4>
+                    <h4>Caminhos</h4>
                 </div>
                 <div style="width: 100%; display: flex; justify-content: space-around; margin-top: 16px;">
                     <%-- Activities --%>
