@@ -58,7 +58,7 @@
                                      <GroupSettings Width="250px" Height="75px" />
                                      <Items>
                                          <telerik:RadMenuItem Text="Desempenho e Frequência" NavigateUrl="PerformanceFrequency.aspx" />
-                                         <telerik:RadMenuItem Text="Conformance" NavigateUrl="Conformance.aspx" />
+                                         <telerik:RadMenuItem Text="Conformidade" NavigateUrl="Conformance.aspx" />
                                      </Items>
                                  </telerik:RadMenuItem>
                                  <telerik:RadMenuItem IsSeparator="true" />
